@@ -1,4 +1,4 @@
-import { SignInDto } from './../domains/dtos/sign-in.dto';
+import { RegisterDto, SignInDto } from './../domains/dtos/sign-in.dto';
 import { UserService } from './../../user/services/user.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ROLE } from './../../../constants';
@@ -45,6 +45,16 @@ export class AuthService {
     };
     return {
       accessToken: await this.jwtService.signAsync(payload),
+    };
+  }
+
+  async userRegister(registerDto: RegisterDto) {
+    const user = await this.userService.createUser(registerDto);
+    return {
+      accessToken: await this.jwtService.signAsync({
+        id: user.id,
+        role: user.role,
+      }),
     };
   }
 
