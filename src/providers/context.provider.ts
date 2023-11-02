@@ -27,7 +27,6 @@ export class ContextProvider {
   }
 
   static getAuthUser(): UserEntity | AdminEntity | LessorEntity | undefined {
-    console.log(ContextProvider.authUserKey, 1);
     return ContextProvider.get<UserEntity | AdminEntity | LessorEntity>(
       ContextProvider.authUserKey,
     );
