@@ -20,7 +20,7 @@ export class AuthService {
 
   async signIn(signInDto: SignInDto): Promise<any> {
     const user = await this.userService.findOneByUserName(signInDto.userName);
-    const isMatched = validateHash(signInDto.password, user.password);
+    const isMatched = await validateHash(signInDto.password, user.password);
     if (!isMatched) {
       throw new UnauthorizedException('Invalid credential');
     }
@@ -35,7 +35,7 @@ export class AuthService {
 
   async adminSignIn(signInDto: SignInDto): Promise<any> {
     const admin = await this.adminService.findOneByUserName(signInDto.userName);
-    const isMatched = validateHash(signInDto.password, admin.password);
+    const isMatched = await validateHash(signInDto.password, admin.password);
     if (!isMatched) {
       throw new UnauthorizedException('Invalid credential');
     }
