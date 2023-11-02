@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { SharedModule } from './shared/shared.module';
@@ -10,6 +8,10 @@ import {
   addTransactionalDataSource,
   getDataSourceByName,
 } from 'typeorm-transactional';
+import { LessorModule } from './modules/lessor/lessor.module';
+import { UserModule } from './modules/user/user.module';
+import { AdminModule } from './modules/admin/admin.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -35,8 +37,10 @@ import {
         return Promise.resolve(dataSource);
       },
     }),
+    LessorModule,
+    UserModule,
+    AdminModule,
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
