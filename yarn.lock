@@ -1703,6 +1703,11 @@ base64-js@^1.3.1:
   resolved "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
 
+base64url@3.x.x:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/base64url/-/base64url-3.0.1.tgz"
+  integrity sha512-ir1UPr3dkwexU7FdV8qBBbNDRUhMmIekYMFZfi+C/sLNnRESKPl23nB9b2pltqfOQNnGzsDdId90AEtG5tCx4A==
+
 bcrypt@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmjs.org/bcrypt/-/bcrypt-5.1.1.tgz"
@@ -4393,6 +4398,11 @@ npmlog@^5.0.1:
     gauge "^3.0.0"
     set-blocking "^2.0.0"
 
+oauth@0.9.x:
+  version "0.9.15"
+  resolved "https://registry.npmjs.org/oauth/-/oauth-0.9.15.tgz"
+  integrity sha512-a5ERWK1kh38ExDEfoO6qUHJb32rd7aYmPHuyCu3Fta/cnICvYmgd2uhuKXvPD+PXB+gCEYYEaQdIRAjCOwAKNA==
+
 object-assign@^4, object-assign@^4.0.1, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
@@ -4566,6 +4576,13 @@ pascal-case@^3.1.2:
     no-case "^3.0.4"
     tslib "^2.0.3"
 
+passport-google-oauth20@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/passport-google-oauth20/-/passport-google-oauth20-2.0.0.tgz"
+  integrity sha512-KSk6IJ15RoxuGq7D1UKK/8qKhNfzbLeLrG3gkLZ7p4A6DBCcv7xpyQwuXtWdpyR0+E0mwkpjY1VfPOhxQrKzdQ==
+  dependencies:
+    passport-oauth2 "1.x.x"
+
 passport-jwt@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/passport-jwt/-/passport-jwt-4.0.1.tgz"
@@ -4573,6 +4590,17 @@ passport-jwt@^4.0.1:
   dependencies:
     jsonwebtoken "^9.0.0"
     passport-strategy "^1.0.0"
+
+passport-oauth2@1.x.x:
+  version "1.7.0"
+  resolved "https://registry.npmjs.org/passport-oauth2/-/passport-oauth2-1.7.0.tgz"
+  integrity sha512-j2gf34szdTF2Onw3+76alNnaAExlUmHvkc7cL+cmaS5NzHzDP/BvFHJruueQ9XAeNOdpI+CH+PWid8RA7KCwAQ==
+  dependencies:
+    base64url "3.x.x"
+    oauth "0.9.x"
+    passport-strategy "1.x.x"
+    uid2 "0.0.x"
+    utils-merge "1.x.x"
 
 passport-strategy@^1.0.0, passport-strategy@1.x.x:
   version "1.0.0"
@@ -5725,6 +5753,11 @@ uid@2.0.2:
   dependencies:
     "@lukeed/csprng" "^1.0.0"
 
+uid2@0.0.x:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/uid2/-/uid2-0.0.4.tgz"
+  integrity sha512-IevTus0SbGwQzYh3+fRsAMTVVPOoIVufzacXcHPmdlle1jUpq7BRL+mw3dgeLanvGZdwwbWhRV6XrcFNdBmjWA==
+
 undici-types@~5.26.4:
   version "5.26.5"
   resolved "https://registry.npmjs.org/undici-types/-/undici-types-5.26.5.tgz"
@@ -5765,7 +5798,7 @@ util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
-utils-merge@^1.0.1, utils-merge@1.0.1:
+utils-merge@^1.0.1, utils-merge@1.0.1, utils-merge@1.x.x:
   version "1.0.1"
   resolved "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==

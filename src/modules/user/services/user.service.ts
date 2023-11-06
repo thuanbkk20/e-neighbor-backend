@@ -4,6 +4,7 @@ import { UserNotFoundException } from 'src/exceptions';
 import { UserEntity } from '../domains/entities/user.entity';
 import { RegisterDto } from 'src/modules/auth/domains/dtos/sign-in.dto';
 import { generateHash } from '@/common/utils';
+import { GoogleSignInDto } from './../../auth/domains/dtos/google-sign-in.dto';
 
 @Injectable()
 export class UserService {
@@ -42,5 +43,22 @@ export class UserService {
     } catch (error) {
       throw new BadRequestException();
     }
+  }
+
+  async registerByGoogle(registerDto: GoogleSignInDto): Promise<UserEntity> {
+    try {
+      const user = await this.userRepository.insert({
+        ...registerDto,
+        password: generateHash(registerDto.password),
+      });
+
+      return user.raw[0];
+    } catch (error) {
+      throw new BadRequestException();
+    }
+  }
+
+  async findByRequiredInfo(findOptions: object): Promise<UserEntity | null> {
+    return await this.userRepository.findOneBy(findOptions);
   }
 }
