@@ -5,10 +5,10 @@ import type {
 } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 
-import type { AdminEntity } from '../modules/admin/domains/entities/admin.entity';
-import type { UserEntity } from '../modules/user/domains/entities/user.entity';
-import { ContextProvider } from '../providers';
-import { LessorEntity } from '../modules/lessor/domains/entities/lessor.entity';
+import type { AdminEntity } from '@modules/admin/domains/entities/admin.entity';
+import type { UserEntity } from '@modules/user/domains/entities/user.entity';
+import { ContextProvider } from '@/providers';
+import { LessorEntity } from '@modules/lessor/domains/entities/lessor.entity';
 
 @Injectable()
 export class AuthUserInterceptor implements NestInterceptor {

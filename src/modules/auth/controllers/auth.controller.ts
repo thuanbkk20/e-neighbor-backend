@@ -6,12 +6,15 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
-import { SignInDto } from '../domains/dtos/sign-in.dto';
+import { RegisterDto, SignInDto } from '../domains/dtos/sign-in.dto';
 import { ContextProvider } from './../../../providers/context.provider';
 import { Auth } from './../../../decorators';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -34,5 +37,16 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async adminSignIn(@Body() signInDto: SignInDto) {
     return this.authService.adminSignIn(signInDto);
+  }
+
+  @Post('register')
+  async userRegister(@Body() registerDto: RegisterDto) {
+    return this.authService.userRegister(registerDto);
+  }
+
+  @Get('/google/callback')
+  @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@Req() req) {
+    return this.authService.googleLogin(req);
   }
 }

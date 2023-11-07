@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { LessorModule } from '../lessor/lessor.module';
+import { GoogleStrategy } from './strategies/google.stategy';
 
 config();
 const configService = new ConfigService();
@@ -25,7 +26,7 @@ const configService = new ConfigService();
     }),
   ],
   exports: [AuthService],
-  providers: [AuthService],
+  providers: [AuthService, GoogleStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

@@ -28,6 +28,8 @@ async function bootstrap() {
     new SerializerInterceptor(),
   );
 
+  app.setGlobalPrefix('/api/v1');
+
   const configService = app.select(SharedModule).get(ApiConfigService);
 
   if (configService.documentationEnabled) {
