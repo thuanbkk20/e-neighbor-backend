@@ -15,7 +15,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly adminService: AdminService,
-    private readonly lessorSerivce: LessorService,
+    private readonly lessorService: LessorService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -28,6 +28,22 @@ export class AuthService {
     const payload = {
       id: user.id,
       role: ROLE.USER,
+    };
+    return {
+      accessToken: await this.jwtService.signAsync(payload),
+    };
+  }
+
+  async lessorSignIn(signInDto: SignInDto): Promise<any> {
+    const user = await this.userService.findOneByUserName(signInDto.userName);
+    const isMatched = await validateHash(signInDto.password, user.password);
+    if (!isMatched) {
+      throw new UnauthorizedException('Invalid credential');
+    }
+    const lessor = await this.lessorService.findOneByUserId(user.id);
+    const payload = {
+      id: lessor.id,
+      role: ROLE.LESSOR,
     };
     return {
       accessToken: await this.jwtService.signAsync(payload),
