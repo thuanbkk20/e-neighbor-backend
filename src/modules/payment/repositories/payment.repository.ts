@@ -15,4 +15,11 @@ export class PaymentRepository extends Repository<PaymentMethodEntity> {
     );
     return queryRunner.getMany();
   }
+
+  async deleteByUserId(id: number) {
+    await this.createQueryBuilder('payment_method') // Use the correct table name here
+      .delete()
+      .where('payment_method.user_id = :id', { id: id })
+      .execute();
+  }
 }

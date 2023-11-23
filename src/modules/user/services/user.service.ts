@@ -14,7 +14,7 @@ import { UserUpdateDto } from '../domains/dtos/user-update.dto';
 import { validateHash } from './../../../common/utils';
 import { UserDto } from '../domains/dtos/user.dto';
 import { PaymentMethodEntity } from '../../payment/domains/entities/payment.entity';
-import { AddPaymentMethodDto } from '../../payment/domains/dtos/add-payment-method.dto';
+import { AddPaymentMethodDto, UpdatePaymentMethodDto } from '../../payment/domains/dtos/payment-method.dto';
 import { ContextProvider } from '../../../providers';
 import { AdminEntity } from '../../admin/domains/entities/admin.entity';
 
@@ -112,5 +112,13 @@ export class UserService {
   async addPaymentMethod(paymentMethod: AddPaymentMethodDto) {
     const user = await this.findOneById(paymentMethod.userId);
     return this.paymentService.addUserPaymentMethod(paymentMethod, user);
+  }
+
+  async updatePaymentMethod(
+    userId: number,
+    paymentMethods: UpdatePaymentMethodDto[],
+  ) {
+    const user = await this.findOneById(userId);
+    this.paymentService.updateUserPaymentMethod(user, paymentMethods);
   }
 }

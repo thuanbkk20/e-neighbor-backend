@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PaymentMethodType } from '../../../../constants';
 
-export class AddPaymentMethodDto {
+export class UpdatePaymentMethodDto {
   @ApiProperty()
   name: string;
 
@@ -10,7 +10,9 @@ export class AddPaymentMethodDto {
 
   @ApiProperty()
   accountNumber: string;
+}
 
+export class AddPaymentMethodDto extends UpdatePaymentMethodDto {
   @ApiProperty()
   userId: number;
 }

@@ -1,7 +1,10 @@
+import { PaymentMethodEntity } from './../domains/entities/payment.entity';
 import { Injectable } from '@nestjs/common';
-import { PaymentMethodEntity } from '../domains/entities/payment.entity';
 import { PaymentRepository } from './../repositories/payment.repository';
-import { AddPaymentMethodDto } from '../domains/dtos/add-payment-method.dto';
+import {
+  AddPaymentMethodDto,
+  UpdatePaymentMethodDto,
+} from '../domains/dtos/payment-method.dto';
 import { UserEntity } from '../../user/domains/entities/user.entity';
 @Injectable()
 export class PaymentService {
@@ -24,5 +27,21 @@ export class PaymentService {
     };
     this.paymentRepository.insert(paymentMethodtoAdd);
     return paymentMethod;
+  }
+
+  async updateUserPaymentMethod(
+    user: UserEntity,
+    paymentMethods: UpdatePaymentMethodDto[],
+  ) {
+    //Remove user exist payment method
+    await this.paymentRepository.deleteByUserId(user.id);
+    //Insert the replacement payment methods
+    const paymentMethodsToSave = paymentMethods.map((paymentMethod) => ({
+      name: paymentMethod.name,
+      type: paymentMethod.type,
+      accountNumber: paymentMethod.accountNumber,
+      user: user,
+    }));
+    this.paymentRepository.insert(paymentMethodsToSave);
   }
 }
