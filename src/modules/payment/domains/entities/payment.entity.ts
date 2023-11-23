@@ -15,7 +15,7 @@ export class PaymentMethodEntity extends AbstractEntity {
   type: PaymentMethodType;
 
   @Column()
-  accountNumber: number;
+  accountNumber: string;
 
   @ManyToOne(() => UserEntity, (user) => user.id)
   @JoinColumn()

@@ -1,3 +1,4 @@
+import { PaymentService } from './../../payment/services/payment.service';
 import {
   BadRequestException,
   Injectable,
@@ -12,10 +13,17 @@ import { GoogleSignInDto } from './../../auth/domains/dtos/google-sign-in.dto';
 import { UserUpdateDto } from '../domains/dtos/user-update.dto';
 import { validateHash } from './../../../common/utils';
 import { UserDto } from '../domains/dtos/user.dto';
+import { PaymentMethodEntity } from '../../payment/domains/entities/payment.entity';
+import { AddPaymentMethodDto } from '../../payment/domains/dtos/add-payment-method.dto';
+import { ContextProvider } from '../../../providers';
+import { AdminEntity } from '../../admin/domains/entities/admin.entity';
 
 @Injectable()
 export class UserService {
-  constructor(readonly userRepository: UserRepository) {}
+  constructor(
+    readonly userRepository: UserRepository,
+    readonly paymentService: PaymentService,
+  ) {}
 
   async findOneByUserName(userName: string): Promise<UserEntity> {
     const user = await this.userRepository.findUserByUserName(userName);
@@ -84,5 +92,25 @@ export class UserService {
     const { password, ...returnUser } =
       await this.userRepository.updateUser(user);
     return returnUser;
+  }
+
+  async canCreateLessorAccount(id: number): Promise<boolean> {
+    const user = await this.findOneById(id);
+    const { avatar, ...fieldsToCheck } = user;
+    const isValid = Object.values(fieldsToCheck).every((x) => x !== null);
+    console.log(isValid);
+    return isValid;
+  }
+
+  async getUserPaymentInfo(userId: number): Promise<PaymentMethodEntity[]> {
+    //Check if userId valid
+    await this.findOneById(userId);
+    return this.paymentService.findByUserId(userId);
+  }
+
+  //TODO: Prevent user from adding payment methods of another account
+  async addPaymentMethod(paymentMethod: AddPaymentMethodDto) {
+    const user = await this.findOneById(paymentMethod.userId);
+    return this.paymentService.addUserPaymentMethod(paymentMethod, user);
   }
 }
