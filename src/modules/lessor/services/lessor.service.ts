@@ -21,18 +21,29 @@ export class LessorService {
     return lessor;
   }
 
+  async findOneByUserId(id: number): Promise<LessorEntity> {
+    const lessor = await this.lessorRepository.findOneByUserId(id);
+
+    if (!lessor) {
+      throw new LessorNotFoundException();
+    }
+    return lessor;
+  }
+
   async registerLessor(registerDto: LessorRegisterDto) {
     const user = await this.userService.findOneById(registerDto.userId);
     if (user.role === 'lessor') {
       throw new BadRequestException('The account role is already lessor');
     }
     //Update user information
-    await this.userService.registerLessor(registerDto);
+    const userAfterUpdate = await this.userService.registerLessor(registerDto);
     //Create new lessor record
     const lessor = {
       wareHouseAddress: registerDto.wareHouseAddress,
 
       description: registerDto.description,
+
+      user: userAfterUpdate,
     };
     this.lessorRepository.save(lessor);
   }

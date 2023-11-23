@@ -39,6 +39,12 @@ export class AuthController {
     return this.authService.adminSignIn(signInDto);
   }
 
+  @Post('lessor-login')
+  @HttpCode(HttpStatus.OK)
+  async lessorSignIn(@Body() signInDto: SignInDto) {
+    return this.authService.lessorSignIn(signInDto);
+  }
+
   @Post('register')
   async userRegister(@Body() registerDto: RegisterDto) {
     return this.authService.userRegister(registerDto);

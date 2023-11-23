@@ -14,4 +14,11 @@ export class LessorRepository extends Repository<LessorEntity> {
       .where('lessor.id = :id', { id });
     return queryBuilder.getOne();
   }
+
+  async findOneByUserId(id: number): Promise<LessorEntity | null> {
+    const queryBuilder = this.createQueryBuilder('lessor')
+      .leftJoinAndSelect('lessor.user', 'user')
+      .where('lessor.user_id = :id', { id });
+    return queryBuilder.getOne();
+  }
 }

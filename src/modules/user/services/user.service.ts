@@ -82,12 +82,10 @@ export class UserService {
 
   async updateUser(user: UserUpdateDto): Promise<UserDto> {
     const userInDB = await this.findOneById(user.id);
-    console.log(userInDB);
     const isPasswordMatched = await validateHash(
       user.password,
       userInDB.password,
     );
-    console.log(isPasswordMatched);
     if (!isPasswordMatched) {
       throw new UnauthorizedException();
     }
@@ -117,15 +115,15 @@ export class UserService {
     this.paymentService.updateUserPaymentMethod(user, paymentMethods);
   }
 
-  async registerLessor(registerDto: LessorRegisterDto) {
+  async registerLessor(registerDto: LessorRegisterDto): Promise<UserEntity> {
     const userToUpdate = {
       ...registerDto,
       id: registerDto.userId,
       role: ROLE.LESSOR,
     };
-    //update user infor
-    this.userRepository.save(userToUpdate);
     //update payment method
     await this.updatePaymentMethod(registerDto.userId, registerDto.paymentInfo);
+    //update user infor
+    return this.userRepository.save(userToUpdate);
   }
 }
