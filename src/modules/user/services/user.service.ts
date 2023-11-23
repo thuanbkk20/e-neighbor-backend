@@ -1,3 +1,4 @@
+import { PaymentService } from './../../payment/services/payment.service';
 import {
   BadRequestException,
   Injectable,
@@ -12,10 +13,20 @@ import { GoogleSignInDto } from './../../auth/domains/dtos/google-sign-in.dto';
 import { UserUpdateDto } from '../domains/dtos/user-update.dto';
 import { validateHash } from './../../../common/utils';
 import { UserDto } from '../domains/dtos/user.dto';
+import { PaymentMethodEntity } from '../../payment/domains/entities/payment.entity';
+import {
+  AddPaymentMethodDto,
+  UpdatePaymentMethodDto,
+} from '../../payment/domains/dtos/payment-method.dto';
+import { LessorRegisterDto } from '../../lessor/domains/dtos/create-lessor.dto';
+import { ROLE } from '../../../constants';
 
 @Injectable()
 export class UserService {
-  constructor(readonly userRepository: UserRepository) {}
+  constructor(
+    readonly userRepository: UserRepository,
+    readonly paymentService: PaymentService,
+  ) {}
 
   async findOneByUserName(userName: string): Promise<UserEntity> {
     const user = await this.userRepository.findUserByUserName(userName);
@@ -84,5 +95,37 @@ export class UserService {
     const { password, ...returnUser } =
       await this.userRepository.updateUser(user);
     return returnUser;
+  }
+
+  async getUserPaymentInfo(userId: number): Promise<PaymentMethodEntity[]> {
+    //Check if userId valid
+    await this.findOneById(userId);
+    return this.paymentService.findByUserId(userId);
+  }
+
+  //TODO: Prevent user from adding payment methods of another account
+  async addPaymentMethod(paymentMethod: AddPaymentMethodDto) {
+    const user = await this.findOneById(paymentMethod.userId);
+    return this.paymentService.addUserPaymentMethod(paymentMethod, user);
+  }
+
+  async updatePaymentMethod(
+    userId: number,
+    paymentMethods: UpdatePaymentMethodDto[],
+  ) {
+    const user = await this.findOneById(userId);
+    this.paymentService.updateUserPaymentMethod(user, paymentMethods);
+  }
+
+  async registerLessor(registerDto: LessorRegisterDto) {
+    const userToUpdate = {
+      ...registerDto,
+      id: registerDto.userId,
+      role: ROLE.LESSOR,
+    };
+    //update user infor
+    this.userRepository.save(userToUpdate);
+    //update payment method
+    await this.updatePaymentMethod(registerDto.userId, registerDto.paymentInfo);
   }
 }
