@@ -14,9 +14,12 @@ import { UserUpdateDto } from '../domains/dtos/user-update.dto';
 import { validateHash } from './../../../common/utils';
 import { UserDto } from '../domains/dtos/user.dto';
 import { PaymentMethodEntity } from '../../payment/domains/entities/payment.entity';
-import { AddPaymentMethodDto, UpdatePaymentMethodDto } from '../../payment/domains/dtos/payment-method.dto';
-import { ContextProvider } from '../../../providers';
-import { AdminEntity } from '../../admin/domains/entities/admin.entity';
+import {
+  AddPaymentMethodDto,
+  UpdatePaymentMethodDto,
+} from '../../payment/domains/dtos/payment-method.dto';
+import { LessorRegisterDto } from '../../lessor/domains/dtos/create-lessor.dto';
+import { ROLE } from '../../../constants';
 
 @Injectable()
 export class UserService {
@@ -94,14 +97,6 @@ export class UserService {
     return returnUser;
   }
 
-  async canCreateLessorAccount(id: number): Promise<boolean> {
-    const user = await this.findOneById(id);
-    const { avatar, ...fieldsToCheck } = user;
-    const isValid = Object.values(fieldsToCheck).every((x) => x !== null);
-    console.log(isValid);
-    return isValid;
-  }
-
   async getUserPaymentInfo(userId: number): Promise<PaymentMethodEntity[]> {
     //Check if userId valid
     await this.findOneById(userId);
@@ -120,5 +115,17 @@ export class UserService {
   ) {
     const user = await this.findOneById(userId);
     this.paymentService.updateUserPaymentMethod(user, paymentMethods);
+  }
+
+  async registerLessor(registerDto: LessorRegisterDto) {
+    const userToUpdate = {
+      ...registerDto,
+      id: registerDto.userId,
+      role: ROLE.LESSOR,
+    };
+    //update user infor
+    this.userRepository.save(userToUpdate);
+    //update payment method
+    await this.updatePaymentMethod(registerDto.userId, registerDto.paymentInfo);
   }
 }

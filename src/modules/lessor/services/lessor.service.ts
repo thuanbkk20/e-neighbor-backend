@@ -1,11 +1,16 @@
 import { LessorNotFoundException } from 'src/exceptions';
 import { LessorEntity } from '../domains/entities/lessor.entity';
 import { LessorRepository } from './../repositories/lessor.repository';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { UserService } from '../../user/services/user.service';
+import { LessorRegisterDto } from '../domains/dtos/create-lessor.dto';
 
 @Injectable()
 export class LessorService {
-  constructor(private readonly lessorRepository: LessorRepository) {}
+  constructor(
+    private readonly lessorRepository: LessorRepository,
+    private readonly userService: UserService,
+  ) {}
 
   async findOneById(id: number): Promise<LessorEntity> {
     const lessor = await this.lessorRepository.findOneById(id);
@@ -14,5 +19,21 @@ export class LessorService {
       throw new LessorNotFoundException();
     }
     return lessor;
+  }
+
+  async registerLessor(registerDto: LessorRegisterDto) {
+    const user = await this.userService.findOneById(registerDto.userId);
+    if (user.role === 'lessor') {
+      throw new BadRequestException('The account role is already lessor');
+    }
+    //Update user information
+    await this.userService.registerLessor(registerDto);
+    //Create new lessor record
+    const lessor = {
+      wareHouseAddress: registerDto.wareHouseAddress,
+
+      description: registerDto.description,
+    };
+    this.lessorRepository.save(lessor);
   }
 }
