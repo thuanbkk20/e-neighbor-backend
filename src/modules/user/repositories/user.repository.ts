@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../domains/entities/user.entity';
+import { UserUpdateDto } from '../domains/dtos/user-update.dto';
 
 @Injectable()
 export class UserRepository extends Repository<UserEntity> {
@@ -12,5 +13,9 @@ export class UserRepository extends Repository<UserEntity> {
     return this.findOneBy({
       userName: userName,
     });
+  }
+
+  async updateUser(user: UserUpdateDto): Promise<UserEntity | null> {
+    return this.save(user);
   }
 }

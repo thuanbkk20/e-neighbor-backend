@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AdminService {
-  constructor(private readonly adminRepository: AdminRepository) {}
+  constructor(readonly adminRepository: AdminRepository) {}
 
   async findOneByUserName(userName: string): Promise<AdminEntity> {
     const admin = await this.adminRepository.findByUserName(userName);

@@ -31,8 +31,8 @@ export class UserEntity extends AbstractEntity {
   @Column({ nullable: true })
   fullName: string;
 
-  @Column()
-  role: ROLE = ROLE.USER;
+  @Column({ default: ROLE.USER })
+  role: string;
 
   @Column({ nullable: true })
   CCCD: string;
