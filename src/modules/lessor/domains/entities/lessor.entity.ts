@@ -24,7 +24,6 @@ export class LessorEntity extends AbstractEntity {
   @JoinColumn()
   user: UserEntity;
 
-  @OneToMany(() => ProductEntity, (product) => product.id)
-  @JoinColumn()
+  @OneToMany(() => ProductEntity, (product) => product.lessor)
   products: ProductEntity[];
 }

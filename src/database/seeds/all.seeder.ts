@@ -10,6 +10,10 @@ import { UserEntity } from '../../modules/user/domains/entities/user.entity';
 
 import { SnakeNamingStrategy } from '../../snake-naming.strategy';
 import AdminSeeder from './admin.seeder';
+import CategorySeeder from './category.seeder';
+import { CategoryEntity } from '../../modules/category/domains/entities/category.entity';
+import { ProductEntity } from '../../modules/product/domains/entities/product.entity';
+import { SurChargeEntity } from '../../modules/product/domains/entities/surcharge.entity';
 
 dotenv.config();
 
@@ -22,8 +26,14 @@ async function executeSeeding() {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     namingStrategy: new SnakeNamingStrategy(),
-    entities: [AdminEntity, UserEntity],
-    seeds: [AdminSeeder],
+    entities: [
+      AdminEntity,
+      UserEntity,
+      CategoryEntity,
+      ProductEntity,
+      SurChargeEntity,
+    ],
+    seeds: [AdminSeeder, CategorySeeder],
   };
 
   const dataSource = new DataSource(options);
