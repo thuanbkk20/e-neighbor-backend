@@ -13,3 +13,6 @@ export const REQUIRED_DOCUMENTS_MAPPING = {
 } as const;
 
 export type RequiredDocumentsType = ValueOf<typeof REQUIRED_DOCUMENTS>;
+export type RequiredDocumentsMappingType = ValueOf<
+  typeof REQUIRED_DOCUMENTS_MAPPING
+>;

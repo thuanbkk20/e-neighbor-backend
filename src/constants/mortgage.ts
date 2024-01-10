@@ -11,3 +11,4 @@ export const MORTGAGE_MAPPING = {
 };
 
 export type MortgageType = ValueOf<typeof MORTGAGE>;
+export type MortgageMappingType = ValueOf<typeof MORTGAGE_MAPPING>;

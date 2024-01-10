@@ -12,6 +12,8 @@ import { LessorModule } from './modules/lessor/lessor.module';
 import { UserModule } from './modules/user/user.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ProductModule } from './modules/product/product.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { AuthModule } from './modules/auth/auth.module';
     UserModule,
     AdminModule,
     AuthModule,
+    ProductModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}
