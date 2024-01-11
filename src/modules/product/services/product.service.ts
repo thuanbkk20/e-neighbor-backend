@@ -74,4 +74,8 @@ export class ProductService {
 
     return this.productRepository.save(newProduct);
   }
+
+  async findOneById(id: number): Promise<ProductEntity> {
+    return this.productRepository.findOneById(id);
+  }
 }

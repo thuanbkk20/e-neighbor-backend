@@ -68,7 +68,6 @@ export class ProductEntity extends AbstractEntity {
   @JoinColumn({ name: 'category_id' })
   category: CategoryEntity;
 
-  @Exclude()
   @OneToMany(() => SurChargeEntity, (surcharge) => surcharge.product)
   surcharge: SurChargeEntity[];
 

@@ -7,4 +7,13 @@ export class ProductRepository extends Repository<ProductEntity> {
   constructor(private readonly dataSource: DataSource) {
     super(ProductEntity, dataSource.createEntityManager());
   }
+
+  async findOneById(id: number): Promise<ProductEntity> {
+    const query = this.createQueryBuilder('products')
+      .leftJoinAndSelect('products.category', 'category')
+      .leftJoinAndSelect('products.surcharge', 'surcharge')
+      .leftJoinAndSelect('products.lessor', 'lessor')
+      .where('products.id = :id', { id: id });
+    return query.getOne();
+  }
 }

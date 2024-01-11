@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ROLE } from '../../../constants';
 import { Auth } from '../../../decorators';
@@ -21,5 +21,13 @@ export class ProductController {
     @Body() createProductDto: CreateProductDto,
   ): Promise<ProductEntity> {
     return this.productService.createProduct(createProductDto);
+  }
+
+  @Get(':id')
+  @ApiOkResponse({
+    type: ProductEntity,
+  })
+  async findProductById(@Param('id') id: number): Promise<ProductEntity> {
+    return this.productService.findOneById(id);
   }
 }
