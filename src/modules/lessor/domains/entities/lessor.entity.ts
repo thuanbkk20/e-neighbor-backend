@@ -1,6 +1,7 @@
+import { ProductEntity } from '../../../product/domains/entities/product.entity';
 import { AbstractEntity } from './../../../../common/abstract.entity';
 import { UserEntity } from './../../../user/domains/entities/user.entity';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity('lessors')
 export class LessorEntity extends AbstractEntity {
@@ -22,4 +23,7 @@ export class LessorEntity extends AbstractEntity {
   @OneToOne(() => UserEntity)
   @JoinColumn()
   user: UserEntity;
+
+  @OneToMany(() => ProductEntity, (product) => product.lessor)
+  products: ProductEntity[];
 }

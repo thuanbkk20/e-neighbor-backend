@@ -15,6 +15,10 @@ export const ERROR_LESSOR_NOT_FOUND = 'error.lessorNotFound';
 // Admin Module error messages
 export const ERROR_ADMIN_NOT_FOUND = 'error.adminNotFound';
 
+// Product Module error messages
+export const ERROR_PRODUCT_NOT_FOUND = 'error.productNotFound';
+export const ERROR_PRODUCT_MISSING_FIELD = 'error.productMissingField';
+
 // Error refreshToken expired
 export const ERROR_REFRESH_TOKEN_EXPIRED = 'error.refreshTokenExpired';
 

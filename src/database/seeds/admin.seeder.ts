@@ -10,8 +10,8 @@ const configService = new ConfigService();
 
 export default class AdminSeeder implements Seeder {
   public async run(dataSource: DataSource) {
-    const categoryRepository = dataSource.getRepository(AdminEntity);
-    await categoryRepository.insert([
+    const adminRepository = dataSource.getRepository(AdminEntity);
+    await adminRepository.insert([
       {
         userName: 'admin',
         password: generateHash('12345678'),

@@ -1,9 +1,16 @@
+import {
+  REQUIRED_DOCUMENTS,
+  RequiredDocumentsType,
+} from './../../../../constants/required-documents';
 import { STATUS, StatusType } from './../../../../constants/status';
-import { Column, Entity, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../../../../common/abstract.entity';
 import { Characteristics } from '../classes/policy.class';
-import { LessorEntity } from '../../../lessor/domains/entities/lessor.entity';
 import { CategoryEntity } from '../../../category/domains/entities/category.entity';
+import { MORTGAGE, MortgageType } from '../../../../constants';
+import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
+import { SurChargeEntity } from './surcharge.entity';
+import { LessorEntity } from '../../../lessor/domains/entities/lessor.entity';
 
 @Entity('products')
 export class ProductEntity extends AbstractEntity {
@@ -17,8 +24,12 @@ export class ProductEntity extends AbstractEntity {
   })
   status: StatusType;
 
-  @Column({ nullable: true })
-  mortgage: string;
+  @Column({
+    type: 'enum',
+    enum: MORTGAGE,
+    default: MORTGAGE.NONE,
+  })
+  mortgage: MortgageType;
 
   @Column()
   description: string;
@@ -29,16 +40,40 @@ export class ProductEntity extends AbstractEntity {
   @Column('simple-array')
   policies: string[];
 
+  @Column('simple-array')
+  images: string[];
+
   @Column('simple-json')
   characteristics: Characteristics[];
 
   @Column()
   price: number;
 
-  @OneToOne(() => LessorEntity)
-  @JoinColumn()
-  lessor: LessorEntity;
+  @Column({
+    type: 'enum',
+    enum: REQUIRED_DOCUMENTS,
+    default: REQUIRED_DOCUMENTS.NONE,
+  })
+  requiredDocuments: RequiredDocumentsType;
 
-  @OneToMany(() => CategoryEntity, (category) => category.id)
-  category: CategoryEntity[];
+  @Column({
+    type: 'enum',
+    enum: TIME_UNIT,
+    default: TIME_UNIT.DAY,
+  })
+  timeUnit: TimeUnitType;
+
+  @ManyToOne(() => CategoryEntity, (category) => category.products)
+  @JoinColumn({ name: 'category_id' })
+  category: CategoryEntity;
+
+  @OneToMany(() => SurChargeEntity, (surcharge) => surcharge.product)
+  surcharge: SurChargeEntity[];
+
+  @Column({ type: Boolean, default: false })
+  isConfirmed: boolean;
+
+  @ManyToOne(() => LessorEntity, (lessor) => lessor.products)
+  @JoinColumn({ name: 'lessor_id' })
+  lessor: LessorEntity;
 }
