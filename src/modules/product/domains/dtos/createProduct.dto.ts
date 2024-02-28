@@ -1,5 +1,5 @@
 import { Characteristics } from './../classes/policy.class';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsArray, IsNumber, IsString } from 'class-validator';
 import {
   MORTGAGE_MAPPING,
@@ -9,6 +9,7 @@ import {
 } from '../../../../constants';
 import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
 import { CreateSurchargeDto } from './createSurcharge.dto';
+import { CreateInsuranceDto } from './createInsurace.dto';
 
 export class CreateProductDto {
   @ApiProperty()
@@ -55,4 +56,7 @@ export class CreateProductDto {
   @ApiProperty({ type: CreateSurchargeDto, isArray: true })
   @IsArray()
   surcharge: CreateSurchargeDto[];
+
+  @ApiPropertyOptional({ type: CreateInsuranceDto })
+  insurance: CreateInsuranceDto;
 }

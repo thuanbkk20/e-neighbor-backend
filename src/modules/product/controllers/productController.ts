@@ -5,6 +5,7 @@ import { Auth } from '../../../decorators';
 import { CreateProductDto } from '../domains/dtos/createProduct.dto';
 import { ProductService } from '../services/product.service';
 import { ProductEntity } from '../domains/entities/product.entity';
+import { ProductDto } from '../domains/dtos/product.dto';
 
 @Controller('products')
 @ApiTags('products')
@@ -25,9 +26,9 @@ export class ProductController {
 
   @Get(':id')
   @ApiOkResponse({
-    type: ProductEntity,
+    type: ProductDto,
   })
-  async findProductById(@Param('id') id: number): Promise<ProductEntity> {
+  async findProductById(@Param('id') id: number): Promise<ProductDto> {
     return this.productService.findOneById(id);
   }
 }

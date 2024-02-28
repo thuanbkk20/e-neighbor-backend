@@ -7,11 +7,17 @@ import { UserModule } from '../user/user.module';
 import { AdminModule } from '../admin/admin.module';
 import { LessorModule } from '../lessor/lessor.module';
 import { SurchargeRepository } from './repositories/surcharge.repository';
+import { InsuranceRepository } from './repositories/insurance.repository';
 
 @Module({
   imports: [CategoryModule, UserModule, AdminModule, LessorModule],
   controllers: [ProductController],
-  providers: [ProductRepository, ProductService, SurchargeRepository],
+  providers: [
+    ProductRepository,
+    ProductService,
+    SurchargeRepository,
+    InsuranceRepository,
+  ],
   exports: [ProductService],
 })
 export class ProductModule {}

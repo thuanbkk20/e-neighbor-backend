@@ -10,7 +10,6 @@ import { CategoryEntity } from '../../../category/domains/entities/category.enti
 import { MORTGAGE, MortgageType } from '../../../../constants';
 import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
 import { SurChargeEntity } from './surcharge.entity';
-import { Exclude } from 'class-transformer';
 import { LessorEntity } from '../../../lessor/domains/entities/lessor.entity';
 
 @Entity('products')
