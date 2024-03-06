@@ -1,4 +1,4 @@
-import { PaymentMethodEntity } from './../domains/entities/payment.entity';
+import { PaymentMethodEntity } from '../domains/entities/payment-method.entity';
 import { Injectable } from '@nestjs/common';
 import { PaymentRepository } from './../repositories/payment.repository';
 import {

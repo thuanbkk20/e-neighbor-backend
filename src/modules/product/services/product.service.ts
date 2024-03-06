@@ -5,7 +5,7 @@ import { CreateProductDto } from './../domains/dtos/createProduct.dto';
 import { Injectable } from '@nestjs/common';
 import { ProductRepository } from '../repositories/product.reposiory';
 import { ProductEntity } from '../domains/entities/product.entity';
-import { SurchargeRepository } from '../repositories/surcharge.repository';
+import { ProductSurchargeRepository } from '../repositories/product-surcharge.repository';
 import { getKeyByValue } from '../../../interfaces';
 import {
   MORTGAGE,
@@ -14,7 +14,7 @@ import {
   REQUIRED_DOCUMENTS_MAPPING,
 } from '../../../constants';
 import { CategoryService } from '../../category/services/category.service';
-import { SurChargeEntity } from '../domains/entities/surcharge.entity';
+import { ProductSurChargeEntity } from '../domains/entities/product-surcharge.entity';
 import { ContextProvider } from '../../../providers';
 import { ProductMissingFieldException } from '../../../exceptions/invalid-product.exception';
 import { ProductDto } from '../domains/dtos/product.dto';
@@ -25,7 +25,7 @@ export class ProductService {
     private readonly lessorService: LessorService,
     private readonly categoryService: CategoryService,
     private readonly productRepository: ProductRepository,
-    private readonly surchargeRepository: SurchargeRepository,
+    private readonly surchargeRepository: ProductSurchargeRepository,
     private readonly insuranceRepository: InsuranceRepository,
   ) {}
 
@@ -64,9 +64,7 @@ export class ProductService {
     //Save surcharge
     const surcharges = await Promise.all(
       createProductDto.surcharge.map(async (surcharge) => {
-        const newSurcharge = new SurChargeEntity();
-        newSurcharge.description = surcharge.description;
-        newSurcharge.name = surcharge.name;
+        const newSurcharge = new ProductSurChargeEntity();
         newSurcharge.price = surcharge.price;
         newSurcharge.product = newProduct;
         await this.surchargeRepository.save(newSurcharge);
@@ -74,7 +72,7 @@ export class ProductService {
       }),
     );
 
-    newProduct.surcharge = surcharges;
+    newProduct.productSurcharges = surcharges;
 
     const uploader = await this.lessorService.findOneById(
       ContextProvider.getAuthUser().id,

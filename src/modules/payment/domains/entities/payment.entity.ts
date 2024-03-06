@@ -1,23 +1,29 @@
-import {
-  PAYMENT_METHOD,
-  PaymentMethodType,
-} from './../../../../constants/payment-method';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { AbstractEntity } from '../../../../common/abstract.entity';
-import { UserEntity } from '../../../user/domains/entities/user.entity';
+import { PaymentMethodEntity } from './payment-method.entity';
+import { OrderEntity } from '../../../order/domains/entities/order.entity';
+import {
+  PAYMENT_TYPE,
+  PaymentTypeType,
+} from '../../../../constants/payment-type';
 
-@Entity('payment_method')
-export class PaymentMethodEntity extends AbstractEntity {
+@Entity('payment')
+export class PaymentEntity extends AbstractEntity {
   @Column()
-  name: string;
+  paymentAmount: number;
 
-  @Column({ enum: PAYMENT_METHOD })
-  type: PaymentMethodType;
+  @Column({
+    type: 'enum',
+    enum: PAYMENT_TYPE,
+    default: PAYMENT_TYPE.ORDER,
+  })
+  paymentType: PaymentTypeType;
 
-  @Column()
-  accountNumber: string;
-
-  @ManyToOne(() => UserEntity, (user) => user.id)
+  @ManyToOne(() => PaymentMethodEntity, (paymentMethod) => paymentMethod.id)
   @JoinColumn()
-  user: UserEntity;
+  paymentMethod: PaymentMethodEntity;
+
+  @OneToOne(() => OrderEntity, (order) => order.id)
+  @JoinColumn()
+  order: OrderEntity;
 }

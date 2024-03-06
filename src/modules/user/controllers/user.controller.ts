@@ -5,7 +5,7 @@ import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { UserUpdateDto } from '../domains/dtos/user-update.dto';
 import { UserDto } from '../domains/dtos/user.dto';
-import { PaymentMethodEntity } from '../../payment/domains/entities/payment.entity';
+import { PaymentMethodEntity } from '../../payment/domains/entities/payment-method.entity';
 import {
   AddPaymentMethodDto,
   UpdatePaymentMethodDto,

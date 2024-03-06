@@ -9,7 +9,7 @@ import { Characteristics } from '../classes/policy.class';
 import { CategoryEntity } from '../../../category/domains/entities/category.entity';
 import { MORTGAGE, MortgageType } from '../../../../constants';
 import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
-import { SurChargeEntity } from './surcharge.entity';
+import { ProductSurChargeEntity } from './product-surcharge.entity';
 import { LessorEntity } from '../../../lessor/domains/entities/lessor.entity';
 
 @Entity('products')
@@ -67,8 +67,11 @@ export class ProductEntity extends AbstractEntity {
   @JoinColumn({ name: 'category_id' })
   category: CategoryEntity;
 
-  @OneToMany(() => SurChargeEntity, (surcharge) => surcharge.product)
-  surcharge: SurChargeEntity[];
+  @OneToMany(
+    () => ProductSurChargeEntity,
+    (productSurcharge) => productSurcharge.product,
+  )
+  productSurcharges: ProductSurChargeEntity[];
 
   @Column({ type: Boolean, default: false })
   isConfirmed: boolean;

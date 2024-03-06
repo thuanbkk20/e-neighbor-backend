@@ -13,7 +13,7 @@ import { GoogleSignInDto } from './../../auth/domains/dtos/google-sign-in.dto';
 import { UserUpdateDto } from '../domains/dtos/user-update.dto';
 import { validateHash } from './../../../common/utils';
 import { UserDto } from '../domains/dtos/user.dto';
-import { PaymentMethodEntity } from '../../payment/domains/entities/payment.entity';
+import { PaymentMethodEntity } from '../../payment/domains/entities/payment-method.entity';
 import {
   AddPaymentMethodDto,
   UpdatePaymentMethodDto,
