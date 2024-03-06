@@ -13,8 +13,9 @@ import AdminSeeder from './admin.seeder';
 import CategorySeeder from './category.seeder';
 import { CategoryEntity } from '../../modules/category/domains/entities/category.entity';
 import { ProductEntity } from '../../modules/product/domains/entities/product.entity';
-import { SurChargeEntity } from '../../modules/product/domains/entities/surcharge.entity';
+import { ProductSurChargeEntity } from '../../modules/product/domains/entities/product-surcharge.entity';
 import { LessorEntity } from '../../modules/lessor/domains/entities/lessor.entity';
+
 
 dotenv.config();
 
@@ -32,7 +33,7 @@ async function executeSeeding() {
       UserEntity,
       CategoryEntity,
       ProductEntity,
-      SurChargeEntity,
+      ProductSurChargeEntity,
       LessorEntity,
     ],
     seeds: [AdminSeeder, CategorySeeder],

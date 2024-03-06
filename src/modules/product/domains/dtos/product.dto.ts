@@ -5,9 +5,9 @@ import { MortgageType, RequiredDocumentsType } from '../../../../constants';
 import { Characteristics } from '../classes/policy.class';
 import { TimeUnitType } from '../../../../constants/time-unit';
 import { CategoryEntity } from '../../../category/domains/entities/category.entity';
-import { SurChargeEntity } from '../entities/surcharge.entity';
 import { LessorEntity } from '../../../lessor/domains/entities/lessor.entity';
 import { ProductEntity } from '../entities/product.entity';
+import { ProductSurChargeEntity } from '../entities/product-surcharge.entity';
 
 export class ProductDto {
   @ApiProperty()
@@ -47,7 +47,7 @@ export class ProductDto {
   category: CategoryEntity;
 
   @ApiProperty()
-  surcharge: SurChargeEntity[];
+  productSurcharges: ProductSurChargeEntity[];
 
   @ApiProperty()
   isConfirmed: boolean;
@@ -71,7 +71,7 @@ export class ProductDto {
     this.requiredDocuments = product.requiredDocuments;
     this.timeUnit = product.timeUnit;
     this.category = product.category;
-    this.surcharge = product.surcharge;
+    this.productSurcharges = product.productSurcharges;
     this.isConfirmed = product.isConfirmed;
     this.lessor = product.lessor;
     this.insurance = insurance;

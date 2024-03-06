@@ -8,7 +8,7 @@ import {
   RequiredDocumentsMappingType,
 } from '../../../../constants';
 import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
-import { CreateSurchargeDto } from './createSurcharge.dto';
+import { CreateProductSurchargeDto } from './createProductSurcharge.dto';
 import { CreateInsuranceDto } from './createInsurace.dto';
 
 export class CreateProductDto {
@@ -53,9 +53,9 @@ export class CreateProductDto {
   @IsNumber()
   category: number;
 
-  @ApiProperty({ type: CreateSurchargeDto, isArray: true })
+  @ApiProperty({ type: CreateProductSurchargeDto, isArray: true })
   @IsArray()
-  surcharge: CreateSurchargeDto[];
+  surcharge: CreateProductSurchargeDto[];
 
   @ApiPropertyOptional({ type: CreateInsuranceDto })
   insurance: CreateInsuranceDto;
