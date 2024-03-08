@@ -15,7 +15,15 @@ import { CategoryEntity } from '../../modules/category/domains/entities/category
 import { ProductEntity } from '../../modules/product/domains/entities/product.entity';
 import { ProductSurChargeEntity } from '../../modules/product/domains/entities/product-surcharge.entity';
 import { LessorEntity } from '../../modules/lessor/domains/entities/lessor.entity';
-
+import SurchargeSeeder from './surcharge.seeder';
+import { SurchargeEntity } from '../../modules/surcharge/domains/entities/surcharge.entity';
+import { InboxEntity } from '../../modules/inbox/domains/entities/inbox.entity';
+import { FeedbackEntity } from '../../modules/feedback/domains/entities/feedback.entity';
+import { OrderEntity } from '../../modules/order/domains/entities/order.entity';
+import { RentalFeeEntity } from '../../modules/order/domains/entities/rental-fee.entity';
+import { PaymentMethodEntity } from '../../modules/payment/domains/entities/payment-method.entity';
+import { PaymentEntity } from '../../modules/payment/domains/entities/payment.entity';
+import { InsuranceEntity } from '../../modules/product/domains/entities/insurance.entity';
 
 dotenv.config();
 
@@ -32,11 +40,19 @@ async function executeSeeding() {
       AdminEntity,
       UserEntity,
       CategoryEntity,
-      ProductEntity,
-      ProductSurChargeEntity,
+      InboxEntity,
+      FeedbackEntity,
       LessorEntity,
+      OrderEntity,
+      RentalFeeEntity,
+      PaymentMethodEntity,
+      PaymentEntity,
+      InsuranceEntity,
+      ProductSurChargeEntity,
+      ProductEntity,
+      SurchargeEntity,
     ],
-    seeds: [AdminSeeder, CategorySeeder],
+    seeds: [AdminSeeder, CategorySeeder, SurchargeSeeder],
   };
 
   const dataSource = new DataSource(options);
