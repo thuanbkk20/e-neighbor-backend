@@ -11,6 +11,9 @@ import { ProductSurChargeEntity } from '../entities/product-surcharge.entity';
 
 export class ProductDto {
   @ApiProperty()
+  id: number;
+
+  @ApiProperty()
   name: string;
 
   @ApiProperty()
@@ -59,6 +62,7 @@ export class ProductDto {
   insurance?: InsuranceEntity;
 
   constructor(product: ProductEntity, insurance?: InsuranceEntity) {
+    this.id = product.id;
     this.name = product.name;
     this.status = product.status;
     this.mortgage = product.mortgage;

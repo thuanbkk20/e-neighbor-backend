@@ -3,10 +3,13 @@ import { AbstractEntity } from '../../../../common/abstract.entity';
 import { ProductEntity } from './product.entity';
 import { Exclude } from 'class-transformer';
 import { SurchargeEntity } from '../../../surcharge/domains/entities/surcharge.entity';
+import { IsInt, Min } from 'class-validator';
 
 @Entity('product_surcharge')
 export class ProductSurChargeEntity extends AbstractEntity {
-  @Column()
+  @Column({ default: 0 })
+  @IsInt({ message: 'Star rating must be an integer' })
+  @Min(0, { message: 'Surcharge must be at least 0' })
   price: number;
 
   @Exclude()

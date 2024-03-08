@@ -2,7 +2,7 @@ import { InsuranceRepository } from './../repositories/insurance.repository';
 import { InsuranceEntity } from './../domains/entities/insurance.entity';
 import { LessorService } from './../../lessor/services/lessor.service';
 import { CreateProductDto } from './../domains/dtos/createProduct.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductRepository } from '../repositories/product.reposiory';
 import { ProductEntity } from '../domains/entities/product.entity';
 import { ProductSurchargeRepository } from '../repositories/product-surcharge.repository';
@@ -12,12 +12,15 @@ import {
   MORTGAGE_MAPPING,
   REQUIRED_DOCUMENTS,
   REQUIRED_DOCUMENTS_MAPPING,
+  SURCHARGE,
 } from '../../../constants';
 import { CategoryService } from '../../category/services/category.service';
 import { ProductSurChargeEntity } from '../domains/entities/product-surcharge.entity';
 import { ContextProvider } from '../../../providers';
 import { ProductMissingFieldException } from '../../../exceptions/invalid-product.exception';
 import { ProductDto } from '../domains/dtos/product.dto';
+import { EntityManager } from 'typeorm';
+import { SurchargeService } from '../../surcharge/services/surcharge.service';
 
 @Injectable()
 export class ProductService {
@@ -25,14 +28,14 @@ export class ProductService {
     private readonly lessorService: LessorService,
     private readonly categoryService: CategoryService,
     private readonly productRepository: ProductRepository,
-    private readonly surchargeRepository: ProductSurchargeRepository,
+    private readonly productSurchargeRepository: ProductSurchargeRepository,
+    private readonly surchargeService: SurchargeService,
     private readonly insuranceRepository: InsuranceRepository,
   ) {}
 
-  async createProduct(
+  private async productDtoToProductEntity(
     createProductDto: CreateProductDto,
   ): Promise<ProductEntity> {
-    //Create new Product entity to save
     const newProduct = new ProductEntity();
     newProduct.name = createProductDto.name;
     newProduct.description = createProductDto.description;
@@ -55,45 +58,63 @@ export class ProductService {
     newProduct.category = await this.categoryService.findById(
       createProductDto.category,
     );
+    return newProduct;
+  }
 
-    //Check if new product is a car
-    if (newProduct.category.name === 'Car' && !createProductDto.insurance) {
-      throw new ProductMissingFieldException('Insurance is required');
-    }
+  async createProduct(
+    createProductDto: CreateProductDto,
+  ): Promise<ProductEntity> {
+    return await this.productRepository.manager.transaction(
+      async (entityManager: EntityManager) => {
+        const newProduct =
+          await this.productDtoToProductEntity(createProductDto);
 
-    //Save surcharge
-    const surcharges = await Promise.all(
-      createProductDto.surcharge.map(async (surcharge) => {
-        const newSurcharge = new ProductSurChargeEntity();
-        newSurcharge.price = surcharge.price;
-        newSurcharge.product = newProduct;
-        await this.surchargeRepository.save(newSurcharge);
-        return newSurcharge;
-      }),
+        if (newProduct.category.name === 'Car' && !createProductDto.insurance) {
+          throw new ProductMissingFieldException('Insurance is required');
+        }
+
+        const surcharges = await Promise.all(
+          createProductDto.surcharge.map(async (surcharge) => {
+            const productSurcharge = new ProductSurChargeEntity();
+            productSurcharge.surcharge =
+              await this.surchargeService.getSurchargeById(
+                surcharge.surchargeId,
+              );
+            if (!productSurcharge.surcharge) {
+              throw new NotFoundException('Surcharge not found');
+            }
+            if (productSurcharge.surcharge.name === SURCHARGE.DAMAGE) {
+              return;
+            }
+            productSurcharge.price = surcharge.price;
+            await entityManager.save(productSurcharge);
+            return productSurcharge;
+          }),
+        );
+
+        newProduct.productSurcharges = surcharges;
+
+        const uploader = await this.lessorService.findOneById(
+          ContextProvider.getAuthUser().id,
+        );
+        newProduct.lessor = uploader;
+
+        const product = await entityManager.save(newProduct);
+
+        if (newProduct.category.name === 'Car') {
+          const insurance = new InsuranceEntity();
+          insurance.name = createProductDto.insurance.name;
+          insurance.description = createProductDto.insurance.description;
+          insurance.images = createProductDto.insurance.images;
+          insurance.issueDate = createProductDto.insurance.issueDate;
+          insurance.expirationDate = createProductDto.insurance.expirationDate;
+          insurance.product = product;
+          await entityManager.save(insurance);
+        }
+
+        return product;
+      },
     );
-
-    newProduct.productSurcharges = surcharges;
-
-    const uploader = await this.lessorService.findOneById(
-      ContextProvider.getAuthUser().id,
-    );
-
-    newProduct.lessor = uploader;
-
-    const product = await this.productRepository.save(newProduct);
-
-    //save insurance if new product is a car
-    const insurance = new InsuranceEntity();
-    insurance.name = createProductDto.insurance.name;
-    insurance.description = createProductDto.insurance.description;
-    insurance.images = createProductDto.insurance.images;
-    insurance.issueDate = createProductDto.insurance.issueDate;
-    insurance.expirationDate = createProductDto.insurance.expirationDate;
-    insurance.product = product;
-
-    await this.insuranceRepository.save(insurance);
-
-    return product;
   }
 
   async findOneById(id: number): Promise<ProductDto> {

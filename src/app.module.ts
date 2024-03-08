@@ -14,6 +14,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { CategoryModule } from './modules/category/category.module';
+import { SurchargeModule } from './modules/surcharge/surcharge.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { CategoryModule } from './modules/category/category.module';
     AuthModule,
     ProductModule,
     CategoryModule,
+    SurchargeModule,
   ],
 })
 export class AppModule {}

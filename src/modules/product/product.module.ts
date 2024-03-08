@@ -8,9 +8,16 @@ import { AdminModule } from '../admin/admin.module';
 import { LessorModule } from '../lessor/lessor.module';
 import { ProductSurchargeRepository } from './repositories/product-surcharge.repository';
 import { InsuranceRepository } from './repositories/insurance.repository';
+import { SurchargeModule } from '../surcharge/surcharge.module';
 
 @Module({
-  imports: [CategoryModule, UserModule, AdminModule, LessorModule],
+  imports: [
+    CategoryModule,
+    UserModule,
+    AdminModule,
+    LessorModule,
+    SurchargeModule,
+  ],
   controllers: [ProductController],
   providers: [
     ProductRepository,

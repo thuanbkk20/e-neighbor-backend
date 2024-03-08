@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ROLE } from '../../../constants';
 import { Auth } from '../../../decorators';
@@ -18,6 +26,7 @@ export class ProductController {
   @ApiOkResponse({
     type: ProductEntity,
   })
+  @UsePipes(new ValidationPipe({ transform: true }))
   async createProduct(
     @Body() createProductDto: CreateProductDto,
   ): Promise<ProductEntity> {
