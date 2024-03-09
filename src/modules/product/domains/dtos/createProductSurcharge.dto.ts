@@ -1,12 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNumber, Min } from 'class-validator';
 
 export class CreateProductSurchargeDto {
   @ApiProperty()
   @IsNumber()
-  surchargeId: string;
+  surchargeId: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsNumber()
-  price: number;
+  @Min(0)
+  price?: number;
 }

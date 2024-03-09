@@ -11,8 +11,9 @@ export class ProductRepository extends Repository<ProductEntity> {
   async findOneById(id: number): Promise<ProductEntity> {
     const query = this.createQueryBuilder('products')
       .leftJoinAndSelect('products.category', 'category')
-      .leftJoinAndSelect('products.surcharge', 'surcharge')
       .leftJoinAndSelect('products.lessor', 'lessor')
+      .leftJoinAndSelect('products.productSurcharges', 'productSurcharges')
+      .leftJoinAndSelect('productSurcharges.surcharge', 'surcharge')
       .where('products.id = :id', { id: id });
     return query.getOne();
   }
