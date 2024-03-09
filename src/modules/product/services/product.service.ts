@@ -61,9 +61,7 @@ export class ProductService {
     return newProduct;
   }
 
-  async createProduct(
-    createProductDto: CreateProductDto,
-  ): Promise<ProductEntity> {
+  async createProduct(createProductDto: CreateProductDto): Promise<ProductDto> {
     return await this.productRepository.manager.transaction(
       async (entityManager: EntityManager) => {
         const newProduct =
@@ -83,14 +81,19 @@ export class ProductService {
             if (!productSurcharge.surcharge) {
               throw new NotFoundException('Surcharge not found');
             }
-            if (productSurcharge.surcharge.name === SURCHARGE.DAMAGE) {
-              return;
-            }
+            if (productSurcharge.surcharge.name === SURCHARGE.DAMAGE) return;
             productSurcharge.price = surcharge.price;
             await entityManager.save(productSurcharge);
             return productSurcharge;
           }),
         );
+
+        const damageSurcharge = new ProductSurChargeEntity();
+        damageSurcharge.price = 0;
+        damageSurcharge.surcharge =
+          await this.surchargeService.getSurchargeByName(SURCHARGE.DAMAGE);
+        await entityManager.save(damageSurcharge);
+        surcharges.push(damageSurcharge);
 
         newProduct.productSurcharges = surcharges;
 
@@ -112,7 +115,7 @@ export class ProductService {
           await entityManager.save(insurance);
         }
 
-        return product;
+        return new ProductDto(product);
       },
     );
   }

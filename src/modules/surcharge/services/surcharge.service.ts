@@ -13,4 +13,12 @@ export class SurchargeService {
   async getSurchargeById(id: number): Promise<SurchargeEntity> {
     return this.surchargeRepository.findOneBy({ id: id });
   }
+
+  async getSurchargeByName(name: string): Promise<SurchargeEntity> {
+    return this.surchargeRepository.findOneBy({ name: name });
+  }
+
+  async getByProductSurchargeId(id: number): Promise<SurchargeEntity> {
+    return this.surchargeRepository.getByProductSurchargeId(id);
+  }
 }

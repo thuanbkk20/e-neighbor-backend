@@ -1,7 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../../../../common/abstract.entity';
 import { ProductEntity } from './product.entity';
-import { Exclude } from 'class-transformer';
 import { SurchargeEntity } from '../../../surcharge/domains/entities/surcharge.entity';
 import { IsInt, Min } from 'class-validator';
 
@@ -12,12 +11,10 @@ export class ProductSurChargeEntity extends AbstractEntity {
   @Min(0, { message: 'Surcharge must be at least 0' })
   price: number;
 
-  @Exclude()
   @ManyToOne(() => SurchargeEntity, (surcharge) => surcharge.productSurcharges)
   @JoinColumn({ name: 'surcharge_id' })
   surcharge: SurchargeEntity;
 
-  @Exclude()
   @ManyToOne(() => ProductEntity, (product) => product.productSurcharges)
   @JoinColumn({ name: 'product_id' })
   product: ProductEntity;
