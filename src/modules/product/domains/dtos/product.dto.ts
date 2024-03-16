@@ -60,6 +60,9 @@ export class ProductDto {
   @ApiProperty()
   isConfirmed: boolean;
 
+  @ApiPropertyOptional()
+  rejectReason?: string;
+
   @ApiProperty()
   lessor: object;
 
@@ -84,6 +87,7 @@ export class ProductDto {
     this.category = product.category;
     this.productSurcharges = product.productSurcharges;
     this.isConfirmed = product.isConfirmed;
+    this.rejectReason = product.rejectReason;
     this.lessor = {
       id: product.lessor.id,
       description: product.lessor.description,

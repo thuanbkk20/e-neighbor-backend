@@ -21,6 +21,13 @@ import { ProductMissingFieldException } from '../../../exceptions/invalid-produc
 import { ProductDto } from '../domains/dtos/product.dto';
 import { EntityManager } from 'typeorm';
 import { SurchargeService } from '../../surcharge/services/surcharge.service';
+import { AdminConfirmDto } from '../domains/dtos/adminConfirm.dto';
+import { ProductNotFoundException } from '../../../exceptions/product-not-found.exception';
+import { ProductRecordDto } from '../domains/dtos/productRecord.dto';
+import { PageDto } from '../../../common/dtos/page.dto';
+import { ProductResponseDto } from '../domains/dtos/productResponse.dto';
+import { ProductPageOptionsDto } from '../domains/dtos/productPageOption.dto';
+import { PageMetaDto } from '../../../common/dtos/page-meta.dto';
 
 @Injectable()
 export class ProductService {
@@ -129,5 +136,43 @@ export class ProductService {
       return new ProductDto(product, insurance);
     }
     return new ProductDto(product);
+  }
+
+  async adminConfirmProduct(confirmDto: AdminConfirmDto): Promise<ProductDto> {
+    const product = await this.productRepository.findOneById(
+      confirmDto.productId,
+    );
+    if (!product) {
+      throw new ProductNotFoundException(
+        'No products were found with the provided id',
+      );
+    }
+    product.isConfirmed = confirmDto.isConfirm;
+    console.log(confirmDto);
+    if (confirmDto.rejectReason) {
+      product.rejectReason = confirmDto.rejectReason;
+    }
+    this.productRepository.save(product);
+    return new ProductDto(product);
+  }
+
+  /**
+   * Retrieves a list of products based on the provided pagination options.
+   * @param pageOptionsDto The pagination options for querying products.
+   * @returns A Promise resolving to a PageDto containing product records and pagination metadata.
+   * @TODO handle these params: rating, minRentalFrequency and maxRentalFrequency
+   */
+  async getProductsList(
+    pageOptionsDto: ProductPageOptionsDto,
+  ): Promise<PageDto<ProductRecordDto>> {
+    const productResponse: ProductResponseDto =
+      await this.productRepository.getProductList(pageOptionsDto);
+
+    const productRecords = productResponse.entities.map(
+      (product) => new ProductRecordDto(product, 0, 0),
+    );
+    const itemCount = productResponse.itemCount;
+    const pageMeta = new PageMetaDto({ pageOptionsDto, itemCount });
+    return new PageDto(productRecords, pageMeta);
   }
 }

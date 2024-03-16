@@ -1,6 +1,6 @@
 import { CategoryModule } from './../category/category.module';
 import { Module } from '@nestjs/common';
-import { ProductController } from './controllers/productController';
+import { ProductController } from './controllers/product.controller';
 import { ProductRepository } from './repositories/product.reposiory';
 import { ProductService } from './services/product.service';
 import { UserModule } from '../user/user.module';
