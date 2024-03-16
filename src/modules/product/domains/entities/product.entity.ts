@@ -63,6 +63,11 @@ export class ProductEntity extends AbstractEntity {
   })
   timeUnit: TimeUnitType;
 
+  @Column({
+    nullable: true,
+  })
+  rejectReason: string;
+
   @ManyToOne(() => CategoryEntity, (category) => category.products)
   @JoinColumn({ name: 'category_id' })
   category: CategoryEntity;
