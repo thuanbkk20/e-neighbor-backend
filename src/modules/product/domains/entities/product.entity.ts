@@ -11,6 +11,7 @@ import { MORTGAGE, MortgageType } from '../../../../constants';
 import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
 import { ProductSurChargeEntity } from './product-surcharge.entity';
 import { LessorEntity } from '../../../lessor/domains/entities/lessor.entity';
+import { OrderEntity } from '../../../order/domains/entities/order.entity';
 
 @Entity('products')
 export class ProductEntity extends AbstractEntity {
@@ -84,4 +85,7 @@ export class ProductEntity extends AbstractEntity {
   @ManyToOne(() => LessorEntity, (lessor) => lessor.products)
   @JoinColumn({ name: 'lessor_id' })
   lessor: LessorEntity;
+
+  @OneToMany(() => OrderEntity, (order) => order.product)
+  orders: OrderEntity[];
 }
