@@ -4,8 +4,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Constructor } from './../types';
 import { AbstractDto } from './dtos/abstract.dto';
+
+import { Constructor } from '@/types';
 
 export interface IAbstractEntity<DTO extends AbstractDto, O = never> {
   id: number;

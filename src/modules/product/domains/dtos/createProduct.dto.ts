@@ -1,7 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsArray, IsNumber, IsString } from 'class-validator';
 
-import { Characteristics } from './../classes/policy.class';
 import { CreateInsuranceDto } from './createInsurace.dto';
 import { CreateProductSurchargeDto } from './createProductSurcharge.dto';
 
@@ -12,6 +11,7 @@ import {
   RequiredDocumentsMappingType,
 } from '@/constants';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
+import { Characteristics } from '@/modules/product/domains/classes/policy.class';
 
 export class CreateProductDto {
   @ApiProperty()

@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { AdminRepository } from './../repositories/admin.repository';
-
 import { AdminEntity } from '@/modules/admin/domains/entities/admin.entity';
+import { AdminRepository } from '@/modules/admin/repositories/admin.repository';
 import { AdminNotFoundException } from 'src/exceptions/admin-not-found.exception';
 
 @Injectable()

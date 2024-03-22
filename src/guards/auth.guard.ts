@@ -7,11 +7,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
-import { ROLE } from './../constants';
-import { AdminService } from './../modules/admin/services/admin.service';
-import { LessorService } from './../modules/lessor/services/lessor.service';
-import { UserService } from './../modules/user/services/user.service';
-import { ApiConfigService } from './../shared/services/api-config.service';
+import { ROLE } from '@/constants';
+import { AdminService } from '@/modules/admin/services/admin.service';
+import { LessorService } from '@/modules/lessor/services/lessor.service';
+import { UserService } from '@/modules/user/services/user.service';
+import { ApiConfigService } from '@/shared/services/api-config.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

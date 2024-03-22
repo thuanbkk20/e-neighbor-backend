@@ -5,18 +5,16 @@ import {
 } from '@nestjs/common';
 import omit from 'lodash/omit';
 
-import { validateHash } from './../../../common/utils';
-import { GoogleSignInDto } from './../../auth/domains/dtos/google-sign-in.dto';
-import { PaymentService } from './../../payment/services/payment.service';
-
-import { generateHash } from '@/common/utils';
+import { generateHash, validateHash } from '@/common/utils';
 import { ROLE } from '@/constants';
+import { GoogleSignInDto } from '@/modules/auth/domains/dtos/google-sign-in.dto';
 import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
 import {
   AddPaymentMethodDto,
   UpdatePaymentMethodDto,
 } from '@/modules/payment/domains/dtos/payment-method.dto';
 import { PaymentMethodEntity } from '@/modules/payment/domains/entities/payment-method.entity';
+import { PaymentService } from '@/modules/payment/services/payment.service';
 import { UserUpdateDto } from '@/modules/user/domains/dtos/user-update.dto';
 import { UserDto } from '@/modules/user/domains/dtos/user.dto';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';

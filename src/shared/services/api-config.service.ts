@@ -57,10 +57,10 @@ export class ApiConfigService {
   get postgresConfig(): TypeOrmModuleOptions {
     return {
       entities: [
-        __dirname + '/../../modules/**/*.entity{.ts,.js}',
-        __dirname + '/../../modules/**/*.view-entity{.ts,.js}',
+        __dirname + '/.../modules/**/*.entity{.ts,.js}',
+        __dirname + '/.../modules/**/*.view-entity{.ts,.js}',
       ],
-      migrations: [__dirname + '/../../database/migrations/*{.ts,.js}'],
+      migrations: [__dirname + '/.../database/migrations/*{.ts,.js}'],
       keepConnectionAlive: !this.isTest,
       dropSchema: this.isTest,
       type: 'postgres',

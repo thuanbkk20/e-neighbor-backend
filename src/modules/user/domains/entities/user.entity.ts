@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 
-import { AbstractEntity } from './../../../../common/abstract.entity';
-import { ROLE } from './../../../../constants';
+import { AbstractEntity } from '@/common/abstract.entity';
+import { ROLE } from '@/constants';
 
 @Entity('users')
 export class UserEntity extends AbstractEntity {

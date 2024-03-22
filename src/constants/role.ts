@@ -1,4 +1,4 @@
-import { type ValueOf } from './../interfaces';
+import { type ValueOf } from '@/interfaces';
 export enum ROLE {
   USER = 'user',
   LESSOR = 'lessor',

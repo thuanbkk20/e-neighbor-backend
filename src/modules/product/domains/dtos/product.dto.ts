@@ -1,12 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import { InsuranceEntity } from './../entities/insurance.entity';
-
 import { MortgageType, RequiredDocumentsType } from '@/constants';
 import { StatusType } from '@/constants/status';
 import { TimeUnitType } from '@/constants/time-unit';
 import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
 import { Characteristics } from '@/modules/product/domains/classes/policy.class';
+import { InsuranceEntity } from '@/modules/product/domains/entities/insurance.entity';
 import { ProductSurChargeEntity } from '@/modules/product/domains/entities/product-surcharge.entity';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 

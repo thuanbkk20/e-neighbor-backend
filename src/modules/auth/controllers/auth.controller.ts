@@ -11,15 +11,14 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 
-import { ROLE } from './../../../constants/role';
-import { Auth } from './../../../decorators';
-import { ContextProvider } from './../../../providers/context.provider';
-
+import { ROLE } from '@/constants';
+import { Auth } from '@/decorators';
 import {
   RegisterDto,
   SignInDto,
 } from '@/modules/auth/domains/dtos/sign-in.dto';
 import { AuthService } from '@/modules/auth/services/auth.service';
+import { ContextProvider } from '@/providers';
 
 @ApiTags('auth')
 @Controller('auth')

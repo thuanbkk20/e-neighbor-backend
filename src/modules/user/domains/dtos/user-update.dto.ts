@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsDate, IsEmail, IsEnum, IsNumber, IsString } from 'class-validator';
 
-import { ROLE } from './../../../../constants/role';
+import { ROLE } from '@/constants';
 
 export class UserUpdateDto {
   @ApiProperty()

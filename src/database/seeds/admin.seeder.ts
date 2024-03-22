@@ -3,8 +3,8 @@ import { config } from 'dotenv';
 import type { DataSource } from 'typeorm';
 import type { Seeder } from 'typeorm-extension';
 
-import { generateHash } from './../../common/utils';
-import { AdminEntity } from './../../modules/admin/domains/entities/admin.entity';
+import { generateHash } from '@/common/utils';
+import { AdminEntity } from '@/modules/admin/domains/entities/admin.entity';
 
 config();
 const configService = new ConfigService();
