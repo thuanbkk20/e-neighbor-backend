@@ -4,3 +4,4 @@
 # Export Git hook params
 export GIT_PARAMS=$*
 
+npm run commitlint

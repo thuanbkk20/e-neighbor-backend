@@ -23,7 +23,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['.eslintrc.js, commitlint.config.js'],
 
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
@@ -66,6 +66,7 @@ module.exports = {
       },
     ],
   },
+  ignorePatterns: ['*.config.js', '*.js'],
   settings: {
     'import/resolver': {
       node: {

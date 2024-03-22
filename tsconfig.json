@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "test/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": ["./**/*.d.ts", "./**/*.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts", "commitlint.config.js"]
 }
