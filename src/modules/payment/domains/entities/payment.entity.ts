@@ -1,8 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { AbstractEntity } from '@/common/abstract.entity';
+
 import { PaymentMethodEntity } from './payment-method.entity';
-import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
+
+import { AbstractEntity } from '@/common/abstract.entity';
 import { PAYMENT_TYPE, PaymentTypeType } from '@/constants/payment-type';
+import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 
 @Entity('payment')
 export class PaymentEntity extends AbstractEntity {

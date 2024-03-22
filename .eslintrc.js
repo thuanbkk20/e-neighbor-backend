@@ -5,10 +5,18 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'no-relative-import-paths'],
+  plugins: [
+    '@typescript-eslint/eslint-plugin',
+    'no-relative-import-paths',
+    'import',
+  ],
   extends: [
-    'plugin:@typescript-eslint/recommended',
+    'eslint:recommended',
+    'plugin:import/errors',
+    'plugin:import/typescript',
     'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   root: true,
   env: {
@@ -47,19 +55,6 @@ module.exports = {
         pathGroupsExcludedImportTypes: ['type'],
       },
     ],
-    'import/resolver': [
-      1,
-      {
-        node: {
-          extensions: ['.ts', '.tsx'],
-          moduleDirectory: ['./src/*', 'node_modules'],
-        },
-        typescript: {
-          alwaysTryTypes: true,
-          project: './tsconfig.json',
-        },
-      },
-    ],
     'no-relative-import-paths/no-relative-import-paths': [
       'warn',
       { allowSameFolder: true, rootDir: 'src', prefix: '@' },
@@ -70,5 +65,18 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    'no-unused-vars': ['error', { argsIgnorePattern: '^(readonly )?' }],
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.ts', '.tsx'],
+        moduleDirectory: ['./src/*', './test/*', 'node_modules'],
+      },
+      typescript: {
+        alwaysTryTypes: true,
+        project: ['./tsconfig.json'],
+      },
+    },
   },
 };

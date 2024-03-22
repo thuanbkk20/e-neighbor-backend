@@ -1,7 +1,8 @@
+import { IsInt, Max, Min } from 'class-validator';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+
 import { AbstractEntity } from '@/common/abstract.entity';
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
-import { IsInt, Max, Min } from 'class-validator';
 
 @Entity('feedbacks')
 export class FeedbackEntity extends AbstractEntity {

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { SurchargeEntity } from '@/modules/surcharge/domains/entities/surcharge.entity';
 
 export class SurchargeDto {

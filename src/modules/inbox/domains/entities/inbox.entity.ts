@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+
 import { AbstractEntity } from '@/common/abstract.entity';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 

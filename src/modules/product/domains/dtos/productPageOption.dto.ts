@@ -1,16 +1,16 @@
 import { ORDER, OrderType } from '@/constants';
 import {
+  PRODUCT_LIST_SORT_FIELD,
+  ProductListSortFieldType,
+} from '@/constants/product-list-sort-field';
+import { STATUS, StatusType } from '@/constants/status';
+import {
   BooleanField,
   BooleanFieldOptional,
   EnumFieldOptional,
   NumberFieldOptional,
   StringFieldOptional,
 } from '@/decorators';
-import {
-  PRODUCT_LIST_SORT_FIELD,
-  ProductListSortFieldType,
-} from '@/constants/product-list-sort-field';
-import { STATUS, StatusType } from '@/constants/status';
 
 export class ProductPageOptionsDto {
   @EnumFieldOptional(() => PRODUCT_LIST_SORT_FIELD, {

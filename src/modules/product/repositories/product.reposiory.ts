@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
+
 import { ProductPageOptionsDto } from '@/modules/product/domains/dtos/productPageOption.dto';
 import { ProductResponseDto } from '@/modules/product/domains/dtos/productResponse.dto';
+import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 
 @Injectable()
 export class ProductRepository extends Repository<ProductEntity> {

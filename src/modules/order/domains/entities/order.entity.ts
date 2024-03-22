@@ -1,4 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
+
+import { RentalFeeEntity } from './rental-fee.entity';
+
 import { AbstractEntity } from '@/common/abstract.entity';
 import {
   ORDER_STATUS,
@@ -6,7 +9,6 @@ import {
   PAYMENT_STATUS,
   PaymentStatusType,
 } from '@/constants';
-import { RentalFeeEntity } from './rental-fee.entity';
 
 @Entity('orders')
 export class OrderEntity extends AbstractEntity {

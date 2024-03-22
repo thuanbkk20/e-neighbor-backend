@@ -13,7 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+    "test": "jest --watchAll=false",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -24,7 +24,14 @@
     "migration:run": "npm run typeorm migration:run -- -d ./ormconfig.ts",
     "migration:revert": "npm run typeorm -- -d ./ormconfig.ts migration:revert",
     "seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-extension/dist/cli/index.js seed -d ormconfig",
-    "seed:run": "node -r tsconfig-paths/register dist/database/seeds/all.seeder.js"
+    "seed:run": "node -r tsconfig-paths/register dist/database/seeds/all.seeder.js",
+    "prepare": "husky",
+    "lint-staged": "lint-staged",
+    "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ",
+    "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src ",
+    "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
+    "lint:prettier": "prettier -c --write \"**/**.{js,jsx,tsx,ts,less,md,json}\" --end-of-line auto",
+    "commitlint": "commitlint --edit"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.0",
@@ -42,6 +49,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "express-ctx": "^0.1.1",
+    "lodash": "^4.17.21",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.3",
@@ -52,22 +60,33 @@
     "typeorm-extension": "^3.1.1",
     "typeorm-transactional": "^0.5.0"
   },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
+    "**/*.{js,jsx,tsx,ts,less,md,json}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
+    "@types/lodash": "^4.17.0",
     "@types/node": "^20.3.1",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "commitlint": "^19.2.1",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-no-relative-import-paths": "^1.5.3",
     "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^9.0.11",
     "jest": "^29.5.0",
+    "lint-staged": "^15.2.2",
     "prettier": "^3.0.0",
     "run-script-webpack-plugin": "^0.2.0",
     "source-map-support": "^0.5.21",

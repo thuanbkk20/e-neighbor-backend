@@ -1,8 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { AbstractEntity } from '@/common/abstract.entity';
-import { ProductEntity } from './product.entity';
-import { SurchargeEntity } from '@/modules/surcharge/domains/entities/surcharge.entity';
 import { IsInt, Min } from 'class-validator';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+
+import { ProductEntity } from './product.entity';
+
+import { AbstractEntity } from '@/common/abstract.entity';
+import { SurchargeEntity } from '@/modules/surcharge/domains/entities/surcharge.entity';
 
 @Entity('product_surcharge')
 export class ProductSurChargeEntity extends AbstractEntity {

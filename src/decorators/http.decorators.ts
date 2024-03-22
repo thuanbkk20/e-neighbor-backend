@@ -10,10 +10,11 @@ import {
 import type { Type } from '@nestjs/common/interfaces';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
-import { AuthGuard, RolesGuard } from '@/guards';
-import { ROLE } from './../constants';
 import { UnauthorizedResponseDto } from './../common/dtos/unauthorized-response.dto';
+import { ROLE } from './../constants';
 import { AuthUserInterceptor } from './../interceptors/auth-user-interceptor.service';
+
+import { AuthGuard, RolesGuard } from '@/guards';
 
 export function Auth(roles: ROLE[] = []): MethodDecorator {
   return applyDecorators(

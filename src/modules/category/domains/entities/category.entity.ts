@@ -1,4 +1,5 @@
 import { Column, Entity, OneToMany } from 'typeorm';
+
 import { AbstractEntity } from '@/common/abstract.entity';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 

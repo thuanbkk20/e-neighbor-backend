@@ -1,9 +1,11 @@
-import { LessorNotFoundException } from 'src/exceptions';
-import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
-import { LessorRepository } from './../repositories/lessor.repository';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UserService } from '@/modules/user/services/user.service';
+
+import { LessorRepository } from './../repositories/lessor.repository';
+
 import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
+import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
+import { UserService } from '@/modules/user/services/user.service';
+import { LessorNotFoundException } from 'src/exceptions';
 
 @Injectable()
 export class LessorService {

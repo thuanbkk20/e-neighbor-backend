@@ -1,9 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { LessorService } from '@/modules/lessor/services/lessor.service';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { Auth } from '@/decorators';
+
 import { ROLE } from '@/constants';
+import { Auth } from '@/decorators';
 import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
+import { LessorService } from '@/modules/lessor/services/lessor.service';
 
 @ApiTags('lessor')
 @Controller('lessor')

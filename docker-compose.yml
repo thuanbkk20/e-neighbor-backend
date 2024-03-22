@@ -9,13 +9,14 @@ services:
     build: .
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     networks:
       - neighbor-net
     depends_on:
       postgres:
         condition: service_healthy
-    links:
-      - postgres
+    restart: always
 
   postgres:
     image: postgres

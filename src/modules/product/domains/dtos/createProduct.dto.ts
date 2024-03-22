@@ -1,6 +1,10 @@
-import { Characteristics } from './../classes/policy.class';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsArray, IsNumber, IsString } from 'class-validator';
+
+import { Characteristics } from './../classes/policy.class';
+import { CreateInsuranceDto } from './createInsurace.dto';
+import { CreateProductSurchargeDto } from './createProductSurcharge.dto';
+
 import {
   MORTGAGE_MAPPING,
   MortgageMappingType,
@@ -8,8 +12,6 @@ import {
   RequiredDocumentsMappingType,
 } from '@/constants';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
-import { CreateProductSurchargeDto } from './createProductSurcharge.dto';
-import { CreateInsuranceDto } from './createInsurace.dto';
 
 export class CreateProductDto {
   @ApiProperty()

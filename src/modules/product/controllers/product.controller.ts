@@ -12,14 +12,15 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+
 import { ROLE } from '@/constants';
 import { Auth } from '@/decorators';
-import { CreateProductDto } from '@/modules/product/domains/dtos/createProduct.dto';
-import { ProductService } from '@/modules/product/services/product.service';
-import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
 import { AdminConfirmDto } from '@/modules/product/domains/dtos/adminConfirm.dto';
-import { ProductPageOptionsDto } from '@/modules/product/domains/dtos/productPageOption.dto';
+import { CreateProductDto } from '@/modules/product/domains/dtos/createProduct.dto';
+import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
 import { ProductListOkResponse } from '@/modules/product/domains/dtos/productListOkResponse.dto';
+import { ProductPageOptionsDto } from '@/modules/product/domains/dtos/productPageOption.dto';
+import { ProductService } from '@/modules/product/services/product.service';
 
 @Controller('products')
 @ApiTags('products')

@@ -1,25 +1,28 @@
-import { PaymentService } from './../../payment/services/payment.service';
 import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRepository } from '@/modules/user/repositories/user.repository';
-import { UserNotFoundException } from 'src/exceptions';
-import { UserEntity } from '@/modules/user/domains/entities/user.entity';
-import { RegisterDto } from 'src/modules/auth/domains/dtos/sign-in.dto';
-import { generateHash } from '@/common/utils';
-import { GoogleSignInDto } from './../../auth/domains/dtos/google-sign-in.dto';
-import { UserUpdateDto } from '@/modules/user/domains/dtos/user-update.dto';
+import omit from 'lodash/omit';
+
 import { validateHash } from './../../../common/utils';
-import { UserDto } from '@/modules/user/domains/dtos/user.dto';
-import { PaymentMethodEntity } from '@/modules/payment/domains/entities/payment-method.entity';
+import { GoogleSignInDto } from './../../auth/domains/dtos/google-sign-in.dto';
+import { PaymentService } from './../../payment/services/payment.service';
+
+import { generateHash } from '@/common/utils';
+import { ROLE } from '@/constants';
+import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
 import {
   AddPaymentMethodDto,
   UpdatePaymentMethodDto,
 } from '@/modules/payment/domains/dtos/payment-method.dto';
-import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
-import { ROLE } from '@/constants';
+import { PaymentMethodEntity } from '@/modules/payment/domains/entities/payment-method.entity';
+import { UserUpdateDto } from '@/modules/user/domains/dtos/user-update.dto';
+import { UserDto } from '@/modules/user/domains/dtos/user.dto';
+import { UserEntity } from '@/modules/user/domains/entities/user.entity';
+import { UserRepository } from '@/modules/user/repositories/user.repository';
+import { UserNotFoundException } from 'src/exceptions';
+import { RegisterDto } from 'src/modules/auth/domains/dtos/sign-in.dto';
 
 @Injectable()
 export class UserService {
@@ -90,9 +93,9 @@ export class UserService {
       throw new UnauthorizedException();
     }
     user.password = generateHash(user.password);
-    const { password, ...returnUser } =
-      await this.userRepository.updateUser(user);
-    return returnUser;
+
+    const queryResult = await this.userRepository.updateUser(user);
+    return omit(queryResult, ['password']);
   }
 
   async getUserPaymentInfo(userId: number): Promise<PaymentMethodEntity[]> {

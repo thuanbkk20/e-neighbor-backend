@@ -1,6 +1,8 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { AbstractEntity } from '@/common/abstract.entity';
+
 import { ProductEntity } from './product.entity';
+
+import { AbstractEntity } from '@/common/abstract.entity';
 
 @Entity('insurance')
 export class InsuranceEntity extends AbstractEntity {

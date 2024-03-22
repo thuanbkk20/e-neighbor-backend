@@ -1,6 +1,7 @@
-import { PAYMENT_METHOD, PaymentMethodType } from '@/constants/payment-method';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+
 import { AbstractEntity } from '@/common/abstract.entity';
+import { PAYMENT_METHOD, PaymentMethodType } from '@/constants/payment-method';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 
 @Entity('payment_method')

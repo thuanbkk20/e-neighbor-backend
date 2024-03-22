@@ -1,5 +1,6 @@
-import { AbstractEntity } from '@/common/abstract.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
+
+import { AbstractEntity } from '@/common/abstract.entity';
 import { ProductSurChargeEntity } from '@/modules/product/domains/entities/product-surcharge.entity';
 
 @Entity('surcharge')

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { PageMetaDto } from './page-meta.dto';
 import { PageMetaCursorDto } from './page-meta-cursor.dto';
+import { PageMetaDto } from './page-meta.dto';
 
 export class PageDto<T> {
   @ApiProperty({ isArray: true })

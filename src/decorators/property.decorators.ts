@@ -1,5 +1,6 @@
 import type { ApiPropertyOptions } from '@nestjs/swagger';
 import { ApiProperty } from '@nestjs/swagger';
+
 import { getVariableName } from './../common/utils';
 
 export function ApiBooleanProperty(

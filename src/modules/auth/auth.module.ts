@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AdminModule } from '@/modules/admin/admin.module';
-import { UserModule } from '@/modules/user/user.module';
-import { AuthService } from './services/auth.service';
-import { AuthController } from './controllers/auth.controller';
-import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import { config } from 'dotenv';
-import { LessorModule } from '@/modules/lessor/lessor.module';
+
+import { AuthController } from './controllers/auth.controller';
+import { AuthService } from './services/auth.service';
 import { GoogleStrategy } from './strategies/google.stategy';
+
+import { AdminModule } from '@/modules/admin/admin.module';
+import { LessorModule } from '@/modules/lessor/lessor.module';
+import { UserModule } from '@/modules/user/user.module';
 
 config();
 const configService = new ConfigService();

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
+
 import { InsuranceEntity } from '@/modules/product/domains/entities/insurance.entity';
 
 @Injectable()
