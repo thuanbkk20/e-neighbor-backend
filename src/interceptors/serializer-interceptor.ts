@@ -4,7 +4,7 @@ import type {
   NestInterceptor,
 } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
-import { MetaResponseDto, ResponseDto } from '../common/dtos/response.dto';
+import { MetaResponseDto, ResponseDto } from '@/common/dtos/response.dto';
 import { map } from 'rxjs';
 
 @Injectable()

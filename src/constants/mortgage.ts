@@ -1,4 +1,4 @@
-import { type ValueOf } from '../interfaces';
+import { type ValueOf } from '@/interfaces';
 export const MORTGAGE = {
   NONE: 'NONE',
   OPTION1: 'OPTION1',

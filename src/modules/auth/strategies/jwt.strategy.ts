@@ -3,10 +3,10 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { ROLE } from '../../../constants';
-import { Unauthorized } from '../../../exceptions/unauthorized.exception';
-import { ApiConfigService } from '../../../shared/services/api-config.service';
-import { AdminService } from '../../admin/services/admin.service';
+import { ROLE } from '@/constants';
+import { Unauthorized } from '@/exceptions/unauthorized.exception';
+import { ApiConfigService } from '@/shared/services/api-config.service';
+import { AdminService } from '@/modules/admin/services/admin.service';
 import { UserService } from './../../user/services/user.service';
 
 @Injectable()

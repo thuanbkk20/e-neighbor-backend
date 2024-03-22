@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { ERROR_PRODUCT_NOT_FOUND } from '../filters/constraint-errors';
+import { ERROR_PRODUCT_NOT_FOUND } from '@/filters/constraint-errors';
 
 export class ProductNotFoundException extends NotFoundException {
   constructor(error?: string) {

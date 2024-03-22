@@ -1,4 +1,4 @@
-import { type ValueOf } from '../interfaces';
+import { type ValueOf } from '@/interfaces';
 export const SURCHARGE = {
   OVERTIME: 'Phí thuê quá giờ',
   HYGIENCE: 'Phí vệ sinh',

@@ -1,4 +1,4 @@
-import { ProductEntity } from '../../../product/domains/entities/product.entity';
+import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 import { AbstractEntity } from './../../../../common/abstract.entity';
 import { UserEntity } from './../../../user/domains/entities/user.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';

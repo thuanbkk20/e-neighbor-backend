@@ -1,11 +1,11 @@
-import { PaymentMethodEntity } from '../domains/entities/payment-method.entity';
+import { PaymentMethodEntity } from '@/modules/payment/domains/entities/payment-method.entity';
 import { Injectable } from '@nestjs/common';
 import { PaymentRepository } from './../repositories/payment.repository';
 import {
   AddPaymentMethodDto,
   UpdatePaymentMethodDto,
-} from '../domains/dtos/payment-method.dto';
-import { UserEntity } from '../../user/domains/entities/user.entity';
+} from '@/modules/payment/domains/dtos/payment-method.dto';
+import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 @Injectable()
 export class PaymentService {
   constructor(private readonly paymentRepository: PaymentRepository) {}

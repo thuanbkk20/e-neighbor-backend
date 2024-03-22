@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-import { SnakeNamingStrategy } from '../../snake-naming.strategy';
+import { SnakeNamingStrategy } from '@/snake-naming.strategy';
 
 @Injectable()
 export class ApiConfigService {

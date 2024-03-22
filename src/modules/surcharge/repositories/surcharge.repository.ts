@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SurchargeEntity } from '../domains/entities/surcharge.entity';
+import { SurchargeEntity } from '@/modules/surcharge/domains/entities/surcharge.entity';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()

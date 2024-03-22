@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { AbstractEntity } from '../../../../common/abstract.entity';
-import { OrderEntity } from '../../../order/domains/entities/order.entity';
+import { AbstractEntity } from '@/common/abstract.entity';
+import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { IsInt, Max, Min } from 'class-validator';
 
 @Entity('feedbacks')

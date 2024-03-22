@@ -3,13 +3,13 @@ import { Auth } from '@/decorators';
 import { UserService } from '@modules/user/services/user.service';
 import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { UserUpdateDto } from '../domains/dtos/user-update.dto';
-import { UserDto } from '../domains/dtos/user.dto';
-import { PaymentMethodEntity } from '../../payment/domains/entities/payment-method.entity';
+import { UserUpdateDto } from '@/modules/user/domains/dtos/user-update.dto';
+import { UserDto } from '@/modules/user/domains/dtos/user.dto';
+import { PaymentMethodEntity } from '@/modules/payment/domains/entities/payment-method.entity';
 import {
   AddPaymentMethodDto,
   UpdatePaymentMethodDto,
-} from '../../payment/domains/dtos/payment-method.dto';
+} from '@/modules/payment/domains/dtos/payment-method.dto';
 
 @ApiTags('user')
 @Controller('user')

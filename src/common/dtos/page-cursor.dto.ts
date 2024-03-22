@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
 
-import { ORDER, OrderType, PAGING_LIMIT } from '../../constants';
+import { ORDER, OrderType, PAGING_LIMIT } from '@/constants';
 
 export class PageCursorDto {
   @IsOptional()

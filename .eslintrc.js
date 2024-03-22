@@ -5,7 +5,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'no-relative-import-paths'],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
@@ -16,10 +16,59 @@ module.exports = {
     jest: true,
   },
   ignorePatterns: ['.eslintrc.js'],
+
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'import/order': [
+      2,
+      {
+        groups: ['builtin', 'external', 'parent', 'sibling', 'index'],
+        'newlines-between': 'always',
+        pathGroups: [
+          {
+            pattern:
+              '{@(@/actions|@/app|@/assets|@/calls|@/client|@/components|@/constants|/@context|@/database|@helpers|@/hooks|@/init|@/managers|@/queries|@/screens|@/selectors|@/share|@/store|@/telemetry|@/typings|@/test|@/utils)/**,@(@/constants|@/i18n|@/notifications|@/store|@/websocket)}',
+            group: 'parent',
+            position: 'after',
+          },
+          {
+            pattern: 'app/**',
+            group: 'parent',
+            position: 'before',
+          },
+        ],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+        pathGroupsExcludedImportTypes: ['type'],
+      },
+    ],
+    'import/resolver': [
+      1,
+      {
+        node: {
+          extensions: ['.ts', '.tsx'],
+          moduleDirectory: ['./src/*', 'node_modules'],
+        },
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
+    ],
+    'no-relative-import-paths/no-relative-import-paths': [
+      'warn',
+      { allowSameFolder: true, rootDir: 'src', prefix: '@' },
+    ],
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
 };

@@ -1,4 +1,4 @@
-import { CategoryEntity } from '../domains/entities/category.entity';
+import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
 import { CategoryRepository } from './../repositories/category.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 

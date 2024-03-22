@@ -6,8 +6,8 @@ import {
   MortgageMappingType,
   REQUIRED_DOCUMENTS_MAPPING,
   RequiredDocumentsMappingType,
-} from '../../../../constants';
-import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
+} from '@/constants';
+import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { CreateProductSurchargeDto } from './createProductSurcharge.dto';
 import { CreateInsuranceDto } from './createInsurace.dto';
 

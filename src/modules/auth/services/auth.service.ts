@@ -8,7 +8,7 @@ import { OAuthException } from './../../../exceptions';
 // import { RegisterDto } from 'modules/user/domains/dtos/register.dto';
 import { LessorService } from './../../lessor/services/lessor.service';
 import { validateHash } from './../../../common/utils';
-import { GoogleSignInDto } from '../domains/dtos/google-sign-in.dto';
+import { GoogleSignInDto } from '@/modules/auth/domains/dtos/google-sign-in.dto';
 
 @Injectable()
 export class AuthService {

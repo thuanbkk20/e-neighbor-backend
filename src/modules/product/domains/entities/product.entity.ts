@@ -4,13 +4,13 @@ import {
 } from './../../../../constants/required-documents';
 import { STATUS, StatusType } from './../../../../constants/status';
 import { Column, Entity, JoinColumn, OneToMany, ManyToOne } from 'typeorm';
-import { AbstractEntity } from '../../../../common/abstract.entity';
-import { Characteristics } from '../classes/policy.class';
-import { CategoryEntity } from '../../../category/domains/entities/category.entity';
-import { MORTGAGE, MortgageType } from '../../../../constants';
-import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
+import { AbstractEntity } from '@/common/abstract.entity';
+import { Characteristics } from '@/modules/product/domains/classes/policy.class';
+import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
+import { MORTGAGE, MortgageType } from '@/constants';
+import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { ProductSurChargeEntity } from './product-surcharge.entity';
-import { LessorEntity } from '../../../lessor/domains/entities/lessor.entity';
+import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 
 @Entity('products')
 export class ProductEntity extends AbstractEntity {

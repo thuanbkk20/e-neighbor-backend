@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { AbstractEntity } from '../../../../common/abstract.entity';
+import { AbstractEntity } from '@/common/abstract.entity';
 import { IsInt, Min } from 'class-validator';
 import { Exclude } from 'class-transformer';
 import { OrderEntity } from './order.entity';

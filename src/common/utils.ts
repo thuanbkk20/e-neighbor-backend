@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt';
 import type { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 
 // import type { NotificationActionType } from '../constants';
-import { ORDER } from '../constants';
+import { ORDER } from '@/constants';
 // import type { NotificationType } from '../interfaces/INotificationTypes';
 // import type { NotificationPayloadDto } from '../modules/notification/domains/dtos/notification-payload.dto';
 // import type { NotificationTemplate } from '../modules/notification/domains/entities/notification-template.entity';

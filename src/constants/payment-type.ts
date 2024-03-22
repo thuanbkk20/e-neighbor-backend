@@ -1,4 +1,4 @@
-import { ValueOf } from '../interfaces';
+import { ValueOf } from '@/interfaces';
 
 export const PAYMENT_TYPE = {
   ORDER: 'ORDER',

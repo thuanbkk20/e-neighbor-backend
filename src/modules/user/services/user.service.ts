@@ -4,22 +4,22 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRepository } from '../repositories/user.repository';
+import { UserRepository } from '@/modules/user/repositories/user.repository';
 import { UserNotFoundException } from 'src/exceptions';
-import { UserEntity } from '../domains/entities/user.entity';
+import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 import { RegisterDto } from 'src/modules/auth/domains/dtos/sign-in.dto';
 import { generateHash } from '@/common/utils';
 import { GoogleSignInDto } from './../../auth/domains/dtos/google-sign-in.dto';
-import { UserUpdateDto } from '../domains/dtos/user-update.dto';
+import { UserUpdateDto } from '@/modules/user/domains/dtos/user-update.dto';
 import { validateHash } from './../../../common/utils';
-import { UserDto } from '../domains/dtos/user.dto';
-import { PaymentMethodEntity } from '../../payment/domains/entities/payment-method.entity';
+import { UserDto } from '@/modules/user/domains/dtos/user.dto';
+import { PaymentMethodEntity } from '@/modules/payment/domains/entities/payment-method.entity';
 import {
   AddPaymentMethodDto,
   UpdatePaymentMethodDto,
-} from '../../payment/domains/dtos/payment-method.dto';
-import { LessorRegisterDto } from '../../lessor/domains/dtos/create-lessor.dto';
-import { ROLE } from '../../../constants';
+} from '@/modules/payment/domains/dtos/payment-method.dto';
+import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
+import { ROLE } from '@/constants';
 
 @Injectable()
 export class UserService {

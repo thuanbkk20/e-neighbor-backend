@@ -1,5 +1,22 @@
 version: "3"
+
+networks:
+  neighbor-net:
+    driver: bridge
+
 services:
+  e-neighbor-api:
+    build: .
+    ports:
+      - "3000:3000"
+    networks:
+      - neighbor-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - postgres
+
   postgres:
     image: postgres
     restart: always
@@ -10,14 +27,24 @@ services:
     ports:
       - "5432:5432"
     # May give error on windows
+    networks:
+      - neighbor-net
     volumes:
       - ./db-data/postgresql:/var/lib/postgresql/data
       - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
     env_file:
       - .env
 
   adminer:
     image: adminer
+    networks:
+      - neighbor-net
     restart: always
     ports:
-      - 8080:8080
+      - "8080:8080"

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AdminModule } from '../admin/admin.module';
-import { UserModule } from '../user/user.module';
+import { AdminModule } from '@/modules/admin/admin.module';
+import { UserModule } from '@/modules/user/user.module';
 import { AuthService } from './services/auth.service';
 import { AuthController } from './controllers/auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
-import { LessorModule } from '../lessor/lessor.module';
+import { LessorModule } from '@/modules/lessor/lessor.module';
 import { GoogleStrategy } from './strategies/google.stategy';
 
 config();

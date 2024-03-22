@@ -1,11 +1,11 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import { AbstractEntity } from '../../../../common/abstract.entity';
+import { AbstractEntity } from '@/common/abstract.entity';
 import {
   ORDER_STATUS,
   OrderStatusType,
   PAYMENT_STATUS,
   PaymentStatusType,
-} from '../../../../constants';
+} from '@/constants';
 import { RentalFeeEntity } from './rental-fee.entity';
 
 @Entity('orders')

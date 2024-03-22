@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { SurchargeRepository } from '../repositories/surcharge.repository';
-import { SurchargeEntity } from '../domains/entities/surcharge.entity';
+import { SurchargeRepository } from '@/modules/surcharge/repositories/surcharge.repository';
+import { SurchargeEntity } from '@/modules/surcharge/domains/entities/surcharge.entity';
 
 @Injectable()
 export class SurchargeService {

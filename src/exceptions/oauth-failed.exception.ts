@@ -1,6 +1,6 @@
 import { UnauthorizedException } from '@nestjs/common';
 
-import { ERROR_OAUTH_FAILED } from '../filters/constraint-errors';
+import { ERROR_OAUTH_FAILED } from '@/filters/constraint-errors';
 
 export class OAuthException extends UnauthorizedException {
   constructor(error?: string) {

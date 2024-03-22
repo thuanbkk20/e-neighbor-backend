@@ -10,7 +10,7 @@ import {
 import type { Type } from '@nestjs/common/interfaces';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
-import { AuthGuard, RolesGuard } from '../guards';
+import { AuthGuard, RolesGuard } from '@/guards';
 import { ROLE } from './../constants';
 import { UnauthorizedResponseDto } from './../common/dtos/unauthorized-response.dto';
 import { AuthUserInterceptor } from './../interceptors/auth-user-interceptor.service';
