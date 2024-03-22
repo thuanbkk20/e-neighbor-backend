@@ -65,7 +65,6 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
-    'no-unused-vars': ['error', { argsIgnorePattern: '^(readonly )?' }],
   },
   settings: {
     'import/resolver': {
