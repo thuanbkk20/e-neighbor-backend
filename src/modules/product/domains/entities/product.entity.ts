@@ -1,20 +1,19 @@
 import { Column, Entity, JoinColumn, OneToMany, ManyToOne } from 'typeorm';
 
+import { STATUS, StatusType } from './../../../../constants/status';
 import { ProductSurChargeEntity } from './product-surcharge.entity';
 
 import { AbstractEntity } from '@/common/abstract.entity';
+import { MORTGAGE, MortgageType } from '@/constants';
 import {
-  MORTGAGE,
-  MortgageType,
   REQUIRED_DOCUMENTS,
   RequiredDocumentsType,
-} from '@/constants';
-import { STATUS, StatusType } from '@/constants/status';
+} from '@/constants/required-documents';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
+import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { Characteristics } from '@/modules/product/domains/classes/policy.class';
-
 @Entity('products')
 export class ProductEntity extends AbstractEntity {
   @Column()
@@ -87,4 +86,7 @@ export class ProductEntity extends AbstractEntity {
   @ManyToOne(() => LessorEntity, (lessor) => lessor.products)
   @JoinColumn({ name: 'lessor_id' })
   lessor: LessorEntity;
+
+  @OneToMany(() => OrderEntity, (order) => order.product)
+  orders: OrderEntity[];
 }

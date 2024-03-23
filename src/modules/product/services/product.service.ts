@@ -6,6 +6,7 @@ import { PageDto } from '@/common/dtos/page.dto';
 import {
   MORTGAGE,
   MORTGAGE_MAPPING,
+  ORDER_STATUS,
   REQUIRED_DOCUMENTS,
   REQUIRED_DOCUMENTS_MAPPING,
   SURCHARGE,
@@ -14,7 +15,9 @@ import { ProductMissingFieldException } from '@/exceptions/invalid-product.excep
 import { ProductNotFoundException } from '@/exceptions/product-not-found.exception';
 import { getKeyByValue } from '@/interfaces';
 import { CategoryService } from '@/modules/category/services/category.service';
+import { FeedbackService } from '@/modules/feedback/services/feedback.service';
 import { LessorService } from '@/modules/lessor/services/lessor.service';
+import { OrderService } from '@/modules/order/services/order.service';
 import { AdminConfirmDto } from '@/modules/product/domains/dtos/adminConfirm.dto';
 import { CreateProductDto } from '@/modules/product/domains/dtos/createProduct.dto';
 import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
@@ -39,6 +42,8 @@ export class ProductService {
     private readonly productSurchargeRepository: ProductSurchargeRepository,
     private readonly surchargeService: SurchargeService,
     private readonly insuranceRepository: InsuranceRepository,
+    private readonly orderService: OrderService,
+    private readonly feedbackService: FeedbackService,
   ) {}
 
   private async productDtoToProductEntity(
@@ -123,20 +128,27 @@ export class ProductService {
           await entityManager.save(insurance);
         }
 
-        return new ProductDto(product);
+        return new ProductDto(product, 0, 0);
       },
     );
   }
 
   async findOneById(id: number): Promise<ProductDto> {
     const product = await this.productRepository.findOneById(id);
+    const averageStar = await this.feedbackService.productAverageStar(
+      product.id,
+    );
+    const completedOrder = await this.orderService.numberOfOrderByStatus(
+      product.id,
+      ORDER_STATUS.COMPLETED,
+    );
     if (product.category.name === 'Car') {
       const insurance = await this.insuranceRepository.findByProductId(
         product.id,
       );
-      return new ProductDto(product, insurance);
+      return new ProductDto(product, averageStar, completedOrder, insurance);
     }
-    return new ProductDto(product);
+    return new ProductDto(product, averageStar, completedOrder);
   }
 
   async adminConfirmProduct(confirmDto: AdminConfirmDto): Promise<ProductDto> {
@@ -154,7 +166,14 @@ export class ProductService {
       product.rejectReason = confirmDto.rejectReason;
     }
     this.productRepository.save(product);
-    return new ProductDto(product);
+    const averageStar = await this.feedbackService.productAverageStar(
+      product.id,
+    );
+    const completedOrder = await this.orderService.numberOfOrderByStatus(
+      product.id,
+      ORDER_STATUS.COMPLETED,
+    );
+    return new ProductDto(product, averageStar, completedOrder);
   }
 
   /**

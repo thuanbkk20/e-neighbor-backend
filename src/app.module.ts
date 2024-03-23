@@ -10,7 +10,9 @@ import {
 import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
+import { FeedbackModule } from './modules/feedback/feedback.module';
 import { LessorModule } from './modules/lessor/lessor.module';
+import { OrderModule } from './modules/order/order.module';
 import { ProductModule } from './modules/product/product.module';
 import { SurchargeModule } from './modules/surcharge/surcharge.module';
 import { UserModule } from './modules/user/user.module';
@@ -46,6 +48,8 @@ import { SharedModule } from './shared/shared.module';
     AdminModule,
     AuthModule,
     ProductModule,
+    OrderModule,
+    FeedbackModule,
     CategoryModule,
     SurchargeModule,
   ],

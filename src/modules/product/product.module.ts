@@ -7,8 +7,9 @@ import { ProductRepository } from './repositories/product.reposiory';
 import { ProductService } from './services/product.service';
 
 import { AdminModule } from '@/modules/admin/admin.module';
-import { CategoryModule } from '@/modules/category/category.module';
+import { FeedbackModule } from '@/modules/feedback/feedback.module';
 import { LessorModule } from '@/modules/lessor/lessor.module';
+import { OrderModule } from '@/modules/order/order.module';
 import { SurchargeModule } from '@/modules/surcharge/surcharge.module';
 import { UserModule } from '@/modules/user/user.module';
 
@@ -19,6 +20,8 @@ import { UserModule } from '@/modules/user/user.module';
     AdminModule,
     LessorModule,
     SurchargeModule,
+    OrderModule,
+    FeedbackModule,
   ],
   controllers: [ProductController],
   providers: [

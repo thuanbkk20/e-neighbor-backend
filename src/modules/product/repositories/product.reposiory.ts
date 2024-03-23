@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
+import { PRODUCT_LIST_SORT_FIELD } from '@/constants/product-list-sort-field';
 import { ProductPageOptionsDto } from '@/modules/product/domains/dtos/productPageOption.dto';
 import { ProductResponseDto } from '@/modules/product/domains/dtos/productResponse.dto';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
@@ -62,7 +63,10 @@ export class ProductRepository extends Repository<ProductEntity> {
     }
 
     // Handle sort
-    if (pageOptionsDto.sortField) {
+    if (
+      pageOptionsDto.sortField &&
+      pageOptionsDto.sortField != PRODUCT_LIST_SORT_FIELD.CREATED_AT
+    ) {
       queryBuilder = queryBuilder
         .orderBy('products.' + pageOptionsDto.sortField, pageOptionsDto.order)
         .addOrderBy('products.id', 'DESC');
@@ -76,7 +80,9 @@ export class ProductRepository extends Repository<ProductEntity> {
 
     // Retrieve entities
     const itemCount = await queryBuilder.getCount();
-    const entities = await queryBuilder.getMany();
+    const { raw, entities } = await queryBuilder.getRawAndEntities();
+
+    console.log('entities', raw);
 
     return new ProductResponseDto(entities, itemCount);
   }

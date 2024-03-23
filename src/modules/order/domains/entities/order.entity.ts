@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 
 import { RentalFeeEntity } from './rental-fee.entity';
 
@@ -9,6 +16,9 @@ import {
   PAYMENT_STATUS,
   PaymentStatusType,
 } from '@/constants';
+import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
+import { PaymentEntity } from '@/modules/payment/domains/entities/payment.entity';
+import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 
 @Entity('orders')
 export class OrderEntity extends AbstractEntity {
@@ -58,4 +68,15 @@ export class OrderEntity extends AbstractEntity {
 
   @OneToMany(() => RentalFeeEntity, (rentalFee) => rentalFee.order)
   rentalFees: RentalFeeEntity[];
+
+  @ManyToOne(() => ProductEntity, (product) => product.orders)
+  product: ProductEntity;
+
+  @OneToOne(() => FeedbackEntity, (feedback) => feedback.id)
+  @JoinColumn()
+  feedback: FeedbackEntity;
+
+  @OneToOne(() => PaymentEntity, (payment) => payment.id)
+  @JoinColumn()
+  payment: PaymentEntity;
 }
