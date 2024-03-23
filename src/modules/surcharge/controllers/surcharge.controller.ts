@@ -1,7 +1,8 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { SurchargeDto } from '../domains/dtos/surcharge.dto';
-import { SurchargeService } from '../services/surcharge.service';
+
+import { SurchargeDto } from '@/modules/surcharge/domains/dtos/surcharge.dto';
+import { SurchargeService } from '@/modules/surcharge/services/surcharge.service';
 
 @Controller('surcharges')
 @ApiTags('surcharges')

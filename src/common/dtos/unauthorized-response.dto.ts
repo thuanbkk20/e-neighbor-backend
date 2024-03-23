@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
 import { DataNull } from './null-data.dto';
 
 class UnauthorizedMetaResponseDto {

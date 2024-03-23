@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { PaymentService } from './services/payment.service';
+
 import { PaymentRepository } from './repositories/payment.repository';
+import { PaymentService } from './services/payment.service';
 
 @Module({
   exports: [PaymentService],

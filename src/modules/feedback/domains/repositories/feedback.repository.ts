@@ -1,6 +1,7 @@
-import { DataSource, Repository } from 'typeorm';
-import { FeedbackEntity } from '../entities/feedback.entity';
 import { Injectable } from '@nestjs/common';
+import { DataSource, Repository } from 'typeorm';
+
+import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
 
 @Injectable()
 export class FeedbackRepository extends Repository<FeedbackEntity> {

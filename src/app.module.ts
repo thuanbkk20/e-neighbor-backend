@@ -1,22 +1,23 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { SharedModule } from './shared/shared.module';
-import { ApiConfigService } from './shared/services/api-config.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import {
   addTransactionalDataSource,
   getDataSourceByName,
 } from 'typeorm-transactional';
-import { LessorModule } from './modules/lessor/lessor.module';
-import { UserModule } from './modules/user/user.module';
+
 import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { ProductModule } from './modules/product/product.module';
 import { CategoryModule } from './modules/category/category.module';
-import { SurchargeModule } from './modules/surcharge/surcharge.module';
-import { OrderModule } from './modules/order/order.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
+import { LessorModule } from './modules/lessor/lessor.module';
+import { OrderModule } from './modules/order/order.module';
+import { ProductModule } from './modules/product/product.module';
+import { SurchargeModule } from './modules/surcharge/surcharge.module';
+import { UserModule } from './modules/user/user.module';
+import { ApiConfigService } from './shared/services/api-config.service';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [

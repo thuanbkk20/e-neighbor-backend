@@ -1,7 +1,7 @@
 import { getValue, setValue } from 'express-ctx';
 
-import type { AdminEntity } from '../modules/admin/domains/entities/admin.entity';
-import type { UserEntity } from '../modules/user/domains/entities/user.entity';
+import type { AdminEntity } from '@/modules/admin/domains/entities/admin.entity';
+import type { UserEntity } from '@/modules/user/domains/entities/user.entity';
 import { LessorEntity } from 'src/modules/lessor/domains/entities/lessor.entity';
 
 export class ContextProvider {

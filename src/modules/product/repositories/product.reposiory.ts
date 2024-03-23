@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { ProductEntity } from '../domains/entities/product.entity';
-import { ProductPageOptionsDto } from '../domains/dtos/productPageOption.dto';
-import { ProductResponseDto } from '../domains/dtos/productResponse.dto';
-import { PRODUCT_LIST_SORT_FIELD } from '../../../constants/product-list-sort-field';
+
+import { PRODUCT_LIST_SORT_FIELD } from '@/constants/product-list-sort-field';
+import { ProductPageOptionsDto } from '@/modules/product/domains/dtos/productPageOption.dto';
+import { ProductResponseDto } from '@/modules/product/domains/dtos/productResponse.dto';
+import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 
 @Injectable()
 export class ProductRepository extends Repository<ProductEntity> {

@@ -1,4 +1,4 @@
-import { type ValueOf } from './../interfaces';
+import { type ValueOf } from '@/interfaces';
 export const ORDER_STATUS = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',

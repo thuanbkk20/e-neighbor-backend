@@ -1,13 +1,13 @@
-import { LessorService } from './../../lessor/services/lessor.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { ROLE } from '../../../constants';
-import { Unauthorized } from '../../../exceptions/unauthorized.exception';
-import { ApiConfigService } from '../../../shared/services/api-config.service';
-import { AdminService } from '../../admin/services/admin.service';
-import { UserService } from './../../user/services/user.service';
+import { ROLE } from '@/constants';
+import { Unauthorized } from '@/exceptions/unauthorized.exception';
+import { AdminService } from '@/modules/admin/services/admin.service';
+import { LessorService } from '@/modules/lessor/services/lessor.service';
+import { UserService } from '@/modules/user/services/user.service';
+import { ApiConfigService } from '@/shared/services/api-config.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt' as const) {

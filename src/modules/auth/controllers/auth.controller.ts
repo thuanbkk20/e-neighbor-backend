@@ -1,4 +1,3 @@
-import { ROLE } from './../../../constants/role';
 import {
   Body,
   Controller,
@@ -9,12 +8,17 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { AuthService } from '../services/auth.service';
-import { RegisterDto, SignInDto } from '../domains/dtos/sign-in.dto';
-import { ContextProvider } from './../../../providers/context.provider';
-import { Auth } from './../../../decorators';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiTags } from '@nestjs/swagger';
+
+import { ROLE } from '@/constants';
+import { Auth } from '@/decorators';
+import {
+  RegisterDto,
+  SignInDto,
+} from '@/modules/auth/domains/dtos/sign-in.dto';
+import { AuthService } from '@/modules/auth/services/auth.service';
+import { ContextProvider } from '@/providers';
 
 @ApiTags('auth')
 @Controller('auth')

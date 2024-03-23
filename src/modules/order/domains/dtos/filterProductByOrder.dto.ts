@@ -1,4 +1,4 @@
-import { ORDER_STATUS, OrderStatusType } from '../../../../constants';
+import { ORDER_STATUS, OrderStatusType } from '@/constants';
 
 export class FilterProductByOrderOptions {
   status: OrderStatusType = ORDER_STATUS.COMPLETED;

@@ -20,7 +20,7 @@ import type {
 import { reverseObjectKeys } from '@nestjs/swagger/dist/utils/reverse-object-keys.util';
 import _ from 'lodash';
 
-import type { IApiFile } from '../interfaces';
+import type { IApiFile } from '@/interfaces';
 
 interface ParameterWithType {
   type: Type<unknown>;

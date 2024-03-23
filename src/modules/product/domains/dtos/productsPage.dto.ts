@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PageMetaDto } from '../../../../common/dtos/page-meta.dto';
+
 import { ProductRecordDto } from './productRecord.dto';
+
+import { PageMetaDto } from '@/common/dtos/page-meta.dto';
 
 export class ProductsPageDto {
   @ApiProperty({ type: [ProductRecordDto] })

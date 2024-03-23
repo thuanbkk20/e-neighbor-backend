@@ -1,14 +1,18 @@
-import { RegisterDto, SignInDto } from './../domains/dtos/sign-in.dto';
-import { UserService } from './../../user/services/user.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ROLE } from './../../../constants';
 import { JwtService } from '@nestjs/jwt';
-import { AdminService } from './../../admin/services/admin.service';
-import { OAuthException } from './../../../exceptions';
+
+import { validateHash } from '@/common/utils';
+import { ROLE } from '@/constants';
+import { OAuthException } from '@/exceptions';
+import { AdminService } from '@/modules/admin/services/admin.service';
 // import { RegisterDto } from 'modules/user/domains/dtos/register.dto';
-import { LessorService } from './../../lessor/services/lessor.service';
-import { validateHash } from './../../../common/utils';
-import { GoogleSignInDto } from '../domains/dtos/google-sign-in.dto';
+import { GoogleSignInDto } from '@/modules/auth/domains/dtos/google-sign-in.dto';
+import {
+  RegisterDto,
+  SignInDto,
+} from '@/modules/auth/domains/dtos/sign-in.dto';
+import { LessorService } from '@/modules/lessor/services/lessor.service';
+import { UserService } from '@/modules/user/services/user.service';
 
 @Injectable()
 export class AuthService {

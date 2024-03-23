@@ -1,16 +1,18 @@
+import { ClassSerializerInterceptor } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { initializeTransactionalContext } from 'typeorm-transactional';
-import { SharedModule } from './shared/shared.module';
-import { ApiConfigService } from './shared/services/api-config.service';
-import { setupSwagger } from './setup-swagger';
-import { middleware as expressCtx } from 'express-ctx';
 import {
   ExpressAdapter,
   NestExpressApplication,
 } from '@nestjs/platform-express';
-import { ClassSerializerInterceptor } from '@nestjs/common';
+import { middleware as expressCtx } from 'express-ctx';
+import { initializeTransactionalContext } from 'typeorm-transactional';
+
+import { AppModule } from './app.module';
 import { SerializerInterceptor } from './interceptors/serializer-interceptor';
+import { setupSwagger } from './setup-swagger';
+import { ApiConfigService } from './shared/services/api-config.service';
+import { SharedModule } from './shared/shared.module';
+
 declare const module: any;
 
 async function bootstrap() {

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { OrderRepository } from '../repositories/order.repository';
-import { OrderStatusType } from '../../../constants';
-import { FilterProductByOrderOptions } from '../domains/dtos/filterProductByOrder.dto';
+
+import { OrderStatusType } from '@/constants';
+import { FilterProductByOrderOptions } from '@/modules/order/domains/dtos/filterProductByOrder.dto';
+import { OrderRepository } from '@/modules/order/repositories/order.repository';
 
 @Injectable()
 export class OrderService {

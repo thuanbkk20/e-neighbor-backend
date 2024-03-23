@@ -1,4 +1,4 @@
-import { type ValueOf } from '../interfaces';
+import { type ValueOf } from '@/interfaces';
 export const PAYMENT_METHOD = {
   BANKING: 'BANKING',
   E_WALLET: 'E WALLET',

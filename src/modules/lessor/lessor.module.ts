@@ -1,9 +1,11 @@
-import { LessorService } from './services/lessor.service';
-import { LessorRepository } from './repositories/lessor.repository';
 import { Module } from '@nestjs/common';
+
 import { LessorController } from './controllers/lessor.controller';
-import { UserModule } from '../user/user.module';
-import { AdminModule } from '../admin/admin.module';
+import { LessorRepository } from './repositories/lessor.repository';
+import { LessorService } from './services/lessor.service';
+
+import { AdminModule } from '@/modules/admin/admin.module';
+import { UserModule } from '@/modules/user/user.module';
 
 @Module({
   controllers: [LessorController],

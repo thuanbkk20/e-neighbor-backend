@@ -1,9 +1,9 @@
 import './src/boilerplate.polyfill';
+import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import type { DataSourceOptions } from 'typeorm';
 import { DataSource } from 'typeorm';
 import type { SeederOptions } from 'typeorm-extension';
-import { ConfigService } from '@nestjs/config';
 
 import { SnakeNamingStrategy } from './src/snake-naming.strategy';
 
@@ -19,7 +19,10 @@ const options: DataSourceOptions & SeederOptions = {
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_DATABASE'),
   namingStrategy: new SnakeNamingStrategy(),
+  synchronize: true,
+  logging: true,
   entities: [
+    __dirname + '/../**/*.entity.{js,ts}',
     './src/modules/**/*.entity{.ts,.js}',
     './src/modules/**/*.view-entity{.ts,.js}',
   ],

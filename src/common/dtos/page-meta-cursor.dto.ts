@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { PageCursorDto } from './page-cursor.dto';
 
 interface IPageMetaCursorDtoParameters {

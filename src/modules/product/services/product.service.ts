@@ -1,14 +1,8 @@
-import { FeedbackService } from './../../feedback/services/feedback.service';
-import { OrderService } from './../../order/services/order.service';
-import { InsuranceRepository } from './../repositories/insurance.repository';
-import { InsuranceEntity } from './../domains/entities/insurance.entity';
-import { LessorService } from './../../lessor/services/lessor.service';
-import { CreateProductDto } from './../domains/dtos/createProduct.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ProductRepository } from '../repositories/product.reposiory';
-import { ProductEntity } from '../domains/entities/product.entity';
-import { ProductSurchargeRepository } from '../repositories/product-surcharge.repository';
-import { getKeyByValue } from '../../../interfaces';
+import { EntityManager } from 'typeorm';
+
+import { PageMetaDto } from '@/common/dtos/page-meta.dto';
+import { PageDto } from '@/common/dtos/page.dto';
 import {
   MORTGAGE,
   MORTGAGE_MAPPING,
@@ -16,21 +10,28 @@ import {
   REQUIRED_DOCUMENTS,
   REQUIRED_DOCUMENTS_MAPPING,
   SURCHARGE,
-} from '../../../constants';
-import { CategoryService } from '../../category/services/category.service';
-import { ProductSurChargeEntity } from '../domains/entities/product-surcharge.entity';
-import { ContextProvider } from '../../../providers';
-import { ProductMissingFieldException } from '../../../exceptions/invalid-product.exception';
-import { ProductDto } from '../domains/dtos/product.dto';
-import { EntityManager } from 'typeorm';
-import { SurchargeService } from '../../surcharge/services/surcharge.service';
-import { AdminConfirmDto } from '../domains/dtos/adminConfirm.dto';
-import { ProductNotFoundException } from '../../../exceptions/product-not-found.exception';
-import { ProductRecordDto } from '../domains/dtos/productRecord.dto';
-import { PageDto } from '../../../common/dtos/page.dto';
-import { ProductResponseDto } from '../domains/dtos/productResponse.dto';
-import { ProductPageOptionsDto } from '../domains/dtos/productPageOption.dto';
-import { PageMetaDto } from '../../../common/dtos/page-meta.dto';
+} from '@/constants';
+import { ProductMissingFieldException } from '@/exceptions/invalid-product.exception';
+import { ProductNotFoundException } from '@/exceptions/product-not-found.exception';
+import { getKeyByValue } from '@/interfaces';
+import { CategoryService } from '@/modules/category/services/category.service';
+import { FeedbackService } from '@/modules/feedback/services/feedback.service';
+import { LessorService } from '@/modules/lessor/services/lessor.service';
+import { OrderService } from '@/modules/order/services/order.service';
+import { AdminConfirmDto } from '@/modules/product/domains/dtos/adminConfirm.dto';
+import { CreateProductDto } from '@/modules/product/domains/dtos/createProduct.dto';
+import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
+import { ProductPageOptionsDto } from '@/modules/product/domains/dtos/productPageOption.dto';
+import { ProductRecordDto } from '@/modules/product/domains/dtos/productRecord.dto';
+import { ProductResponseDto } from '@/modules/product/domains/dtos/productResponse.dto';
+import { InsuranceEntity } from '@/modules/product/domains/entities/insurance.entity';
+import { ProductSurChargeEntity } from '@/modules/product/domains/entities/product-surcharge.entity';
+import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
+import { InsuranceRepository } from '@/modules/product/repositories/insurance.repository';
+import { ProductSurchargeRepository } from '@/modules/product/repositories/product-surcharge.repository';
+import { ProductRepository } from '@/modules/product/repositories/product.reposiory';
+import { SurchargeService } from '@/modules/surcharge/services/surcharge.service';
+import { ContextProvider } from '@/providers';
 
 @Injectable()
 export class ProductService {

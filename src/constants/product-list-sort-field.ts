@@ -1,4 +1,4 @@
-import { type ValueOf } from '../interfaces';
+import { type ValueOf } from '@/interfaces';
 export const PRODUCT_LIST_SORT_FIELD = {
   CREATED_AT: 'created_at',
   PRICE: 'price',

@@ -1,18 +1,19 @@
+import { Column, Entity, JoinColumn, OneToMany, ManyToOne } from 'typeorm';
+
+import { STATUS, StatusType } from './../../../../constants/status';
+import { ProductSurChargeEntity } from './product-surcharge.entity';
+
+import { AbstractEntity } from '@/common/abstract.entity';
+import { MORTGAGE, MortgageType } from '@/constants';
 import {
   REQUIRED_DOCUMENTS,
   RequiredDocumentsType,
-} from './../../../../constants/required-documents';
-import { STATUS, StatusType } from './../../../../constants/status';
-import { Column, Entity, JoinColumn, OneToMany, ManyToOne } from 'typeorm';
-import { AbstractEntity } from '../../../../common/abstract.entity';
-import { Characteristics } from '../classes/policy.class';
-import { CategoryEntity } from '../../../category/domains/entities/category.entity';
-import { MORTGAGE, MortgageType } from '../../../../constants';
-import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
-import { ProductSurChargeEntity } from './product-surcharge.entity';
-import { LessorEntity } from '../../../lessor/domains/entities/lessor.entity';
-import { OrderEntity } from '../../../order/domains/entities/order.entity';
-
+} from '@/constants/required-documents';
+import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
+import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
+import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
+import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
+import { Characteristics } from '@/modules/product/domains/classes/policy.class';
 @Entity('products')
 export class ProductEntity extends AbstractEntity {
   @Column()

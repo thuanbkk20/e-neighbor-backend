@@ -1,4 +1,4 @@
-import { type ValueOf } from './../interfaces';
+import { type ValueOf } from '@/interfaces';
 export enum STATUS {
   AVAILABLE = 'available',
   NOT_AVAILABLE = 'not_available',

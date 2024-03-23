@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { ERROR_ADMIN_NOT_FOUND } from '../filters/constraint-errors';
+import { ERROR_ADMIN_NOT_FOUND } from '@/filters/constraint-errors';
 
 export class AdminNotFoundException extends NotFoundException {
   constructor(error?: string) {

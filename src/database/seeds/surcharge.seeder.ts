@@ -1,6 +1,7 @@
 import type { DataSource } from 'typeorm';
 import type { Seeder } from 'typeorm-extension';
-import { SurchargeEntity } from '../../modules/surcharge/domains/entities/surcharge.entity';
+
+import { SurchargeEntity } from '@/modules/surcharge/domains/entities/surcharge.entity';
 
 export default class SurchargeSeeder implements Seeder {
   public async run(dataSource: DataSource) {

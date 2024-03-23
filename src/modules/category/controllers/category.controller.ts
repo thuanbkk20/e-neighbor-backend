@@ -1,7 +1,8 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { CategoryService } from '../services/category.service';
-import { CategoryEntity } from '../domains/entities/category.entity';
+
+import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
+import { CategoryService } from '@/modules/category/services/category.service';
 
 @Controller('categories')
 @ApiTags('categories')

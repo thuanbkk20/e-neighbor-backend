@@ -1,7 +1,7 @@
 import { IsNumber } from 'class-validator';
 
-import { NumberField } from '../../../../decorators';
-import { ProductEntity } from '../entities/product.entity';
+import { NumberField } from '@/decorators';
+import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 
 export class ProductResponseDto {
   entities: ProductEntity[];

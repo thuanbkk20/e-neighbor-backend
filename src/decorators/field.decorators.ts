@@ -22,6 +22,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+import { ApiEnumProperty, ApiUUIDProperty } from './property.decorators';
 import {
   PhoneNumberSerializer,
   ToArray,
@@ -35,7 +36,6 @@ import {
   IsTmpKey as IsTemporaryKey,
   IsUndefinable,
 } from './validator.decorators';
-import { ApiEnumProperty, ApiUUIDProperty } from './property.decorators';
 
 interface IFieldOptions {
   each?: boolean;

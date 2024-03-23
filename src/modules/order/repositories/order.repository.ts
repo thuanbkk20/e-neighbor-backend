@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { OrderEntity } from '../domains/entities/order.entity';
-import { OrderStatusType } from '../../../constants';
-import { FilterProductByOrderOptions } from '../domains/dtos/filterProductByOrder.dto';
+
+import { OrderStatusType } from '@/constants';
+import { FilterProductByOrderOptions } from '@/modules/order/domains/dtos/filterProductByOrder.dto';
+import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 
 @Injectable()
 export class OrderRepository extends Repository<OrderEntity> {

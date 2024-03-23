@@ -1,8 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { AbstractEntity } from '../../../../common/abstract.entity';
-import { IsInt, Min } from 'class-validator';
 import { Exclude } from 'class-transformer';
+import { IsInt, Min } from 'class-validator';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+
 import { OrderEntity } from './order.entity';
+
+import { AbstractEntity } from '@/common/abstract.entity';
 
 @Entity('rental_fee')
 export class RentalFeeEntity extends AbstractEntity {

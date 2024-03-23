@@ -1,8 +1,9 @@
-import { TIME_UNIT, TimeUnitType } from '../../../../constants/time-unit';
-import { CategoryEntity } from '../../../category/domains/entities/category.entity';
-import { ProductEntity } from '../entities/product.entity';
-import { STATUS, StatusType } from './../../../../constants/status';
 import { ApiProperty } from '@nestjs/swagger';
+
+import { STATUS, StatusType } from '@/constants/status';
+import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
+import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
+import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 
 export class ProductRecordDto {
   @ApiProperty()
