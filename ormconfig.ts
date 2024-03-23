@@ -19,7 +19,10 @@ const options: DataSourceOptions & SeederOptions = {
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_DATABASE'),
   namingStrategy: new SnakeNamingStrategy(),
+  synchronize: true,
+  logging: true,
   entities: [
+    __dirname + '/../**/*.entity.{js,ts}',
     './src/modules/**/*.entity{.ts,.js}',
     './src/modules/**/*.view-entity{.ts,.js}',
   ],
