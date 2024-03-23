@@ -1,9 +1,9 @@
 import './src/boilerplate.polyfill';
+import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import type { DataSourceOptions } from 'typeorm';
 import { DataSource } from 'typeorm';
 import type { SeederOptions } from 'typeorm-extension';
-import { ConfigService } from '@nestjs/config';
 
 import { SnakeNamingStrategy } from './src/snake-naming.strategy';
 

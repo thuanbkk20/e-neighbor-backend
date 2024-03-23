@@ -23,7 +23,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js, commitlint.config.js'],
+  ignorePatterns: ['.eslintrc.js', 'commitlint.config.js', 'ormconfig.ts'],
 
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
