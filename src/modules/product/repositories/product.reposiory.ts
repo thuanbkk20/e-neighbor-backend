@@ -3,6 +3,7 @@ import { DataSource, Repository } from 'typeorm';
 import { ProductEntity } from '../domains/entities/product.entity';
 import { ProductPageOptionsDto } from '../domains/dtos/productPageOption.dto';
 import { ProductResponseDto } from '../domains/dtos/productResponse.dto';
+import { PRODUCT_LIST_SORT_FIELD } from '../../../constants/product-list-sort-field';
 
 @Injectable()
 export class ProductRepository extends Repository<ProductEntity> {
@@ -61,7 +62,10 @@ export class ProductRepository extends Repository<ProductEntity> {
     }
 
     // Handle sort
-    if (pageOptionsDto.sortField) {
+    if (
+      pageOptionsDto.sortField &&
+      pageOptionsDto.sortField != PRODUCT_LIST_SORT_FIELD.CREATED_AT
+    ) {
       queryBuilder = queryBuilder
         .orderBy('products.' + pageOptionsDto.sortField, pageOptionsDto.order)
         .addOrderBy('products.id', 'DESC');
@@ -75,7 +79,9 @@ export class ProductRepository extends Repository<ProductEntity> {
 
     // Retrieve entities
     const itemCount = await queryBuilder.getCount();
-    const entities = await queryBuilder.getMany();
+    const { raw, entities } = await queryBuilder.getRawAndEntities();
+
+    console.log('entities', raw);
 
     return new ProductResponseDto(entities, itemCount);
   }
