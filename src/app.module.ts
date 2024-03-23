@@ -15,6 +15,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { CategoryModule } from './modules/category/category.module';
 import { SurchargeModule } from './modules/surcharge/surcharge.module';
+import { OrderModule } from './modules/order/order.module';
+import { FeedbackModule } from './modules/feedback/feedback.module';
 
 @Module({
   imports: [
@@ -45,6 +47,8 @@ import { SurchargeModule } from './modules/surcharge/surcharge.module';
     AdminModule,
     AuthModule,
     ProductModule,
+    OrderModule,
+    FeedbackModule,
     CategoryModule,
     SurchargeModule,
   ],
