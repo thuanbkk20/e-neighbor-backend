@@ -16,6 +16,6 @@ export class FeedbackRepository extends Repository<FeedbackEntity> {
       .where('product.id = :id', { id: productId })
       .getRawOne();
 
-    return feedbacks.averageStar || 0;
+    return parseFloat(feedbacks.averageStar) || 0;
   }
 }

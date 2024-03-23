@@ -1,3 +1,5 @@
+import { FeedbackService } from './../../feedback/services/feedback.service';
+import { OrderService } from './../../order/services/order.service';
 import { InsuranceRepository } from './../repositories/insurance.repository';
 import { InsuranceEntity } from './../domains/entities/insurance.entity';
 import { LessorService } from './../../lessor/services/lessor.service';
@@ -10,6 +12,7 @@ import { getKeyByValue } from '../../../interfaces';
 import {
   MORTGAGE,
   MORTGAGE_MAPPING,
+  ORDER_STATUS,
   REQUIRED_DOCUMENTS,
   REQUIRED_DOCUMENTS_MAPPING,
   SURCHARGE,
@@ -38,6 +41,8 @@ export class ProductService {
     private readonly productSurchargeRepository: ProductSurchargeRepository,
     private readonly surchargeService: SurchargeService,
     private readonly insuranceRepository: InsuranceRepository,
+    private readonly orderService: OrderService,
+    private readonly feedbackService: FeedbackService,
   ) {}
 
   private async productDtoToProductEntity(
@@ -122,20 +127,27 @@ export class ProductService {
           await entityManager.save(insurance);
         }
 
-        return new ProductDto(product);
+        return new ProductDto(product, 0, 0);
       },
     );
   }
 
   async findOneById(id: number): Promise<ProductDto> {
     const product = await this.productRepository.findOneById(id);
+    const averageStar = await this.feedbackService.productAverageStar(
+      product.id,
+    );
+    const completedOrder = await this.orderService.numberOfOrderByStatus(
+      product.id,
+      ORDER_STATUS.COMPLETED,
+    );
     if (product.category.name === 'Car') {
       const insurance = await this.insuranceRepository.findByProductId(
         product.id,
       );
-      return new ProductDto(product, insurance);
+      return new ProductDto(product, averageStar, completedOrder, insurance);
     }
-    return new ProductDto(product);
+    return new ProductDto(product, averageStar, completedOrder);
   }
 
   async adminConfirmProduct(confirmDto: AdminConfirmDto): Promise<ProductDto> {
@@ -153,7 +165,14 @@ export class ProductService {
       product.rejectReason = confirmDto.rejectReason;
     }
     this.productRepository.save(product);
-    return new ProductDto(product);
+    const averageStar = await this.feedbackService.productAverageStar(
+      product.id,
+    );
+    const completedOrder = await this.orderService.numberOfOrderByStatus(
+      product.id,
+      ORDER_STATUS.COMPLETED,
+    );
+    return new ProductDto(product, averageStar, completedOrder);
   }
 
   /**

@@ -9,6 +9,8 @@ import { LessorModule } from '../lessor/lessor.module';
 import { ProductSurchargeRepository } from './repositories/product-surcharge.repository';
 import { InsuranceRepository } from './repositories/insurance.repository';
 import { SurchargeModule } from '../surcharge/surcharge.module';
+import { OrderModule } from '../order/order.module';
+import { FeedbackModule } from '../feedback/feedback.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { SurchargeModule } from '../surcharge/surcharge.module';
     AdminModule,
     LessorModule,
     SurchargeModule,
+    OrderModule,
+    FeedbackModule,
   ],
   controllers: [ProductController],
   providers: [
