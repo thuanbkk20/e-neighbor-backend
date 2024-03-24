@@ -3,11 +3,7 @@ import { IsEmail, IsString } from 'class-validator';
 
 import { UpdatePaymentMethodDto } from '@/modules/payment/domains/dtos/payment-method.dto';
 
-export class LessorRegisterDto {
-  @ApiProperty()
-  @IsString()
-  userId: number;
-
+export class LessorOnboardDto {
   @ApiProperty()
   @IsEmail()
   email: string;

@@ -24,7 +24,7 @@
     "migration:run": "npm run typeorm migration:run -- -d ./ormconfig.ts",
     "migration:revert": "npm run typeorm -- -d ./ormconfig.ts migration:revert",
     "seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-extension/dist/cli/index.js seed -d ormconfig",
-    "seed:run": "node -r tsconfig-paths/register dist/database/seeds/all.seeder.js",
+    "seed:run": "ts-node -r tsconfig-paths/register src/database/seeds/all.seeder.ts",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ",

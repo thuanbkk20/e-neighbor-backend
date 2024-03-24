@@ -3,7 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import omit from 'lodash/omit';
+import { omit } from 'lodash';
 
 import { generateHash, validateHash } from '@/common/utils';
 import { ROLE } from '@/constants';
@@ -93,6 +93,12 @@ export class UserService {
     user.password = generateHash(user.password);
 
     const queryResult = await this.userRepository.updateUser(user);
+    return omit(queryResult, ['password']);
+  }
+
+  async updateJwtUser(user: UserUpdateDto): Promise<UserDto> {
+    const queryResult = await this.userRepository.updateUser(user);
+    console.log(omit(queryResult, ['password']));
     return omit(queryResult, ['password']);
   }
 

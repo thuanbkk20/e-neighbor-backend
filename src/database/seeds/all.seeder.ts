@@ -9,6 +9,7 @@ import AdminSeeder from './admin.seeder';
 import CategorySeeder from './category.seeder';
 import SurchargeSeeder from './surcharge.seeder';
 
+import ProductSeeder from '@/database/seeds/products.seeder';
 import { AdminEntity } from '@/modules/admin/domains/entities/admin.entity';
 import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
 import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
@@ -52,7 +53,7 @@ async function executeSeeding() {
       ProductEntity,
       SurchargeEntity,
     ],
-    seeds: [AdminSeeder, CategorySeeder, SurchargeSeeder],
+    seeds: [AdminSeeder, CategorySeeder, SurchargeSeeder, ProductSeeder],
   };
 
   const dataSource = new DataSource(options);

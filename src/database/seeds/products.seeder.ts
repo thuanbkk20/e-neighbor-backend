@@ -3,7 +3,7 @@ import { Seeder } from 'typeorm-extension';
 
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 
-export default class CategorySeeder implements Seeder {
+export default class ProductSeeder implements Seeder {
   public async run(dataSource: DataSource) {
     const productDir = dataSource.getRepository(ProductEntity);
     await productDir.insert([
