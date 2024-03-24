@@ -57,8 +57,8 @@ export default class ProductSeeder implements Seeder {
         ],
         price: 70, // Price per unit of time
         requiredDocuments: 'OPTION1',
-        category: { id: 1 }, // Assuming you have a category with ID 1 for "Cars"
-        lessor: { id: 2 }, // Assuming you have a lessor with ID 2
+        category: { id: 2 }, // Assuming you have a category with ID 1 for "Cars"
+        lessor: { id: 1 }, // Assuming you have a lessor with ID 2
       },
       // Add more car objects as needed
     ]);

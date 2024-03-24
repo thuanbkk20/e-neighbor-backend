@@ -22,6 +22,9 @@ bootstrap:
 up:
 	docker-compose up -d --remove-orphans --build
 
+up-watch:
+	docker-compose up --build --remove-orphans
+
 dev-up:
 	docker-compose up -d --remove-orphans
 	npm run start:dev
@@ -43,6 +46,9 @@ create-migrate:
 
 generate-migrate:
 	npm run migration:generate -- ./src/database/migrations/${MIGRATION_NAME}
+
+generate-seed-container:
+	docker-compose exec e-neighbor-api npm run seed:run
 
 fork-kill-dev:
 	lsof -t -i tcp:3000 | xargs kill

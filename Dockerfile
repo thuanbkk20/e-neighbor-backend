@@ -13,5 +13,7 @@ RUN npm install
 COPY . .
 # Expose port
 EXPOSE 3000
+# Seed database
+RUN npm run seed:run
 # Start the app
 CMD [ "npm", "run", "start:dev" ]

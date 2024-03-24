@@ -82,7 +82,7 @@ export class ProductRepository extends Repository<ProductEntity> {
     const itemCount = await queryBuilder.getCount();
     const { raw, entities } = await queryBuilder.getRawAndEntities();
 
-    console.log('entities', raw);
+    console.log('entities', raw, entities);
 
     return new ProductResponseDto(entities, itemCount);
   }

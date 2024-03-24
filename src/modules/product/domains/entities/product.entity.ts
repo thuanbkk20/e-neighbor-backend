@@ -84,8 +84,16 @@ export class ProductEntity extends AbstractEntity {
   isConfirmed: boolean;
 
   @ManyToOne(() => LessorEntity, (lessor) => lessor.products)
-  @JoinColumn({ name: 'lessor_id' })
+  @JoinColumn({ name: 'lessor_id', referencedColumnName: 'id' })
   lessor: LessorEntity;
+
+  /// Traffic count
+  @Column()
+  accessCount: number;
+
+  // Calculated each time a feedback is update
+  @Column()
+  rating: number;
 
   @OneToMany(() => OrderEntity, (order) => order.product)
   orders: OrderEntity[];

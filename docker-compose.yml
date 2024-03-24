@@ -16,6 +16,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./src:/app/src
+      - ./.env:/app/.env
     restart: always
 
   postgres:
@@ -41,6 +45,19 @@ services:
       start_period: 80s
     env_file:
       - .env
+
+  pgadmin:
+    image: dpage/pgadmin4
+    networks:
+      - neighbor-net
+    depends_on:
+      - postgres
+    ports:
+      - "5555:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    restart: unless-stopped
 
   adminer:
     image: adminer
