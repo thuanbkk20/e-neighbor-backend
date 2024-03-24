@@ -59,5 +59,8 @@ compose-create-migrate:
 compose-generate-migrate:
 	docker-compose exec e-neighbor-api npm run migration:generate
 
+compose-seed-run:
+	docker-compose exec e-neighbor-api npm run seed:run
+
 fork-kill-dev:
 	lsof -t -i tcp:3000 | xargs kill

@@ -24,7 +24,7 @@ export class LessorController {
   @Post('/onboard')
   @ApiBody({ type: LessorOnboardDto })
   async onboard(@Body() registerDto: LessorOnboardDto) {
-    return this.lessorService.lessorOnboard({
+    return await this.lessorService.lessorOnboard({
       ...ContextProvider.getAuthUser(),
       ...registerDto,
     });

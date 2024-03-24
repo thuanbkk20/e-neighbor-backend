@@ -7,6 +7,7 @@ import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 import { LessorRepository } from '@/modules/lessor/repositories/lessor.repository';
 import { UserUpdateDto } from '@/modules/user/domains/dtos/user-update.dto';
 import { UserService } from '@/modules/user/services/user.service';
+import { ContextProvider } from '@/providers';
 import { LessorNotFoundException } from 'src/exceptions';
 
 @Injectable()
@@ -53,7 +54,10 @@ export class LessorService {
   }
 
   async lessorOnboard(registerDto: LessorOnboardDto & UserUpdateDto) {
-    const userAfterUpdate = await this.userService.updateJwtUser(registerDto);
+    const userAfterUpdate = await this.userService.updateJwtUser({
+      ...registerDto,
+      role: ROLE.LESSOR,
+    });
 
     const lessor = {
       wareHouseAddress: registerDto.wareHouseAddress,
@@ -62,6 +66,7 @@ export class LessorService {
 
       user: userAfterUpdate,
     };
-    this.lessorRepository.save(lessor);
+    const newLessor = await this.lessorRepository.save(lessor);
+    ContextProvider.setAuthUser(newLessor);
   }
 }

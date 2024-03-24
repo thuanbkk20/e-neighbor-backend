@@ -98,7 +98,6 @@ export class UserService {
 
   async updateJwtUser(user: UserUpdateDto): Promise<UserDto> {
     const queryResult = await this.userRepository.updateUser(user);
-    console.log(omit(queryResult, ['password']));
     return omit(queryResult, ['password']);
   }
 
