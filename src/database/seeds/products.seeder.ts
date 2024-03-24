@@ -33,6 +33,8 @@ export default class ProductSeeder implements Seeder {
         requiredDocuments: 'OPTION1',
         category: { id: 1 }, // Assuming you have a category with ID 1 for "Cars"
         lessor: { id: 1 }, // Assuming you have a lessor with ID 1
+        rating: 0,
+        accessCount: 0,
       },
       {
         name: 'Honda CR-V 2022',
@@ -59,6 +61,8 @@ export default class ProductSeeder implements Seeder {
         requiredDocuments: 'OPTION1',
         category: { id: 2 }, // Assuming you have a category with ID 1 for "Cars"
         lessor: { id: 1 }, // Assuming you have a lessor with ID 2
+        rating: 0,
+        accessCount: 0,
       },
       // Add more car objects as needed
     ]);

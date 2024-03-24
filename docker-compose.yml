@@ -11,15 +11,16 @@ services:
       - "3000:3000"
     env_file:
       - .env
+    environment:
+      DB_HOST: postgres
     networks:
       - neighbor-net
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
-      - ./node_modules:/app/node_modules
-      - ./src:/app/src
-      - ./.env:/app/.env
+      - .:/app
+      - /app/node_modules
     restart: always
 
   postgres:
@@ -27,6 +28,7 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
       TZ: 'GMT'
       PGTZ: 'GMT'
     ports:

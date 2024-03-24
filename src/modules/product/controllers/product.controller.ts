@@ -36,6 +36,28 @@ export class ProductController {
     return this.productService.getProductsList(productPageOptions);
   }
 
+  @Get('/most-viewed')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: ProductListOkResponse,
+  })
+  async getMostViewedProducts(
+    @Query() productPaginationParams: ProductPageOptionsDto,
+  ) {
+    return this.productService.getMostViewedProducts(productPaginationParams);
+  }
+
+  @Get('/most-rated')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: ProductListOkResponse,
+  })
+  async getMostRatedProducts(
+    @Query() productPaginationParams: ProductPageOptionsDto,
+  ) {
+    return this.productService.getMostRatedProducts(productPaginationParams);
+  }
+
   @Auth([ROLE.LESSOR])
   @Post()
   @HttpCode(HttpStatus.CREATED)
