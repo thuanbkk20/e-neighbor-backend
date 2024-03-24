@@ -13,14 +13,14 @@ bootstrap:
 
 	echo "Create .env file..."
 	cp .env.example .env
-	
+
 	npm install
 	make up
 	make up-migrate
 	npm run start:dev
-	
+
 up:
-	docker-compose up -d --remove-orphans
+	docker-compose up -d --remove-orphans --build
 
 dev-up:
 	docker-compose up -d --remove-orphans
