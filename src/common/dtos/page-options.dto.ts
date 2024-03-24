@@ -30,6 +30,12 @@ export class PageOptionsDto {
     return (this.page - 1) * this.take;
   }
 
+  @NumberFieldOptional({
+    minimum: 0,
+    int: true,
+  })
+  readonly offset?: number;
+
   @StringFieldOptional()
   readonly q?: string;
 }

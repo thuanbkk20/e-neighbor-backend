@@ -4,7 +4,7 @@ import { IsString } from 'class-validator';
 export class Characteristics {
   @ApiProperty()
   @IsString()
-  name: string;
+  localeId: string;
 
   @ApiProperty()
   @IsString()

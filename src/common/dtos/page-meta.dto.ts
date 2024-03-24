@@ -26,6 +26,9 @@ export class PageMetaDto {
   @ApiProperty()
   readonly hasNextPage: boolean;
 
+  @ApiProperty()
+  readonly offset?: number;
+
   constructor({ pageOptionsDto, itemCount }: IPageMetaDtoParameters) {
     this.page = pageOptionsDto.page;
     this.take = pageOptionsDto.take;
@@ -33,5 +36,6 @@ export class PageMetaDto {
     this.pageCount = Math.ceil(this.itemCount / this.take);
     this.hasPreviousPage = this.page > 1;
     this.hasNextPage = this.page < this.pageCount;
+    this.offset = pageOptionsDto.offset ?? 0;
   }
 }
