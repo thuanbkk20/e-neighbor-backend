@@ -7,6 +7,7 @@ import { OAuthException } from '@/exceptions';
 import { AdminService } from '@/modules/admin/services/admin.service';
 // import { RegisterDto } from 'modules/user/domains/dtos/register.dto';
 import { GoogleSignInDto } from '@/modules/auth/domains/dtos/google-sign-in.dto';
+import { JwtResponseDto } from '@/modules/auth/domains/dtos/jwt-response.dto';
 import {
   RegisterDto,
   SignInDto,
@@ -23,7 +24,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(signInDto: SignInDto): Promise<any> {
+  async signIn(signInDto: SignInDto): Promise<JwtResponseDto> {
     const user = await this.userService.findOneByUserName(signInDto.userName);
     const isMatched = await validateHash(signInDto.password, user.password);
     if (!isMatched) {
@@ -33,28 +34,18 @@ export class AuthService {
       id: user.id,
       role: ROLE.USER,
     };
-    return {
-      accessToken: await this.jwtService.signAsync(payload),
-    };
-  }
-
-  async lessorSignIn(signInDto: SignInDto): Promise<any> {
-    const user = await this.userService.findOneByUserName(signInDto.userName);
-    const isMatched = await validateHash(signInDto.password, user.password);
-    if (!isMatched) {
-      throw new UnauthorizedException('Invalid credential');
-    }
     const lessor = await this.lessorService.findOneByUserId(user.id);
-    const payload = {
-      id: lessor.id,
-      role: ROLE.LESSOR,
-    };
+    console.log(lessor);
+    if (lessor != null) {
+      payload.id = lessor.id;
+      payload.role = ROLE.LESSOR;
+    }
     return {
       accessToken: await this.jwtService.signAsync(payload),
     };
   }
 
-  async adminSignIn(signInDto: SignInDto): Promise<any> {
+  async adminSignIn(signInDto: SignInDto): Promise<JwtResponseDto> {
     const admin = await this.adminService.findOneByUserName(signInDto.userName);
     const isMatched = await validateHash(signInDto.password, admin.password);
     if (!isMatched) {
@@ -69,7 +60,7 @@ export class AuthService {
     };
   }
 
-  async userRegister(registerDto: RegisterDto) {
+  async userRegister(registerDto: RegisterDto): Promise<JwtResponseDto> {
     const user = await this.userService.createUser(registerDto);
     return {
       accessToken: await this.jwtService.signAsync({
@@ -79,7 +70,9 @@ export class AuthService {
     };
   }
 
-  async userRegisterByGoogle(registerDto: GoogleSignInDto) {
+  async userRegisterByGoogle(
+    registerDto: GoogleSignInDto,
+  ): Promise<JwtResponseDto> {
     const user = await this.userService.registerByGoogle(registerDto);
     return {
       accessToken: await this.jwtService.signAsync({
@@ -110,7 +103,7 @@ export class AuthService {
   //   await this.adminService.saveUser(user);
   // }
 
-  async googleLogin(req: any) {
+  async googleLogin(req: any): Promise<JwtResponseDto> {
     if (!req.user) {
       throw new OAuthException();
     }
