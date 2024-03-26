@@ -47,7 +47,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push
-        if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -55,7 +54,7 @@ jobs:
           tags: mrdiamond12312/e-neighbor-render-api:latest
 
       - name: Async - Manually Trigger OnRender deploy
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/master'
         env:
           DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
