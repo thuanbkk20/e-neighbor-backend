@@ -11,11 +11,16 @@ services:
       - "3000:3000"
     env_file:
       - .env
+    environment:
+      DB_HOST: postgres
     networks:
       - neighbor-net
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
     restart: always
 
   postgres:
@@ -23,6 +28,7 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
       TZ: 'GMT'
       PGTZ: 'GMT'
     ports:
@@ -41,6 +47,19 @@ services:
       start_period: 80s
     env_file:
       - .env
+
+  pgadmin:
+    image: dpage/pgadmin4
+    networks:
+      - neighbor-net
+    depends_on:
+      - postgres
+    ports:
+      - "5555:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    restart: unless-stopped
 
   adminer:
     image: adminer

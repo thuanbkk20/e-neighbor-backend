@@ -10,7 +10,7 @@ export class UserUpdateDto {
 
   @ApiProperty()
   @IsString()
-  password: string;
+  password?: string;
 
   @ApiPropertyOptional()
   @IsEmail()

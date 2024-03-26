@@ -61,6 +61,9 @@ export class ProductPageOptionsDto {
   @EnumFieldOptional(() => STATUS)
   readonly status?: StatusType[];
 
+  @NumberFieldOptional()
+  readonly offset?: number;
+
   @NumberFieldOptional({
     minimum: 1,
     maximum: 5,

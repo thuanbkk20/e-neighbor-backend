@@ -24,6 +24,7 @@ import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
 import { ProductPageOptionsDto } from '@/modules/product/domains/dtos/productPageOption.dto';
 import { ProductRecordDto } from '@/modules/product/domains/dtos/productRecord.dto';
 import { ProductResponseDto } from '@/modules/product/domains/dtos/productResponse.dto';
+import { ProductViewDto } from '@/modules/product/domains/dtos/productView.dto';
 import { InsuranceEntity } from '@/modules/product/domains/entities/insurance.entity';
 import { ProductSurChargeEntity } from '@/modules/product/domains/entities/product-surcharge.entity';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
@@ -195,4 +196,46 @@ export class ProductService {
     const pageMeta = new PageMetaDto({ pageOptionsDto, itemCount });
     return new PageDto(productRecords, pageMeta);
   }
+
+  getMostViewedProducts = async (
+    paginationParamsDto: ProductPageOptionsDto,
+  ) => {
+    const mostViewedQuery =
+      this.productRepository.getTopFourViewedProductList(paginationParamsDto);
+
+    const mostViewedProducts = await mostViewedQuery
+      .getRawAndEntities()
+      .then(({ entities }) =>
+        entities.map((entity) => new ProductViewDto(entity)),
+      );
+
+    const productsCount = await mostViewedQuery.getCount();
+
+    const paginationMeta = new PageMetaDto({
+      pageOptionsDto: paginationParamsDto,
+      itemCount: productsCount,
+    });
+
+    return new PageDto(mostViewedProducts, paginationMeta);
+  };
+
+  getMostRatedProducts = async (paginationParamsDto: ProductPageOptionsDto) => {
+    const mostRatedQuery =
+      this.productRepository.getTopFourRatedProductList(paginationParamsDto);
+
+    const mostRatedProducts = await mostRatedQuery
+      .getRawAndEntities()
+      .then(({ entities }) =>
+        entities.map((entity) => new ProductViewDto(entity)),
+      );
+
+    const productsCount = await mostRatedQuery.getCount();
+
+    const paginationMeta = new PageMetaDto({
+      pageOptionsDto: paginationParamsDto,
+      itemCount: productsCount,
+    });
+
+    return new PageDto(mostRatedProducts, paginationMeta);
+  };
 }

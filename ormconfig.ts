@@ -22,7 +22,6 @@ const options: DataSourceOptions & SeederOptions = {
   synchronize: true,
   logging: true,
   entities: [
-    __dirname + '/../**/*.entity.{js,ts}',
     './src/modules/**/*.entity{.ts,.js}',
     './src/modules/**/*.view-entity{.ts,.js}',
   ],

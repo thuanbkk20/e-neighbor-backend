@@ -1,6 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, ManyToOne } from 'typeorm';
 
-import { STATUS, StatusType } from './../../../../constants/status';
 import { ProductSurChargeEntity } from './product-surcharge.entity';
 
 import { AbstractEntity } from '@/common/abstract.entity';
@@ -9,6 +8,7 @@ import {
   REQUIRED_DOCUMENTS,
   RequiredDocumentsType,
 } from '@/constants/required-documents';
+import { STATUS, StatusType } from '@/constants/status';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
@@ -84,8 +84,16 @@ export class ProductEntity extends AbstractEntity {
   isConfirmed: boolean;
 
   @ManyToOne(() => LessorEntity, (lessor) => lessor.products)
-  @JoinColumn({ name: 'lessor_id' })
+  @JoinColumn({ name: 'lessor_id', referencedColumnName: 'id' })
   lessor: LessorEntity;
+
+  /// Traffic count
+  @Column()
+  accessCount: number;
+
+  // Calculated each time a feedback is update
+  @Column()
+  rating: number;
 
   @OneToMany(() => OrderEntity, (order) => order.product)
   orders: OrderEntity[];

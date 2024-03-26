@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import { AbstractEntity } from '@/common/abstract.entity';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
-import { UserEntity } from '@modules/user/domains/entities/user.entity';
+import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 
 @Entity('lessors')
 export class LessorEntity extends AbstractEntity {

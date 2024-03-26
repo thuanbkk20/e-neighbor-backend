@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Repository, SelectQueryBuilder } from 'typeorm';
 
 import { PRODUCT_LIST_SORT_FIELD } from '@/constants/product-list-sort-field';
 import { ProductPageOptionsDto } from '@/modules/product/domains/dtos/productPageOption.dto';
@@ -11,6 +11,10 @@ export class ProductRepository extends Repository<ProductEntity> {
   constructor(private readonly dataSource: DataSource) {
     super(ProductEntity, dataSource.createEntityManager());
   }
+
+  productsQueryBuilder = this.createQueryBuilder('products')
+    .leftJoinAndSelect('products.category', 'category')
+    .leftJoinAndSelect('products.lessor', 'lessor');
 
   async findOneById(id: number): Promise<ProductEntity> {
     const query = this.createQueryBuilder('products')
@@ -80,10 +84,37 @@ export class ProductRepository extends Repository<ProductEntity> {
 
     // Retrieve entities
     const itemCount = await queryBuilder.getCount();
-    const { raw, entities } = await queryBuilder.getRawAndEntities();
-
-    console.log('entities', raw);
+    const { entities } = await queryBuilder.getRawAndEntities();
 
     return new ProductResponseDto(entities, itemCount);
+  }
+
+  getTopFourRatedProductList(
+    paginationParams: ProductPageOptionsDto,
+  ): SelectQueryBuilder<ProductEntity> {
+    return this.productsQueryBuilder
+      .where('products.is_confirmed = :isConfirm', {
+        isConfirm: true,
+      })
+      .andWhere('category.is_vehicle = :isVehicle', {
+        isVehicle: paginationParams.isVehicle,
+      })
+      .orderBy('products.rating', 'DESC')
+      .skip(paginationParams.offset ?? 0)
+      .take(4);
+  }
+
+  getTopFourViewedProductList(
+    paginationParams: ProductPageOptionsDto,
+  ): SelectQueryBuilder<ProductEntity> {
+    return this.productsQueryBuilder
+      .where('products.is_confirmed = :isConfirm', {
+        isConfirm: true,
+      })
+      .andWhere('category.is_vehicle = :isVehicle', {
+        isVehicle: paginationParams.isVehicle,
+      })
+      .orderBy('products.accessCount', 'DESC')
+      .skip(paginationParams.offset ?? 0);
   }
 }
