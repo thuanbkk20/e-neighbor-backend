@@ -28,7 +28,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async userSignIn(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto);
+    return await this.authService.signIn(signInDto);
   }
 
   @Auth([ROLE.ADMIN, ROLE.USER, ROLE.LESSOR])
@@ -41,12 +41,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async adminSignIn(@Body() signInDto: SignInDto) {
     return this.authService.adminSignIn(signInDto);
-  }
-
-  @Post('lessor-login')
-  @HttpCode(HttpStatus.OK)
-  async lessorSignIn(@Body() signInDto: SignInDto) {
-    return this.authService.lessorSignIn(signInDto);
   }
 
   @Post('register')
