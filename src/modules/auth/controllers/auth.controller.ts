@@ -18,6 +18,7 @@ import {
   SignInDto,
 } from '@/modules/auth/domains/dtos/sign-in.dto';
 import { AuthService } from '@/modules/auth/services/auth.service';
+import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 import { ContextProvider } from '@/providers';
 
 @ApiTags('auth')
@@ -34,6 +35,12 @@ export class AuthController {
   @Auth([ROLE.ADMIN, ROLE.USER, ROLE.LESSOR])
   @Get('profile')
   getProfile() {
+    const authUser = ContextProvider.getAuthUser();
+    if (authUser instanceof LessorEntity) {
+      const userInfo = authUser.user;
+      delete authUser.user;
+      return { ...authUser, ...userInfo };
+    }
     return ContextProvider.getAuthUser();
   }
 
