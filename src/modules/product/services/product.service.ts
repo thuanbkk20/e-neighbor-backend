@@ -199,15 +199,14 @@ export class ProductService {
 
   getMostViewedProducts = async (
     paginationParamsDto: ProductPageOptionsDto,
-  ) => {
+  ): Promise<PageDto<ProductViewDto>> => {
     const mostViewedQuery =
       this.productRepository.getTopFourViewedProductList(paginationParamsDto);
 
-    const mostViewedProducts = await mostViewedQuery
-      .getRawAndEntities()
-      .then(({ entities }) =>
-        entities.map((entity) => new ProductViewDto(entity)),
-      );
+    const { entities } = await mostViewedQuery.getRawAndEntities();
+    const mostViewedProducts = entities.map(
+      (entity) => new ProductViewDto(entity),
+    );
 
     const productsCount = await mostViewedQuery.getCount();
 
@@ -219,7 +218,9 @@ export class ProductService {
     return new PageDto(mostViewedProducts, paginationMeta);
   };
 
-  getMostRatedProducts = async (paginationParamsDto: ProductPageOptionsDto) => {
+  getMostRatedProducts = async (
+    paginationParamsDto: ProductPageOptionsDto,
+  ): Promise<PageDto<ProductViewDto>> => {
     const mostRatedQuery =
       this.productRepository.getTopFourRatedProductList(paginationParamsDto);
 
