@@ -34,6 +34,9 @@ export class ProductViewDto {
   category: CategoryEntity;
 
   @ApiProperty()
+  image: string;
+
+  @ApiProperty()
   lessorImage: string;
 
   constructor(product: ProductEntity) {
@@ -46,6 +49,7 @@ export class ProductViewDto {
     this.rating = product.rating;
     this.accessCount = product.accessCount;
     this.category = product.category;
+    this.image = product.images[0];
     this.lessorImage = product.lessor.user.avatar;
   }
 }

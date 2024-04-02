@@ -12,10 +12,6 @@ export class ProductRepository extends Repository<ProductEntity> {
     super(ProductEntity, dataSource.createEntityManager());
   }
 
-  productsQueryBuilder = this.createQueryBuilder('products')
-    .leftJoinAndSelect('products.category', 'category')
-    .leftJoinAndSelect('products.lessor', 'lessor');
-
   async findOneById(id: number): Promise<ProductEntity> {
     const query = this.createQueryBuilder('products')
       .leftJoinAndSelect('products.category', 'category')
@@ -92,29 +88,38 @@ export class ProductRepository extends Repository<ProductEntity> {
   getTopFourRatedProductList(
     paginationParams: ProductPageOptionsDto,
   ): SelectQueryBuilder<ProductEntity> {
-    return this.productsQueryBuilder
+    const productQueryBuilder = this.createQueryBuilder('products')
+      .leftJoinAndSelect('products.category', 'category')
+      .leftJoinAndSelect('products.lessor', 'lessor')
+      .leftJoinAndSelect('lessor.user', 'user')
       .where('products.is_confirmed = :isConfirm', {
-        isConfirm: true,
+        isConfirm: paginationParams.isConfirmedByAdmin ?? false,
       })
       .andWhere('category.is_vehicle = :isVehicle', {
-        isVehicle: paginationParams.isVehicle,
+        isVehicle: paginationParams.isVehicle ?? false,
       })
       .orderBy('products.rating', 'DESC')
       .skip(paginationParams.offset ?? 0)
-      .take(4);
+      .take(paginationParams.take ?? 12);
+    return productQueryBuilder;
   }
 
   getTopFourViewedProductList(
     paginationParams: ProductPageOptionsDto,
   ): SelectQueryBuilder<ProductEntity> {
-    return this.productsQueryBuilder
+    const productQueryBuilder = this.createQueryBuilder('products')
+      .leftJoinAndSelect('products.category', 'category')
+      .leftJoinAndSelect('products.lessor', 'lessor')
+      .leftJoinAndSelect('lessor.user', 'user')
       .where('products.is_confirmed = :isConfirm', {
-        isConfirm: true,
+        isConfirm: paginationParams.isConfirmedByAdmin ?? false,
       })
       .andWhere('category.is_vehicle = :isVehicle', {
-        isVehicle: paginationParams.isVehicle,
+        isVehicle: paginationParams.isVehicle ?? false,
       })
       .orderBy('products.accessCount', 'DESC')
-      .skip(paginationParams.offset ?? 0);
+      .skip(paginationParams.offset ?? 0)
+      .take(paginationParams.take ?? 12);
+    return productQueryBuilder;
   }
 }
