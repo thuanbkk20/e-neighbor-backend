@@ -25,10 +25,16 @@ export class ProductRecordDto {
   status: StatusType;
 
   @ApiProperty()
-  turnOver: number;
+  accessCount: number;
+
+  @ApiProperty()
+  image: string;
 
   @ApiProperty()
   rating: number;
+
+  @ApiProperty()
+  completedOrder: number;
 
   @ApiProperty()
   category: CategoryEntity;
@@ -36,15 +42,17 @@ export class ProductRecordDto {
   @ApiProperty()
   lessorId: number;
 
-  constructor(product: ProductEntity, turnOver: number, rating: number) {
+  constructor(product: ProductEntity, completedOrder: number) {
     this.id = product.id;
     this.name = product.name;
     this.price = product.price;
     this.timeUnit = product.timeUnit;
     this.value = product.value;
     this.status = product.status;
-    this.turnOver = turnOver;
-    this.rating = rating;
+    this.accessCount = product.accessCount;
+    this.image = product.images[0];
+    this.completedOrder = completedOrder;
+    this.rating = product.rating;
     this.category = product.category;
   }
 }

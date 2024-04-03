@@ -88,12 +88,12 @@ export class ProductEntity extends AbstractEntity {
   lessor: LessorEntity;
 
   /// Traffic count
-  @Column()
-  accessCount: number;
+  @Column({ default: 0 })
+  accessCount: number = 0;
 
   // Calculated each time a feedback is update
-  @Column()
-  rating: number;
+  @Column({ nullable: true })
+  rating?: number;
 
   @OneToMany(() => OrderEntity, (order) => order.product)
   orders: OrderEntity[];

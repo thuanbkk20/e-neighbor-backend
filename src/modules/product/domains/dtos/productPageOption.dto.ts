@@ -70,16 +70,4 @@ export class ProductPageOptionsDto {
     int: true,
   })
   readonly rating?: number;
-
-  @NumberFieldOptional({
-    minimum: 0,
-    int: true,
-  })
-  readonly minRentalFrequency?: number;
-
-  @NumberFieldOptional({
-    minimum: 1,
-    int: true,
-  })
-  readonly maxRentalFrequency?: number;
 }
