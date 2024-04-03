@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository, SelectQueryBuilder } from 'typeorm';
 
-import { PRODUCT_LIST_SORT_FIELD } from '@/constants/product-list-sort-field';
 import { ProductPageOptionsDto } from '@/modules/product/domains/dtos/productPageOption.dto';
 import { ProductResponseDto } from '@/modules/product/domains/dtos/productResponse.dto';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
@@ -62,11 +61,14 @@ export class ProductRepository extends Repository<ProductEntity> {
       });
     }
 
+    if (pageOptionsDto.rating) {
+      queryBuilder = queryBuilder.andWhere('products.rating >= :rating', {
+        rating: pageOptionsDto.rating,
+      });
+    }
+
     // Handle sort
-    if (
-      pageOptionsDto.sortField &&
-      pageOptionsDto.sortField != PRODUCT_LIST_SORT_FIELD.CREATED_AT
-    ) {
+    if (pageOptionsDto.sortField) {
       queryBuilder = queryBuilder
         .orderBy('products.' + pageOptionsDto.sortField, pageOptionsDto.order)
         .addOrderBy('products.id', 'DESC');

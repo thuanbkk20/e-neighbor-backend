@@ -186,8 +186,14 @@ export class ProductService {
     const productResponse: ProductResponseDto =
       await this.productRepository.getProductList(pageOptionsDto);
 
-    const productRecords = productResponse.entities.map(
-      (product) => new ProductRecordDto(product, 0, 0),
+    const productRecords = await Promise.all(
+      productResponse.entities.map(async (product) => {
+        const completedOrder = await this.orderService.numberOfOrderByStatus(
+          product.id,
+          ORDER_STATUS.COMPLETED,
+        );
+        return new ProductRecordDto(product, completedOrder);
+      }),
     );
     const itemCount = productResponse.itemCount;
     const pageMeta = new PageMetaDto({ pageOptionsDto, itemCount });
