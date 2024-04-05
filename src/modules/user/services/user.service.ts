@@ -88,11 +88,12 @@ export class UserService {
       userInDB.password,
     );
     if (!isPasswordMatched) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Incorrect password!');
     }
     user.password = generateHash(user.password);
+    const userToUpdate = omit(user, ['role']);
 
-    const queryResult = await this.userRepository.updateUser(user);
+    const queryResult = await this.userRepository.updateUser(userToUpdate);
     return omit(queryResult, ['password']);
   }
 

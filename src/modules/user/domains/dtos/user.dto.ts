@@ -19,7 +19,11 @@ export class UserDto {
 
   role?: string;
 
-  CCCD?: string;
+  citizenId?: string;
+
+  citizenCardFront?: string;
+
+  citizenCardBack?: string;
 
   createdAt?: Date;
 
