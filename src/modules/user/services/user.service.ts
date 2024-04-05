@@ -117,9 +117,9 @@ export class UserService {
   async updatePaymentMethod(
     userId: number,
     paymentMethods: UpdatePaymentMethodDto[],
-  ) {
+  ): Promise<PaymentMethodEntity[]> {
     const user = await this.findOneById(userId);
-    this.paymentService.updateUserPaymentMethod(user, paymentMethods);
+    return this.paymentService.updateUserPaymentMethod(user, paymentMethods);
   }
 
   async registerLessor(registerDto: LessorRegisterDto): Promise<UserEntity> {
