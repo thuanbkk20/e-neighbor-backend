@@ -6,8 +6,11 @@ import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.d
 import { LessorOnboardDto } from '@/modules/lessor/domains/dtos/lessor-onboard.dto';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 import { LessorRepository } from '@/modules/lessor/repositories/lessor.repository';
+import { PaymentService } from '@/modules/payment/services/payment.service';
 import { UserUpdateDto } from '@/modules/user/domains/dtos/user-update.dto';
+import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 import { UserService } from '@/modules/user/services/user.service';
+import { ContextProvider } from '@/providers';
 import { LessorNotFoundException } from 'src/exceptions';
 
 @Injectable()
@@ -16,6 +19,7 @@ export class LessorService {
     private readonly lessorRepository: LessorRepository,
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly paymentService: PaymentService,
   ) {}
 
   async findOneById(
@@ -44,6 +48,11 @@ export class LessorService {
 
   async registerLessor(registerDto: LessorRegisterDto) {
     const user = await this.userService.findOneById(registerDto.userId);
+    // Update user payment methods
+    await this.paymentService.updateUserPaymentMethod(
+      user,
+      registerDto.paymentInfo,
+    );
     if (user.role === ROLE.LESSOR) {
       throw new BadRequestException('The account role is already lessor');
     }
@@ -54,6 +63,8 @@ export class LessorService {
       wareHouseAddress: registerDto.wareHouseAddress,
 
       description: registerDto.description,
+
+      shopName: registerDto.shopName,
 
       user: userAfterUpdate,
     };
@@ -68,6 +79,15 @@ export class LessorService {
   }
 
   async lessorOnboard(registerDto: LessorOnboardDto & UserUpdateDto) {
+    const authUser = ContextProvider.getAuthUser();
+    // Update user payment methods
+    if (authUser instanceof UserEntity) {
+      await this.paymentService.updateUserPaymentMethod(
+        authUser,
+        registerDto.paymentInfo,
+      );
+    }
+
     const userAfterUpdate = await this.userService.updateJwtUser({
       ...registerDto,
       role: ROLE.LESSOR,
@@ -77,6 +97,8 @@ export class LessorService {
       wareHouseAddress: registerDto.wareHouseAddress,
 
       description: registerDto.description,
+
+      shopName: registerDto.shopName,
 
       user: userAfterUpdate,
     };
