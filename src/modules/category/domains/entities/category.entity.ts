@@ -11,7 +11,7 @@ export class CategoryEntity extends AbstractEntity {
   @Column()
   isVehicle: boolean;
 
-  @Column('simple-array')
+  @Column('simple-array', { default: [] })
   characteristics: string[];
 
   @OneToMany(() => ProductEntity, (product) => product.category)

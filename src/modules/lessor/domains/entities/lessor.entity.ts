@@ -28,6 +28,6 @@ export class LessorEntity extends AbstractEntity {
   @OneToMany(() => ProductEntity, (product) => product.lessor)
   products: ProductEntity[];
 
-  @Column()
+  @Column({ nullable: true, default: '' })
   shopName: string;
 }

@@ -5,57 +5,108 @@ import { CategoryEntity } from '@/modules/category/domains/entities/category.ent
 
 export default class CategorySeeder implements Seeder {
   public async run(dataSource: DataSource) {
+    const furnitureCharsBase = [
+      'furniture.characteristics.quantity',
+      'furniture.characteristics.function',
+      'furniture.characteristics.brand',
+      'furniture.characteristics.origin',
+      'furniture.characteristics.warranty.type',
+      'furniture.characteristics.warranty.date',
+    ];
+    const furnitureChars = [
+      ...furnitureCharsBase,
+      'furniture.characteristics.size',
+      'furniture.characteristics.height',
+      'furniture.characteristics.material',
+      'furniture.characteristics.shape',
+      'furniture.characteristics.weight',
+    ];
+    const furnitureToolsChars = [
+      ...furnitureChars,
+      'furniture.characteristics.energyType',
+    ];
+
+    const vehicleChars = [
+      'vehicle.characteristics.seats',
+      'vehicle.characteristics.fuel',
+      'vehicle.characteristics.fuelRate',
+      'vehicle.characteristics.utility.GPS',
+      'vehicle.characteristics.weight',
+    ];
+    const carChars = [
+      'vehicle.characteristics.utility.bluetooth',
+      'vehicle.characteristics.utility.obstacleSensor',
+      'vehicle.characteristics.utility.usb',
+      'vehicle.characteristics.utility.dashcam',
+      'vehicle.characteristics.utility.speedChart',
+      'vehicle.characteristics.utility.sparewheel',
+      'vehicle.characteristics.utility.backCamera',
+      'vehicle.characteristics.utility.sunRoof',
+      'vehicle.characteristics.utility.etc',
+      'vehicle.characteristics.utility.tyreSensor',
+      'vehicle.characteristics.utility.airBag',
+    ];
     const categoryRepository = dataSource.getRepository(CategoryEntity);
     await categoryRepository.insert([
       {
-        name: 'Cough/Chair',
+        name: 'furniture.category.cough',
         isVehicle: false,
         products: [],
+        characteristics: furnitureChars,
       },
       {
-        name: 'Table/Desk',
+        name: 'furniture.category.table',
         isVehicle: false,
         products: [],
+        characteristics: furnitureChars,
       },
       {
-        name: 'Electronic Devices',
+        name: 'furniture.category.electronic',
         isVehicle: false,
         products: [],
+        characteristics: furnitureToolsChars,
       },
       {
-        name: 'Decorations',
+        name: 'furniture.category.decorations',
         isVehicle: false,
         products: [],
+        characteristics: furnitureCharsBase,
       },
       {
-        name: 'Bed',
+        name: 'furniture.category.bed',
         isVehicle: false,
         products: [],
+        characteristics: furnitureChars,
       },
       {
-        name: 'Cabinet',
+        name: 'furniture.category.cabinet',
         isVehicle: false,
         products: [],
+        characteristics: furnitureChars,
       },
       {
-        name: 'Kitchen Appliances',
+        name: 'furniture.category.kitchen-appliances',
         isVehicle: false,
         products: [],
+        characteristics: furnitureToolsChars,
       },
       {
         name: 'Car',
         isVehicle: true,
         products: [],
+        characteristics: carChars,
       },
       {
-        name: 'Mortorcycle',
+        name: 'Motorcycle',
         isVehicle: true,
         products: [],
+        characteristics: vehicleChars,
       },
       {
         name: 'Bike',
         isVehicle: true,
         products: [],
+        characteristics: vehicleChars,
       },
     ]);
   }

@@ -1,6 +1,6 @@
-import { NumberFieldOptional } from '@/decorators';
+import { BooleanFieldOptional } from '@/decorators';
 
 export class CategoryOptionsDto {
-  @NumberFieldOptional()
+  @BooleanFieldOptional()
   readonly isVehicle?: boolean;
 }
