@@ -88,11 +88,12 @@ export class UserService {
       userInDB.password,
     );
     if (!isPasswordMatched) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Incorrect password!');
     }
     user.password = generateHash(user.password);
+    const userToUpdate = omit(user, ['role']);
 
-    const queryResult = await this.userRepository.updateUser(user);
+    const queryResult = await this.userRepository.updateUser(userToUpdate);
     return omit(queryResult, ['password']);
   }
 
@@ -116,9 +117,9 @@ export class UserService {
   async updatePaymentMethod(
     userId: number,
     paymentMethods: UpdatePaymentMethodDto[],
-  ) {
+  ): Promise<PaymentMethodEntity[]> {
     const user = await this.findOneById(userId);
-    this.paymentService.updateUserPaymentMethod(user, paymentMethods);
+    return this.paymentService.updateUserPaymentMethod(user, paymentMethods);
   }
 
   async registerLessor(registerDto: LessorRegisterDto): Promise<UserEntity> {

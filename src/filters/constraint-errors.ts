@@ -9,6 +9,9 @@ export const ERROR_UNIQUE_EMAIL = 'error.unique.email';
 export const ERROR_USER_CONFLICT = 'error.userConflict';
 export const ERROR_DATA_CONFLICT = 'error.dataConflict';
 
+// Payment Module error messages
+export const ERROR_DUPLICATE_PAYMENT_METHOD = 'error.duplicatePaymentMethod';
+
 // Lessor Module error messages
 export const ERROR_LESSOR_NOT_FOUND = 'error.lessorNotFound';
 
@@ -69,4 +72,7 @@ export const CONSTRAINT_ERRORS: Record<string, string | string[]> = {
 
   //Data
   DATA_001: ERROR_DATA_CONFLICT,
+
+  // Payment
+  PAYMENT_001: ERROR_DUPLICATE_PAYMENT_METHOD,
 };

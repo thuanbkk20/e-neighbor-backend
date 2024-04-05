@@ -18,4 +18,7 @@ export class PaymentMethodEntity extends AbstractEntity {
   @ManyToOne(() => UserEntity, (user) => user.id)
   @JoinColumn()
   user: UserEntity;
+
+  @Column({ type: Boolean, default: true })
+  isInUsed: boolean = true;
 }

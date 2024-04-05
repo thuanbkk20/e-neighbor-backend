@@ -29,7 +29,15 @@ export class LessorOnboardDto {
 
   @ApiProperty()
   @IsString()
-  CCCD: string;
+  citizenId: string;
+
+  @ApiProperty()
+  @IsString()
+  citizenCardFront: string;
+
+  @ApiProperty()
+  @IsString()
+  citizenCardBack: string;
 
   @ApiProperty({
     type: UpdatePaymentMethodDto,
@@ -44,4 +52,8 @@ export class LessorOnboardDto {
   @ApiPropertyOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  shopName: string;
 }

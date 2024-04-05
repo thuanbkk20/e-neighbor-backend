@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { DuplicatePaymentMethodException } from '@/exceptions';
 import {
   AddPaymentMethodDto,
   UpdatePaymentMethodDto,
@@ -20,11 +21,16 @@ export class PaymentService {
     paymentMethod: AddPaymentMethodDto,
     user: UserEntity,
   ): Promise<AddPaymentMethodDto> {
+    const existingPaymentMethod =
+      await this.paymentRepository.findOneByManyOptions(paymentMethod);
+    if (existingPaymentMethod) {
+      throw new DuplicatePaymentMethodException(
+        'Payment method already exists',
+      );
+    }
     const paymentMethodtoAdd = {
-      name: paymentMethod.name,
-      type: paymentMethod.type,
-      accountNumber: paymentMethod.accountNumber,
       user: user,
+      ...paymentMethod,
     };
     this.paymentRepository.insert(paymentMethodtoAdd);
     return paymentMethod;
@@ -34,15 +40,45 @@ export class PaymentService {
     user: UserEntity,
     paymentMethods: UpdatePaymentMethodDto[],
   ) {
-    //Remove user exist payment method
-    await this.paymentRepository.deleteByUserId(user.id);
-    //Insert the replacement payment methods
+    const currentPaymentMethods = await this.paymentRepository.findByUserId(
+      user.id,
+    );
     const paymentMethodsToSave = paymentMethods.map((paymentMethod) => ({
       name: paymentMethod.name,
       type: paymentMethod.type,
       accountNumber: paymentMethod.accountNumber,
       user: user,
     }));
-    this.paymentRepository.insert(paymentMethodsToSave);
+
+    const currentMethodIds = currentPaymentMethods.map(
+      (method) => `${method.type}-${method.name}-${method.accountNumber}`,
+    );
+    const newMethodIds = paymentMethodsToSave.map(
+      (method) => `${method.type}-${method.name}-${method.accountNumber}`,
+    );
+
+    const newPaymentMethods = paymentMethodsToSave.filter(
+      (newMethod) =>
+        !currentMethodIds.includes(
+          `${newMethod.type}-${newMethod.name}-${newMethod.accountNumber}`,
+        ),
+    );
+    if (newPaymentMethods.length != 0) {
+      await this.paymentRepository.insert(newPaymentMethods);
+    }
+    const oldPaymentMethods = currentPaymentMethods.filter(
+      (currentMethod) =>
+        !newMethodIds.includes(
+          `${currentMethod.type}-${currentMethod.name}-${currentMethod.accountNumber}`,
+        ),
+    );
+    if (oldPaymentMethods.length != 0) {
+      const oldPaymentMethodIds = oldPaymentMethods.map((method) => method.id);
+      await this.paymentRepository.update(oldPaymentMethodIds, {
+        isInUsed: false,
+      });
+    }
+
+    return this.findByUserId(user.id);
   }
 }
