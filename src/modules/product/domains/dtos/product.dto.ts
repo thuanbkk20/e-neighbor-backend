@@ -71,6 +71,9 @@ export class ProductDto {
   insurance?: InsuranceEntity;
 
   @ApiProperty()
+  accessCount: number;
+
+  @ApiProperty()
   averageStar: number;
 
   @ApiProperty()
@@ -78,7 +81,6 @@ export class ProductDto {
 
   constructor(
     product: ProductEntity,
-    averageStar: number,
     numberOfCompletedOrders: number,
     insurance?: InsuranceEntity,
   ) {
@@ -108,7 +110,8 @@ export class ProductDto {
       responseTime: product.lessor.responseTime,
       agreementRate: product.lessor.agreementRate,
     };
-    this.averageStar = averageStar;
+    this.accessCount = product.accessCount;
+    this.averageStar = product.rating;
     this.numberOfCompletedOrders = numberOfCompletedOrders;
     this.insurance = insurance;
   }

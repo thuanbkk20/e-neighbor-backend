@@ -46,7 +46,15 @@ export class UserUpdateDto {
 
   @ApiPropertyOptional()
   @IsString()
-  CCCD?: string;
+  citizenId?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  citizenCardFront?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  citizenCardBack?: string;
 
   @ApiPropertyOptional()
   updatedAt?: Date = new Date();

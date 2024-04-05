@@ -129,16 +129,16 @@ export class ProductService {
           await entityManager.save(insurance);
         }
 
-        return new ProductDto(product, 0, 0);
+        return new ProductDto(product, 0);
       },
     );
   }
 
   async findOneById(id: number): Promise<ProductDto> {
     const product = await this.productRepository.findOneById(id);
-    const averageStar = await this.feedbackService.productAverageStar(
-      product.id,
-    );
+    //Update access count
+    product.accessCount += 1;
+    await this.productRepository.save(product);
     const completedOrder = await this.orderService.numberOfOrderByStatus(
       product.id,
       ORDER_STATUS.COMPLETED,
@@ -147,9 +147,9 @@ export class ProductService {
       const insurance = await this.insuranceRepository.findByProductId(
         product.id,
       );
-      return new ProductDto(product, averageStar, completedOrder, insurance);
+      return new ProductDto(product, completedOrder, insurance);
     }
-    return new ProductDto(product, averageStar, completedOrder);
+    return new ProductDto(product, completedOrder);
   }
 
   async adminConfirmProduct(confirmDto: AdminConfirmDto): Promise<ProductDto> {
@@ -167,14 +167,11 @@ export class ProductService {
       product.rejectReason = confirmDto.rejectReason;
     }
     this.productRepository.save(product);
-    const averageStar = await this.feedbackService.productAverageStar(
-      product.id,
-    );
     const completedOrder = await this.orderService.numberOfOrderByStatus(
       product.id,
       ORDER_STATUS.COMPLETED,
     );
-    return new ProductDto(product, averageStar, completedOrder);
+    return new ProductDto(product, completedOrder);
   }
 
   /**
@@ -189,8 +186,14 @@ export class ProductService {
     const productResponse: ProductResponseDto =
       await this.productRepository.getProductList(pageOptionsDto);
 
-    const productRecords = productResponse.entities.map(
-      (product) => new ProductRecordDto(product, 0, 0),
+    const productRecords = await Promise.all(
+      productResponse.entities.map(async (product) => {
+        const completedOrder = await this.orderService.numberOfOrderByStatus(
+          product.id,
+          ORDER_STATUS.COMPLETED,
+        );
+        return new ProductRecordDto(product, completedOrder);
+      }),
     );
     const itemCount = productResponse.itemCount;
     const pageMeta = new PageMetaDto({ pageOptionsDto, itemCount });

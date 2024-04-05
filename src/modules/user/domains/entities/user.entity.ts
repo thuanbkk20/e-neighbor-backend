@@ -36,5 +36,11 @@ export class UserEntity extends AbstractEntity {
   role: string;
 
   @Column({ nullable: true })
-  CCCD: string;
+  citizenId: string;
+
+  @Column({ nullable: true })
+  citizenCardFront: string;
+
+  @Column({ nullable: true })
+  citizenCardBack: string;
 }

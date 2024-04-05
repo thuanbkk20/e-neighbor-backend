@@ -43,7 +43,7 @@ export class UserController {
   async updatePaymentMethods(
     @Param('id') id: number,
     @Body() paymentMethod: UpdatePaymentMethodDto[],
-  ) {
+  ): Promise<PaymentMethodEntity[]> {
     return this.userService.updatePaymentMethod(id, paymentMethod);
   }
 }
