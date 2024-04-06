@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+import { CategoryOptionsDto } from '@/modules/category/domains/dtos/categoryOptions.dto';
 import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
 import { CategoryService } from '@/modules/category/services/category.service';
 
@@ -13,8 +14,10 @@ export class CategoryController {
   @ApiOkResponse({
     type: [CategoryEntity],
   })
-  async getAllCategories(): Promise<CategoryEntity[]> {
-    return this.categoryService.getAllCategories();
+  async getAllCategories(
+    @Query() categoryOptions: CategoryOptionsDto,
+  ): Promise<CategoryEntity[]> {
+    return this.categoryService.getAllCategories(categoryOptions);
   }
 
   @Get(':id')
