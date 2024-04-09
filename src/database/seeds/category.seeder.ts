@@ -6,50 +6,53 @@ import { CategoryEntity } from '@/modules/category/domains/entities/category.ent
 export default class CategorySeeder implements Seeder {
   public async run(dataSource: DataSource) {
     const furnitureCharsBase = [
-      'furniture.characteristics.quantity',
-      'furniture.characteristics.function',
-      'furniture.characteristics.brand',
-      'furniture.characteristics.origin',
-      'furniture.characteristics.warranty.type',
-      'furniture.characteristics.warranty.date',
+      'furniture-characteristics-quantity',
+      'furniture-characteristics-function',
+      'furniture-characteristics-brand',
+      'furniture-characteristics-origin',
+      'furniture-characteristics-warranty-type',
+      'furniture-characteristics-warranty-date',
     ];
+
     const furnitureChars = [
+      'furniture-characteristics-size',
+      'furniture-characteristics-height',
+      'furniture-characteristics-material',
+      'furniture-characteristics-shape',
+      'furniture-characteristics-weight',
       ...furnitureCharsBase,
-      'furniture.characteristics.size',
-      'furniture.characteristics.height',
-      'furniture.characteristics.material',
-      'furniture.characteristics.shape',
-      'furniture.characteristics.weight',
     ];
+
     const furnitureToolsChars = [
       ...furnitureChars,
-      'furniture.characteristics.energyType',
+      'furniture-characteristics-energyType',
     ];
 
     const vehicleChars = [
-      'vehicle.characteristics.seats',
-      'vehicle.characteristics.fuel',
-      'vehicle.characteristics.fuelRate',
-      'vehicle.characteristics.utility.GPS',
-      'vehicle.characteristics.weight',
+      'vehicle-characteristics-seats',
+      'vehicle-characteristics-fuel',
+      'vehicle-characteristics-fuelRate',
+      'vehicle-characteristics-utility-GPS',
+      'vehicle-characteristics-weight',
     ];
+
     const carChars = [
-      'vehicle.characteristics.utility.bluetooth',
-      'vehicle.characteristics.utility.obstacleSensor',
-      'vehicle.characteristics.utility.usb',
-      'vehicle.characteristics.utility.dashcam',
-      'vehicle.characteristics.utility.speedChart',
-      'vehicle.characteristics.utility.sparewheel',
-      'vehicle.characteristics.utility.backCamera',
-      'vehicle.characteristics.utility.sunRoof',
-      'vehicle.characteristics.utility.etc',
-      'vehicle.characteristics.utility.tyreSensor',
-      'vehicle.characteristics.utility.airBag',
+      'vehicle-characteristics-utility-bluetooth',
+      'vehicle-characteristics-utility-obstacleSensor',
+      'vehicle-characteristics-utility-usb',
+      'vehicle-characteristics-utility-dashcam',
+      'vehicle-characteristics-utility-speedChart',
+      'vehicle-characteristics-utility-sparewheel',
+      'vehicle-characteristics-utility-backCamera',
+      'vehicle-characteristics-utility-sunRoof',
+      'vehicle-characteristics-utility-etc',
+      'vehicle-characteristics-utility-tyreSensor',
+      'vehicle-characteristics-utility-airBag',
     ];
     const categoryRepository = dataSource.getRepository(CategoryEntity);
     await categoryRepository.insert([
       {
-        name: 'furniture.category.cough',
+        name: 'furniture.category.couch',
         isVehicle: false,
         products: [],
         characteristics: furnitureChars,
@@ -91,19 +94,19 @@ export default class CategorySeeder implements Seeder {
         characteristics: furnitureToolsChars,
       },
       {
-        name: 'Car',
+        name: 'vehicle.category.car',
         isVehicle: true,
         products: [],
         characteristics: carChars,
       },
       {
-        name: 'Motorcycle',
+        name: 'vehicle.category.motorbike',
         isVehicle: true,
         products: [],
         characteristics: vehicleChars,
       },
       {
-        name: 'Bike',
+        name: 'vehicle.category.bike',
         isVehicle: true,
         products: [],
         characteristics: vehicleChars,
