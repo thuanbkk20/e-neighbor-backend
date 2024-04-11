@@ -11,58 +11,96 @@ export default class ProductSeeder implements Seeder {
         name: 'Toyota Camry 2023',
         description:
           'Spacious and fuel-efficient sedan, perfect for comfortable rides in the city or on road trips.',
-        value: 25000, // Adjust the value as needed
+        value: 85000000, // Adjust the value as needed
         policies: [
           'No smoking inside the car',
           'Pets allowed with prior approval',
           'Mileage limit: 200 kilometers per day (additional charges apply)',
         ],
-        images: ['image1.jpg', 'image2.jpg', 'image3.jpg'], // Replace with your image URLs
+        images: [
+          'https://www.koonstoyotatysonscorner.com/blogs/4498/wp-content/uploads/2022/11/2023-Toyota-Camry.webp',
+          'https://static.wixstatic.com/media/b4dcef_83f6a0ff7cac4a7289acf764b919ed6c~mv2.png/v1/fill/w_640,h_360,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b4dcef_83f6a0ff7cac4a7289acf764b919ed6c~mv2.png',
+          'https://binhduong.toyota.com.vn/upload/anh_1_3.jpg',
+        ], // Replace with your image URLs
         characteristics: [
-          { localeId: 'product.characteristic.vehicle.seat', description: '5' },
+          { localeId: 'vehicle-characteristics-seats', description: '5' },
           {
-            localeId: 'product.characteristic.vehicle.type',
-            description: 'Automatic',
+            localeId: 'vehicle-characteristics-fuel',
+            description: 'Gasoline',
           },
           {
-            localeId: 'product.characteristic.vehicle.gas',
-            description: 'E-95',
+            localeId: 'vehicle-characteristics-weight',
+            description: '1496 kg',
+          },
+          {
+            localeId: 'vehicle-characteristics-utility-GPS',
+            description: 'Included',
+          },
+          {
+            localeId: 'vehicle-characteristics-utility-backCamera',
+            description: 'Included',
+          },
+          {
+            localeId: 'vehicle-characteristics-utility-airBag',
+            description: 'Included',
           },
         ],
-        price: 50, // Price per unit of time (assuming your timeUnit is set to DAY by default)
+        price: 800000, // Price per unit of time (assuming your timeUnit is set to DAY by default)
         requiredDocuments: 'OPTION1',
-        category: { id: 1 }, // Assuming you have a category with ID 1 for "Cars"
+        category: { id: 8 }, // Assuming you have a category with ID 8 for "Cars"
         lessor: { id: 1 }, // Assuming you have a lessor with ID 1
         rating: 0,
         accessCount: 0,
+        isConfirmed: true,
       },
       {
         name: 'Honda CR-V 2022',
         description:
           'Compact SUV with plenty of cargo space, ideal for outdoor adventures or small families.',
-        value: 30000, // Adjust the value as needed
+        value: 998000000, // Adjust the value as needed
         policies: [
           'No off-road driving',
           'Cleaning fee applies for excessive dirt',
         ],
-        images: ['image4.jpg', 'image5.jpg', 'image6.jpg'], // Replace with your image URLs
+        images: [
+          'https://danviet.mediacdn.vn/296231569849192448/2022/2/7/khoi-dong-nam-moi-gia-lan-banh-xe-honda-cr-v-2022-giam-sau-nho-uu-dai-ca-tram-trieu-dong-danvietvn-3-1644244507524638791136.jpg',
+          'https://icdn.24h.com.vn/upload/1-2022/images/2022-02-25/image3-1645754800-13-width660height420.jpg',
+          'https://danviet.mediacdn.vn/296231569849192448/2022/2/7/khoi-dong-nam-moi-gia-lan-banh-xe-honda-cr-v-2022-giam-sau-nho-uu-dai-ca-tram-trieu-dong-danvietvn-3-1644244507524638791136.jpg',
+        ], // Replace with your image URLs
         characteristics: [
           { localeId: 'product.characteristic.vehicle.seat', description: '7' },
           {
-            localeId: 'product.characteristic.vehicle.type',
-            description: 'Automatic',
+            localeId: 'vehicle-characteristics-fuel',
+            description: 'Gasoline',
           },
           {
-            localeId: 'product.characteristic.vehicle.gas',
-            description: 'SUV',
+            localeId: 'vehicle-characteristics-utility-GPS',
+            description: 'Included',
+          },
+          {
+            localeId: 'vehicle-characteristics-weight',
+            description: '1587 kg',
+          },
+          {
+            localeId: 'vehicle-characteristics-utility-bluetooth',
+            description: 'Included',
+          },
+          {
+            localeId: 'vehicle-characteristics-utility-backCamera',
+            description: 'Included',
+          },
+          {
+            localeId: 'vehicle-characteristics-utility-GPS',
+            description: 'Included',
           },
         ],
-        price: 70, // Price per unit of time
+        price: 950000, // Price per unit of time
         requiredDocuments: 'OPTION1',
-        category: { id: 2 }, // Assuming you have a category with ID 1 for "Cars"
+        category: { id: 8 }, // Assuming you have a category with ID 8 for "Cars"
         lessor: { id: 1 }, // Assuming you have a lessor with ID 2
         rating: 0,
         accessCount: 0,
+        isConfirmed: true,
       },
       // Add more car objects as needed
     ]);
