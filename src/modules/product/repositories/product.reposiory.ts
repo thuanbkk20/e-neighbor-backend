@@ -95,10 +95,10 @@ export class ProductRepository extends Repository<ProductEntity> {
       .leftJoinAndSelect('products.lessor', 'lessor')
       .leftJoinAndSelect('lessor.user', 'user')
       .where('products.is_confirmed = :isConfirm', {
-        isConfirm: paginationParams.isConfirmedByAdmin ?? false,
+        isConfirm: paginationParams.isConfirmedByAdmin ?? true,
       })
       .andWhere('category.is_vehicle = :isVehicle', {
-        isVehicle: paginationParams.isVehicle ?? false,
+        isVehicle: paginationParams.isVehicle ?? true,
       })
       .orderBy('products.rating', 'DESC')
       .skip(paginationParams.offset ?? 0)
@@ -114,10 +114,10 @@ export class ProductRepository extends Repository<ProductEntity> {
       .leftJoinAndSelect('products.lessor', 'lessor')
       .leftJoinAndSelect('lessor.user', 'user')
       .where('products.is_confirmed = :isConfirm', {
-        isConfirm: paginationParams.isConfirmedByAdmin ?? false,
+        isConfirm: paginationParams.isConfirmedByAdmin ?? true,
       })
       .andWhere('category.is_vehicle = :isVehicle', {
-        isVehicle: paginationParams.isVehicle ?? false,
+        isVehicle: paginationParams.isVehicle ?? true,
       })
       .orderBy('products.accessCount', 'DESC')
       .skip(paginationParams.offset ?? 0)
