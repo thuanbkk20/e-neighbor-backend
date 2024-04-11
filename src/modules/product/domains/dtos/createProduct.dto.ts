@@ -5,10 +5,10 @@ import { CreateInsuranceDto } from './createInsurace.dto';
 import { CreateProductSurchargeDto } from './createProductSurcharge.dto';
 
 import {
-  MORTGAGE_MAPPING,
-  MortgageMappingType,
-  REQUIRED_DOCUMENTS_MAPPING,
-  RequiredDocumentsMappingType,
+  MORTGAGE,
+  MortgageType,
+  REQUIRED_DOCUMENTS,
+  RequiredDocumentsType,
 } from '@/constants';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { Characteristics } from '@/modules/product/domains/classes/policy.class';
@@ -30,11 +30,11 @@ export class CreateProductDto {
   @IsArray()
   policies: string[];
 
-  @ApiProperty({ type: 'enum', enum: MORTGAGE_MAPPING })
-  mortgage: MortgageMappingType;
+  @ApiProperty({ type: 'enum', enum: MORTGAGE })
+  mortgage: MortgageType;
 
-  @ApiProperty({ type: 'enum', enum: REQUIRED_DOCUMENTS_MAPPING })
-  requiredDocuments: RequiredDocumentsMappingType;
+  @ApiProperty({ type: 'enum', enum: REQUIRED_DOCUMENTS })
+  requiredDocuments: RequiredDocumentsType;
 
   @ApiProperty()
   @IsArray()

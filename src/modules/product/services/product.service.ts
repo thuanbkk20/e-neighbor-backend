@@ -3,17 +3,9 @@ import { EntityManager } from 'typeorm';
 
 import { PageMetaDto } from '@/common/dtos/page-meta.dto';
 import { PageDto } from '@/common/dtos/page.dto';
-import {
-  MORTGAGE,
-  MORTGAGE_MAPPING,
-  ORDER_STATUS,
-  REQUIRED_DOCUMENTS,
-  REQUIRED_DOCUMENTS_MAPPING,
-  SURCHARGE,
-} from '@/constants';
+import { ORDER_STATUS, SURCHARGE } from '@/constants';
 import { ProductMissingFieldException } from '@/exceptions/invalid-product.exception';
 import { ProductNotFoundException } from '@/exceptions/product-not-found.exception';
-import { getKeyByValue } from '@/interfaces';
 import { CategoryService } from '@/modules/category/services/category.service';
 import { FeedbackService } from '@/modules/feedback/services/feedback.service';
 import { LessorService } from '@/modules/lessor/services/lessor.service';
@@ -54,20 +46,12 @@ export class ProductService {
     newProduct.name = createProductDto.name;
     newProduct.description = createProductDto.description;
     newProduct.value = createProductDto.value;
-    const mortgageKey = getKeyByValue(
-      MORTGAGE_MAPPING,
-      createProductDto.mortgage,
-    );
-    newProduct.mortgage = MORTGAGE[mortgageKey];
+    newProduct.mortgage = createProductDto.mortgage;
     newProduct.policies = createProductDto.policies;
     newProduct.images = createProductDto.images;
     newProduct.characteristics = createProductDto.characteristics;
     newProduct.price = createProductDto.price;
-    const requiredDocumentsKey = getKeyByValue(
-      REQUIRED_DOCUMENTS_MAPPING,
-      createProductDto.requiredDocuments,
-    );
-    newProduct.requiredDocuments = REQUIRED_DOCUMENTS[requiredDocumentsKey];
+    newProduct.requiredDocuments = createProductDto.requiredDocuments;
     newProduct.timeUnit = createProductDto.timeUnit;
     newProduct.category = await this.categoryService.findById(
       createProductDto.category,

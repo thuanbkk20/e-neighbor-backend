@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
+import { REQUIRED_DOCUMENTS, MORTGAGE } from '@/constants';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 
 export default class ProductSeeder implements Seeder {
@@ -19,7 +20,7 @@ export default class ProductSeeder implements Seeder {
         ],
         images: [
           'https://www.koonstoyotatysonscorner.com/blogs/4498/wp-content/uploads/2022/11/2023-Toyota-Camry.webp',
-          'https://static.wixstatic.com/media/b4dcef_83f6a0ff7cac4a7289acf764b919ed6c~mv2.png/v1/fill/w_640,h_360,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b4dcef_83f6a0ff7cac4a7289acf764b919ed6c~mv2.png',
+          'https://banxemoi.com.vn/wp-content/uploads/2022/09/noi-that-xe-toyota-camry-2023-moi.jpg',
           'https://binhduong.toyota.com.vn/upload/anh_1_3.jpg',
         ], // Replace with your image URLs
         characteristics: [
@@ -46,7 +47,8 @@ export default class ProductSeeder implements Seeder {
           },
         ],
         price: 800000, // Price per unit of time (assuming your timeUnit is set to DAY by default)
-        requiredDocuments: 'OPTION1',
+        requiredDocuments: REQUIRED_DOCUMENTS.OPTION1,
+        mortgage: MORTGAGE.OPTION1,
         category: { id: 8 }, // Assuming you have a category with ID 8 for "Cars"
         lessor: { id: 1 }, // Assuming you have a lessor with ID 1
         rating: 0,
@@ -65,10 +67,13 @@ export default class ProductSeeder implements Seeder {
         images: [
           'https://danviet.mediacdn.vn/296231569849192448/2022/2/7/khoi-dong-nam-moi-gia-lan-banh-xe-honda-cr-v-2022-giam-sau-nho-uu-dai-ca-tram-trieu-dong-danvietvn-3-1644244507524638791136.jpg',
           'https://icdn.24h.com.vn/upload/1-2022/images/2022-02-25/image3-1645754800-13-width660height420.jpg',
-          'https://danviet.mediacdn.vn/296231569849192448/2022/2/7/khoi-dong-nam-moi-gia-lan-banh-xe-honda-cr-v-2022-giam-sau-nho-uu-dai-ca-tram-trieu-dong-danvietvn-3-1644244507524638791136.jpg',
+          'https://hondaotobinhduong.net/wp-content/uploads/2022/12/honda-crv-2022-mau-trang-.jpg',
         ], // Replace with your image URLs
         characteristics: [
-          { localeId: 'product.characteristic.vehicle.seat', description: '7' },
+          {
+            localeId: 'vehicle-characteristics-seats',
+            description: '7',
+          },
           {
             localeId: 'vehicle-characteristics-fuel',
             description: 'Gasoline',
@@ -95,7 +100,7 @@ export default class ProductSeeder implements Seeder {
           },
         ],
         price: 950000, // Price per unit of time
-        requiredDocuments: 'OPTION1',
+        requiredDocuments: REQUIRED_DOCUMENTS.OPTION1,
         category: { id: 8 }, // Assuming you have a category with ID 8 for "Cars"
         lessor: { id: 1 }, // Assuming you have a lessor with ID 2
         rating: 0,
