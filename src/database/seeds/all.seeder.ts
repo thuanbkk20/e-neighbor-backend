@@ -7,7 +7,9 @@ import { runSeeders } from 'typeorm-extension';
 
 import AdminSeeder from './admin.seeder';
 import CategorySeeder from './category.seeder';
+import LessorSeeder from './lessor.seeder';
 import SurchargeSeeder from './surcharge.seeder';
+import UserSeeder from './users.seeder';
 
 import ProductSeeder from '@/database/seeds/products.seeder';
 import { AdminEntity } from '@/modules/admin/domains/entities/admin.entity';
@@ -53,7 +55,14 @@ async function executeSeeding() {
       ProductEntity,
       SurchargeEntity,
     ],
-    seeds: [AdminSeeder, CategorySeeder, SurchargeSeeder, ProductSeeder],
+    seeds: [
+      AdminSeeder,
+      CategorySeeder,
+      SurchargeSeeder,
+      UserSeeder,
+      LessorSeeder,
+      ProductSeeder,
+    ],
   };
 
   const dataSource = new DataSource(options);
