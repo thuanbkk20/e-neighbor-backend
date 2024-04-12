@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsEnum, IsNumber, IsString } from 'class-validator';
 
 import { CreateInsuranceDto } from './createInsurace.dto';
 import { CreateProductSurchargeDto } from './createProductSurcharge.dto';
@@ -10,6 +10,7 @@ import {
   REQUIRED_DOCUMENTS,
   RequiredDocumentsType,
 } from '@/constants';
+import { POLICY, PolicyType } from '@/constants/policy';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { Characteristics } from '@/modules/product/domains/classes/policy.class';
 
@@ -26,9 +27,10 @@ export class CreateProductDto {
   @IsNumber()
   value: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'enum', enum: POLICY, isArray: true })
   @IsArray()
-  policies: string[];
+  @IsEnum(POLICY, { each: true })
+  policies: PolicyType[];
 
   @ApiProperty({ type: 'enum', enum: MORTGAGE })
   mortgage: MortgageType;
