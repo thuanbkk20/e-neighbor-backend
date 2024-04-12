@@ -79,7 +79,8 @@ export class ProductService {
             if (!productSurcharge.surcharge) {
               throw new NotFoundException('Surcharge not found');
             }
-            if (productSurcharge.surcharge.name === SURCHARGE.DAMAGE) return;
+            if (productSurcharge.surcharge.name === SURCHARGE.DAMAGE_FEE)
+              return;
             productSurcharge.price = surcharge.price;
             await entityManager.save(productSurcharge);
             return productSurcharge;
@@ -89,7 +90,7 @@ export class ProductService {
         const damageSurcharge = new ProductSurChargeEntity();
         damageSurcharge.price = 0;
         damageSurcharge.surcharge =
-          await this.surchargeService.getSurchargeByName(SURCHARGE.DAMAGE);
+          await this.surchargeService.getSurchargeByName(SURCHARGE.DAMAGE_FEE);
         await entityManager.save(damageSurcharge);
         surcharges.push(damageSurcharge);
 

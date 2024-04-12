@@ -1,8 +1,8 @@
 import { type ValueOf } from '@/interfaces';
 export const SURCHARGE = {
-  OVERTIME: 'Phí thuê quá giờ',
-  HYGIENCE: 'Phí vệ sinh',
-  DAMAGE: 'Phí tổn hại sản phẩm',
+  LATE_FEE: 'products.surCharge.lateFees',
+  SANITY_FEE: 'products.surCharge.sanityFees',
+  DAMAGE_FEE: 'products.surCharge.damageFees',
 };
 
 export type SurchargeType = ValueOf<typeof SURCHARGE>;

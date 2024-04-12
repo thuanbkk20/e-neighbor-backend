@@ -1,4 +1,9 @@
-import { ORDER, OrderType } from '@/constants';
+import {
+  COMMON_LOCATION,
+  CommonLocationType,
+  ORDER,
+  OrderType,
+} from '@/constants';
 import {
   PRODUCT_LIST_SORT_FIELD,
   ProductListSortFieldType,
@@ -70,4 +75,13 @@ export class ProductPageOptionsDto {
     int: true,
   })
   readonly rating?: number;
+
+  @EnumFieldOptional(() => COMMON_LOCATION)
+  readonly location?: CommonLocationType;
+
+  @NumberFieldOptional()
+  readonly maxPrice?: number;
+
+  @NumberFieldOptional()
+  readonly minPrice?: number;
 }
