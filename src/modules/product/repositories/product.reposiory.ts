@@ -67,6 +67,24 @@ export class ProductRepository extends Repository<ProductEntity> {
       });
     }
 
+    if (pageOptionsDto.minPrice) {
+      queryBuilder = queryBuilder.andWhere('products.price >= :minPrice', {
+        minPrice: pageOptionsDto.minPrice,
+      });
+    }
+
+    if (pageOptionsDto.maxPrice) {
+      queryBuilder = queryBuilder.andWhere('products.price <= :maxPrice', {
+        maxPrice: pageOptionsDto.maxPrice,
+      });
+    }
+
+    if (pageOptionsDto.location) {
+      queryBuilder = queryBuilder.andWhere('lessor.location = :location', {
+        location: pageOptionsDto.location,
+      });
+    }
+
     // Handle sort
     if (pageOptionsDto.sortField) {
       queryBuilder = queryBuilder
@@ -99,7 +117,25 @@ export class ProductRepository extends Repository<ProductEntity> {
       })
       .andWhere('category.is_vehicle = :isVehicle', {
         isVehicle: paginationParams.isVehicle ?? true,
-      })
+      });
+    if (paginationParams.minPrice) {
+      productQueryBuilder.andWhere('products.price >= :minPrice', {
+        minPrice: paginationParams.minPrice,
+      });
+    }
+
+    if (paginationParams.maxPrice) {
+      productQueryBuilder.andWhere('products.price <= :maxPrice', {
+        maxPrice: paginationParams.maxPrice,
+      });
+    }
+
+    if (paginationParams.location) {
+      productQueryBuilder.andWhere('lessor.location = :location', {
+        location: paginationParams.location,
+      });
+    }
+    productQueryBuilder
       .orderBy('products.rating', 'DESC')
       .skip(paginationParams.offset ?? 0)
       .take(paginationParams.take ?? 12);
@@ -118,7 +154,25 @@ export class ProductRepository extends Repository<ProductEntity> {
       })
       .andWhere('category.is_vehicle = :isVehicle', {
         isVehicle: paginationParams.isVehicle ?? true,
-      })
+      });
+    if (paginationParams.minPrice) {
+      productQueryBuilder.andWhere('products.price >= :minPrice', {
+        minPrice: paginationParams.minPrice,
+      });
+    }
+
+    if (paginationParams.maxPrice) {
+      productQueryBuilder.andWhere('products.price <= :maxPrice', {
+        maxPrice: paginationParams.maxPrice,
+      });
+    }
+
+    if (paginationParams.location) {
+      productQueryBuilder.andWhere('lessor.location = :location', {
+        location: paginationParams.location,
+      });
+    }
+    productQueryBuilder
       .orderBy('products.accessCount', 'DESC')
       .skip(paginationParams.offset ?? 0)
       .take(paginationParams.take ?? 12);
