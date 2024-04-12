@@ -66,6 +66,8 @@ export class LessorService {
 
       shopName: registerDto.shopName,
 
+      location: registerDto.location,
+
       user: userAfterUpdate,
     };
     const newLessor = await this.lessorRepository.save(lessor);
@@ -99,6 +101,8 @@ export class LessorService {
       description: registerDto.description,
 
       shopName: registerDto.shopName,
+
+      location: registerDto.location,
 
       user: userAfterUpdate,
     };

@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsString } from 'class-validator';
 
+import { COMMON_LOCATION, CommonLocationType } from '@/constants';
 import { UpdatePaymentMethodDto } from '@/modules/payment/domains/dtos/payment-method.dto';
 
 export class LessorRegisterDto {
@@ -59,5 +60,8 @@ export class LessorRegisterDto {
 
   @ApiPropertyOptional()
   @IsString()
-  shopName: string;
+  shopName?: string;
+
+  @ApiPropertyOptional({ type: 'enum', enum: COMMON_LOCATION })
+  location?: CommonLocationType;
 }
