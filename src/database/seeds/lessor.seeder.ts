@@ -1,6 +1,7 @@
 import type { DataSource } from 'typeorm';
 import type { Seeder } from 'typeorm-extension';
 
+import { COMMON_LOCATION } from '@/constants';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 
 export default class LessorSeeder implements Seeder {
@@ -15,6 +16,7 @@ export default class LessorSeeder implements Seeder {
         products: [],
         user: { id: 1 },
         shopName: 'Dịch vụ cho thuê Minh Quang',
+        location: COMMON_LOCATION.HCM,
       },
     ]);
   }

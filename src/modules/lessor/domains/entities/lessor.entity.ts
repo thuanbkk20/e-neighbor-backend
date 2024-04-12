@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import { AbstractEntity } from '@/common/abstract.entity';
+import { COMMON_LOCATION, CommonLocationType } from '@/constants';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 
@@ -30,4 +31,11 @@ export class LessorEntity extends AbstractEntity {
 
   @Column({ nullable: true, default: '' })
   shopName: string;
+
+  @Column({
+    type: 'enum',
+    enum: COMMON_LOCATION,
+    default: COMMON_LOCATION.HCM,
+  })
+  location: CommonLocationType;
 }
