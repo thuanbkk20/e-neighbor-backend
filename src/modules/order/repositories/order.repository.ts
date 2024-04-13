@@ -54,4 +54,22 @@ export class OrderRepository extends Repository<OrderEntity> {
     const ids = products.map((product) => product.product_id);
     return ids;
   }
+
+  async getOrdersByStatuses(
+    statuses: OrderStatusType[],
+    productId?: number,
+  ): Promise<OrderEntity[]> {
+    const query = this.createQueryBuilder('orders')
+      .leftJoinAndSelect('orders.product', 'product')
+      .leftJoinAndSelect('orders.rentalFees', 'rentalFees')
+      .leftJoinAndSelect('orders.feedback', 'feedback')
+      .leftJoinAndSelect('orders.payment', 'payment')
+      .where('orders.orderStatus IN (:...orderStatus)', {
+        orderStatus: statuses,
+      });
+    if (productId) {
+      query.andWhere('product.id = :id', { id: productId });
+    }
+    return query.getMany();
+  }
 }
