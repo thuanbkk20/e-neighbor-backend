@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 
 import { PageMetaDto } from '@/common/dtos/page-meta.dto';
@@ -35,6 +40,7 @@ export class ProductService {
     private readonly productSurchargeRepository: ProductSurchargeRepository,
     private readonly surchargeService: SurchargeService,
     private readonly insuranceRepository: InsuranceRepository,
+    @Inject(forwardRef(() => OrderService))
     private readonly orderService: OrderService,
     private readonly feedbackService: FeedbackService,
   ) {}
@@ -135,6 +141,14 @@ export class ProductService {
       return new ProductDto(product, completedOrder, insurance);
     }
     return new ProductDto(product, completedOrder);
+  }
+
+  async getEntityById(id: number): Promise<ProductEntity> {
+    const product = await this.productRepository.findOneById(id);
+    if (!product) {
+      throw new ProductNotFoundException(`Product with id ${id} not found!`);
+    }
+    return product;
   }
 
   async adminConfirmProduct(confirmDto: AdminConfirmDto): Promise<ProductDto> {
