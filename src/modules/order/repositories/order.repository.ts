@@ -64,6 +64,7 @@ export class OrderRepository extends Repository<OrderEntity> {
       .leftJoinAndSelect('orders.rentalFees', 'rentalFees')
       .leftJoinAndSelect('orders.feedback', 'feedback')
       .leftJoinAndSelect('orders.payment', 'payment')
+      .leftJoinAndSelect('orders.user', 'user')
       .where('orders.orderStatus IN (:...orderStatus)', {
         orderStatus: statuses,
       });

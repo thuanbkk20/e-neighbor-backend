@@ -50,8 +50,14 @@ export class OrderService {
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<OrderEntity> {
     let user = ContextProvider.getAuthUser();
-    const rentTime = createOrderDto.rentTime;
-    const returnTime = createOrderDto.returnTime;
+    let rentTime = createOrderDto.rentTime;
+    let returnTime = createOrderDto.returnTime;
+    if (typeof rentTime === 'string') {
+      rentTime = new Date(rentTime);
+    }
+    if (typeof returnTime === 'string') {
+      returnTime = new Date(returnTime);
+    }
     const product = await this.productService.getEntityById(
       createOrderDto.productId,
     );
@@ -64,12 +70,8 @@ export class OrderService {
     }
     //Check time
     this.checkRentTime(rentTime, returnTime, product);
-    //Retrieve all product orders that are either approved or in progress
-    const orders = await this.getOrdersByStatuses(
-      [ORDER_STATUS.APPROVED, ORDER_STATUS.IN_PROGRESS],
-      createOrderDto.productId,
-    );
-    // Need to check approved or in progress order in time range
+    await this.validateRentTimeWithOrders(rentTime, returnTime, product);
+    //Create new order
     const order = new OrderEntity();
     order.rentTime = rentTime;
     order.returnTime = returnTime;
@@ -85,7 +87,7 @@ export class OrderService {
       order.user = user;
     }
     try {
-      await this.orderRepository.save(order);
+      // await this.orderRepository.save(order);
     } catch (error) {
       console.error('Error creating order:', error);
       throw new InternalServerErrorException('Failed to create order');
@@ -99,12 +101,6 @@ export class OrderService {
     product: ProductEntity,
   ): boolean {
     const currentDate = new Date();
-    if (typeof rentDate === 'string') {
-      rentDate = new Date(rentDate);
-    }
-    if (typeof returnDate === 'string') {
-      returnDate = new Date(returnDate);
-    }
     if (rentDate.getTime() < currentDate.getTime()) {
       throw new BadRequestException('Rent time cannot be in the past!');
     }
@@ -118,8 +114,22 @@ export class OrderService {
         'Return date must be after rent date at least 1 ' + product.timeUnit,
       );
     }
-    const rentHour = rentDate.getUTCHours();
-    const returnHour = returnDate.getUTCHours();
+    let rentHour = rentDate.getHours();
+    if (
+      rentDate.getMinutes() !== 0 ||
+      rentDate.getSeconds() !== 0 ||
+      rentDate.getMilliseconds() !== 0
+    ) {
+      rentHour += 1;
+    }
+    let returnHour = returnDate.getHours();
+    if (
+      returnDate.getMinutes() !== 0 ||
+      returnDate.getSeconds() !== 0 ||
+      returnDate.getMilliseconds() !== 0
+    ) {
+      returnHour += 1;
+    }
     if (
       rentHour < RENT_TIME.RENT_START ||
       rentHour > RENT_TIME.RENT_END ||
@@ -140,6 +150,54 @@ export class OrderService {
     product: ProductEntity,
   ): number {
     return 0;
+  }
+
+  /**
+   * Validates the rental time range for a product, ensuring it does not overlap with existing orders.
+   * Throws an error if the rental time range overlaps with existing orders or violates conditions.
+   * @param rentTime The start time of the rental period.
+   * @param returnTime The end time of the rental period.
+   * @param product The product entity for which the rental time is being validated.
+   * @throws BadRequestException If the rental time range overlaps with existing orders or violates conditions.
+   */
+  private async validateRentTimeWithOrders(
+    rentTime: Date,
+    returnTime: Date,
+    product: ProductEntity,
+  ): Promise<boolean> {
+    const user = await ContextProvider.getAuthUser();
+    //Retrieve all product orders that are either approved or in progress
+    const orders = await this.getOrdersByStatuses(
+      [ORDER_STATUS.APPROVED, ORDER_STATUS.IN_PROGRESS],
+      product.id,
+    );
+
+    for (const order of orders) {
+      if (order.user.id === user.id) {
+        throw new BadRequestException(
+          `User with id ${user.id} have ordered product with ${product.id} from ${order.rentTime} to ${order.returnTime}`,
+        );
+      }
+      const orderRentTime = new Date(order.rentTime);
+      const orderReturnTime = new Date(order.returnTime);
+      console.log(orderRentTime.getDate());
+      console.log(orderReturnTime.getDate());
+      console.log(rentTime.getDate());
+      console.log(returnTime.getDate());
+      orderRentTime.setDate(orderRentTime.getDate());
+      orderRentTime.setHours(0, 0, 0, 0);
+      orderReturnTime.setDate(orderReturnTime.getDate() + 1);
+      orderReturnTime.setHours(0, 0, 0, 0);
+      // Check if the given rentTime and returnTime satisfy the conditions
+      if (rentTime >= orderReturnTime || returnTime <= orderRentTime) {
+        return true; // No overlap, satisfies conditions
+      } else {
+        throw new BadRequestException(
+          `The requested rental time overlaps with existing orders`,
+        );
+      }
+    }
+    return true;
   }
 
   /**
