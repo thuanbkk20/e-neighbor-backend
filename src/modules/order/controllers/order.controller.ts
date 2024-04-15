@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   UsePipes,
   ValidationPipe,
@@ -28,5 +30,15 @@ export class OrderController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<OrderDto> {
     return this.orderService.createOrder(createOrderDto);
+  }
+
+  @Auth([ROLE.ADMIN, ROLE.USER, ROLE.LESSOR])
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: OrderDto,
+  })
+  async findOrderById(@Param('id') id: number): Promise<OrderDto> {
+    return this.orderService.findOrderById(id);
   }
 }

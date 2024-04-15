@@ -55,6 +55,19 @@ export class OrderRepository extends Repository<OrderEntity> {
     return ids;
   }
 
+  async findOneById(id: number): Promise<OrderEntity> {
+    const query = this.createQueryBuilder('orders')
+      .leftJoinAndSelect('orders.product', 'product')
+      .leftJoinAndSelect('orders.rentalFees', 'rentalFees')
+      .leftJoinAndSelect('orders.feedback', 'feedback')
+      .leftJoinAndSelect('orders.payment', 'payment')
+      .leftJoinAndSelect('orders.user', 'user')
+      .where('orders.id = :id', {
+        id: id,
+      });
+    return query.getOne();
+  }
+
   async getOrdersByStatuses(
     statuses: OrderStatusType[],
     productId?: number,

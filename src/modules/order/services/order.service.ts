@@ -13,6 +13,7 @@ import {
   RENT_TIME,
 } from '@/constants';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
+import { OrderNotFoundException } from '@/exceptions';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 import { CreateOrderDto } from '@/modules/order/domains/dtos/createOrder.dto';
 import { FilterProductByOrderOptions } from '@/modules/order/domains/dtos/filterProductByOrder.dto';
@@ -56,6 +57,20 @@ export class OrderService {
     productId?: number,
   ): Promise<OrderEntity[]> {
     return this.orderRepository.getOrdersByStatuses(statuses, productId);
+  }
+
+  async findOrderById(id: number): Promise<OrderDto> {
+    const order = await this.orderRepository.findOneById(id);
+    if (!order) {
+      throw new OrderNotFoundException(`Order with id ${id} not found!`);
+    }
+    const productCompletedOrder = await this.numberOfOrderByStatus(
+      order.product.id,
+      ORDER_STATUS.COMPLETED,
+    );
+    const product = await this.productService.getEntityById(order.product.id);
+    const productDto = new ProductDto(product, productCompletedOrder);
+    return new OrderDto(order, productDto);
   }
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<OrderDto> {
