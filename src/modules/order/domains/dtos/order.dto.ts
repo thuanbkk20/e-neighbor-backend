@@ -11,7 +11,7 @@ import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.ent
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { PaymentEntity } from '@/modules/payment/domains/entities/payment.entity';
 import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
-import { UserEntity } from '@/modules/user/domains/entities/user.entity';
+import { UserDto } from '@/modules/user/domains/dtos/user.dto';
 
 export class OrderDto {
   @ApiProperty()
@@ -75,7 +75,7 @@ export class OrderDto {
   payment: PaymentEntity;
 
   @ApiProperty()
-  user: UserEntity;
+  user: UserDto;
 
   constructor(order: OrderEntity, product: ProductDto) {
     this.id = order.id;
@@ -97,7 +97,7 @@ export class OrderDto {
     this.timeUnit = order.timeUnit;
     this.feedback = order.feedback;
     this.payment = order.payment;
-    this.user = order.user;
+    this.user = new UserDto(order.user);
     this.product = product;
   }
 }
