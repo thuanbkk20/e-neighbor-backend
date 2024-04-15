@@ -78,7 +78,7 @@ export class OrderService {
     order.deliveryAddress = createOrderDto.deliveryAddress;
     order.product = product;
     order.rentPrice = product.price;
-    order.orderValue = this.calculateInitOrderPrice(
+    order.orderValue = this.calculateInitialOrderPrice(
       rentTime,
       returnTime,
       product,
@@ -87,7 +87,7 @@ export class OrderService {
       order.user = user;
     }
     try {
-      // await this.orderRepository.save(order);
+      await this.orderRepository.save(order);
     } catch (error) {
       console.error('Error creating order:', error);
       throw new InternalServerErrorException('Failed to create order');
@@ -144,12 +144,31 @@ export class OrderService {
   }
 
   //will be implemented later
-  private calculateInitOrderPrice(
+  private calculateInitialOrderPrice(
     rentDate: Date,
     returnDate: Date,
     product: ProductEntity,
   ): number {
-    return 0;
+    let orderValue = 0;
+    const rentTime = rentDate.getTime();
+    const returnTime = returnDate.getTime();
+    const differenceInMilliseconds = returnTime - rentTime;
+    const differenceInDate = differenceInMilliseconds / (24 * 60 * 60 * 1000);
+    switch (product.timeUnit) {
+      case TIME_UNIT.DAY:
+        // Convert milliseconds to days, considering the time component
+        orderValue = product.price * Math.ceil(differenceInDate);
+        break;
+      case TIME_UNIT.WEEK:
+        orderValue = (product.price / 7) * Math.ceil(differenceInDate);
+        break;
+      case TIME_UNIT.MONTH:
+        orderValue = (product.price / 28) * Math.ceil(differenceInDate);
+        break;
+      default:
+        throw new Error('Invalid time unit');
+    }
+    return orderValue;
   }
 
   /**
@@ -180,10 +199,6 @@ export class OrderService {
       }
       const orderRentTime = new Date(order.rentTime);
       const orderReturnTime = new Date(order.returnTime);
-      console.log(orderRentTime.getDate());
-      console.log(orderReturnTime.getDate());
-      console.log(rentTime.getDate());
-      console.log(returnTime.getDate());
       orderRentTime.setDate(orderRentTime.getDate());
       orderRentTime.setHours(0, 0, 0, 0);
       orderReturnTime.setDate(orderReturnTime.getDate() + 1);
@@ -217,32 +232,21 @@ export class OrderService {
   ): boolean {
     // Calculate the difference in milliseconds
     const differenceInMilliseconds = date2Obj.getTime() - date1Obj.getTime();
-
-    // Calculate the difference based on the specified time unit
-    let differenceInTimeUnits: number;
+    const differenceInDate = Math.ceil(
+      differenceInMilliseconds / (24 * 60 * 60 * 1000),
+    );
     switch (timeUnit) {
       case TIME_UNIT.DAY:
         // Convert milliseconds to days, considering the time component
-        differenceInTimeUnits =
-          differenceInMilliseconds / (1000 * 60 * 60 * 24);
-        break;
+        return differenceInDate >= 1;
       case TIME_UNIT.WEEK:
-        differenceInTimeUnits =
-          differenceInMilliseconds / (1000 * 60 * 60 * 24 * (7 - 1));
-        break;
+        return differenceInDate >= 7;
       case TIME_UNIT.MONTH:
         // Assuming that a month is 4 week
-        differenceInTimeUnits =
-          differenceInMilliseconds / (1000 * 60 * 60 * 24 * (28 - 1));
-        break;
+        return differenceInDate >= 28;
       default:
         throw new Error('Invalid time unit');
     }
-
-    // Check if the difference is at least 1 time unit
-    return (
-      differenceInTimeUnits >= 1 ||
-      (differenceInTimeUnits >= 0 && timeUnit === TIME_UNIT.DAY)
-    );
+    return true;
   }
 }
