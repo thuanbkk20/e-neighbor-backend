@@ -9,3 +9,4 @@ export * from './payment-status';
 export * from './surcharge';
 export * from './common-location';
 export * from './rent-time';
+export * from './timezone';
