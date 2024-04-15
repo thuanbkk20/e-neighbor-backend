@@ -5,11 +5,16 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { OrderEntity } from './order.entity';
 
 import { AbstractEntity } from '@/common/abstract.entity';
+import { RENTAL_FEE_NAME, RentalFeeNameType } from '@/constants';
 
 @Entity('rental_fee')
 export class RentalFeeEntity extends AbstractEntity {
-  @Column()
-  name: string;
+  @Column({
+    type: 'enum',
+    enum: RENTAL_FEE_NAME,
+    default: RENTAL_FEE_NAME.STANDARD,
+  })
+  name: RentalFeeNameType;
 
   @Column()
   description: string;
@@ -21,6 +26,6 @@ export class RentalFeeEntity extends AbstractEntity {
 
   @Exclude()
   @ManyToOne(() => OrderEntity, (order) => order.rentalFees)
-  @JoinColumn({ name: 'product_id' })
+  @JoinColumn({ name: 'order_id' })
   order: OrderEntity;
 }

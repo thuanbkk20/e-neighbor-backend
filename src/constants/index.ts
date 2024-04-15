@@ -10,3 +10,4 @@ export * from './surcharge';
 export * from './common-location';
 export * from './rent-time';
 export * from './timezone';
+export * from './rental-fee';
