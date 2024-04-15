@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { COMMON_LOCATION, CommonLocationType } from '@/constants';
 import { STATUS, StatusType } from '@/constants/status';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
@@ -42,6 +43,12 @@ export class ProductRecordDto {
   @ApiProperty()
   lessorId: number;
 
+  @ApiProperty()
+  lessorImage: string;
+
+  @ApiProperty({ type: 'enum', enum: COMMON_LOCATION })
+  location: CommonLocationType;
+
   constructor(product: ProductEntity, completedOrder: number) {
     this.id = product.id;
     this.name = product.name;
@@ -54,5 +61,7 @@ export class ProductRecordDto {
     this.completedOrder = completedOrder;
     this.rating = product.rating;
     this.category = product.category;
+    this.location = product?.lessor?.location;
+    this.lessorImage = product?.lessor?.user?.avatar;
   }
 }

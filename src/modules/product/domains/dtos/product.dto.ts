@@ -1,6 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import { MortgageType, RequiredDocumentsType } from '@/constants';
+import {
+  COMMON_LOCATION,
+  CommonLocationType,
+  MortgageType,
+  RequiredDocumentsType,
+} from '@/constants';
 import { StatusType } from '@/constants/status';
 import { TimeUnitType } from '@/constants/time-unit';
 import { CategoryEntity } from '@/modules/category/domains/entities/category.entity';
@@ -79,6 +84,9 @@ export class ProductDto {
   @ApiProperty()
   numberOfCompletedOrders: number;
 
+  @ApiProperty({ type: 'enum', enum: COMMON_LOCATION })
+  location: CommonLocationType;
+
   constructor(
     product: ProductEntity,
     numberOfCompletedOrders: number,
@@ -115,5 +123,6 @@ export class ProductDto {
     this.averageStar = product.rating;
     this.numberOfCompletedOrders = numberOfCompletedOrders;
     this.insurance = insurance;
+    this.location = product.lessor.location;
   }
 }
