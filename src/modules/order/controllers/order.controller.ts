@@ -12,7 +12,7 @@ import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ROLE } from '@/constants';
 import { Auth } from '@/decorators';
 import { CreateOrderDto } from '@/modules/order/domains/dtos/createOrder.dto';
-import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
+import { OrderDto } from '@/modules/order/domains/dtos/order.dto';
 import { OrderService } from '@/modules/order/services/order.service';
 
 @Controller('orders')
@@ -23,12 +23,10 @@ export class OrderController {
   @Auth([ROLE.USER, ROLE.LESSOR])
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOkResponse({ type: OrderEntity })
+  @ApiOkResponse({ type: OrderDto })
   @ApiBody({ type: CreateOrderDto })
   @UsePipes(new ValidationPipe({ transform: true }))
-  async createOrder(
-    @Body() createOrderDto: CreateOrderDto,
-  ): Promise<OrderEntity> {
+  async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<OrderDto> {
     return this.orderService.createOrder(createOrderDto);
   }
 }

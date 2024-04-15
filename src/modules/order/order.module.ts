@@ -2,6 +2,7 @@ import { Module, forwardRef } from '@nestjs/common';
 
 import { OrderController } from './controllers/order.controller';
 import { OrderRepository } from './repositories/order.repository';
+import { RentalFeeRepository } from './repositories/rentalFee.repository';
 import { OrderService } from './services/order.service';
 
 import { AdminModule } from '@/modules/admin/admin.module';
@@ -17,7 +18,7 @@ import { UserModule } from '@/modules/user/user.module';
     AdminModule,
   ],
   controllers: [OrderController],
-  providers: [OrderRepository, OrderService],
+  providers: [OrderRepository, OrderService, RentalFeeRepository],
   exports: [OrderService],
 })
 export class OrderModule {}

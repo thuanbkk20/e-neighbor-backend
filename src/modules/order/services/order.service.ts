@@ -6,13 +6,22 @@ import {
   forwardRef,
 } from '@nestjs/common';
 
-import { ORDER_STATUS, OrderStatusType, RENT_TIME } from '@/constants';
+import {
+  ORDER_STATUS,
+  OrderStatusType,
+  RENTAL_FEE_NAME,
+  RENT_TIME,
+} from '@/constants';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 import { CreateOrderDto } from '@/modules/order/domains/dtos/createOrder.dto';
 import { FilterProductByOrderOptions } from '@/modules/order/domains/dtos/filterProductByOrder.dto';
+import { OrderDto } from '@/modules/order/domains/dtos/order.dto';
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
+import { RentalFeeEntity } from '@/modules/order/domains/entities/rental-fee.entity';
 import { OrderRepository } from '@/modules/order/repositories/order.repository';
+import { RentalFeeRepository } from '@/modules/order/repositories/rentalFee.repository';
+import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 import { ProductService } from '@/modules/product/services/product.service';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
@@ -24,6 +33,7 @@ export class OrderService {
     private readonly orderRepository: OrderRepository,
     @Inject(forwardRef(() => ProductService))
     private readonly productService: ProductService,
+    private readonly rentalFeeRepository: RentalFeeRepository,
   ) {}
 
   async numberOfOrderByStatus(
@@ -48,7 +58,7 @@ export class OrderService {
     return this.orderRepository.getOrdersByStatuses(statuses, productId);
   }
 
-  async createOrder(createOrderDto: CreateOrderDto): Promise<OrderEntity> {
+  async createOrder(createOrderDto: CreateOrderDto): Promise<OrderDto> {
     let user = ContextProvider.getAuthUser();
     let rentTime = createOrderDto.rentTime;
     let returnTime = createOrderDto.returnTime;
@@ -68,7 +78,7 @@ export class OrderService {
       }
       user = user.user; // Change from LessorEntity to UserEntity
     }
-    //Check time
+    // Check time
     this.checkRentTime(rentTime, returnTime, product);
     await this.validateRentTimeWithOrders(rentTime, returnTime, product);
     //Create new order
@@ -84,15 +94,27 @@ export class OrderService {
       product,
     );
     if (user instanceof UserEntity) {
+      //Check if user complete profile information
+      this.checkIfUserCompleteProfileInformation(user);
       order.user = user;
     }
     try {
-      await this.orderRepository.save(order);
+      // Create rental fee
+      const rentalFee = new RentalFeeEntity();
+      rentalFee.name = RENTAL_FEE_NAME.STANDARD;
+      rentalFee.description = `Fee for renting product with price ${product.price}, time unit ${product.timeUnit} from ${order.rentTime} to ${order.returnTime}`;
+      rentalFee.amount = order.orderValue;
+      rentalFee.order = order;
+      await this.rentalFeeRepository.save(rentalFee);
+      order.rentalFees = [rentalFee];
+      //Save order
+      const createdOrder = await this.orderRepository.save(order);
+      const productDto = new ProductDto(product, 0);
+      return new OrderDto(createdOrder, productDto);
     } catch (error) {
       console.error('Error creating order:', error);
       throw new InternalServerErrorException('Failed to create order');
     }
-    return order;
   }
 
   private checkRentTime(
@@ -143,7 +165,14 @@ export class OrderService {
     return true;
   }
 
-  //will be implemented later
+  /**
+   * Calculates the initial order price based on the rental dates and the product's pricing unit.
+   *
+   * @param rentDate The date when the product is rented.
+   * @param returnDate The date when the product is returned.
+   * @param product The product entity containing pricing information.
+   * @returns The calculated initial order price.
+   */
   private calculateInitialOrderPrice(
     rentDate: Date,
     returnDate: Date,
@@ -184,7 +213,6 @@ export class OrderService {
     returnTime: Date,
     product: ProductEntity,
   ): Promise<boolean> {
-    const user = await ContextProvider.getAuthUser();
     //Retrieve all product orders that are either approved or in progress
     const orders = await this.getOrdersByStatuses(
       [ORDER_STATUS.APPROVED, ORDER_STATUS.IN_PROGRESS],
@@ -192,11 +220,6 @@ export class OrderService {
     );
 
     for (const order of orders) {
-      if (order.user.id === user.id) {
-        throw new BadRequestException(
-          `User with id ${user.id} have ordered product with ${product.id} from ${order.rentTime} to ${order.returnTime}`,
-        );
-      }
       const orderRentTime = new Date(order.rentTime);
       const orderReturnTime = new Date(order.returnTime);
       orderRentTime.setDate(orderRentTime.getDate());
@@ -246,6 +269,26 @@ export class OrderService {
         return differenceInDate >= 28;
       default:
         throw new Error('Invalid time unit');
+    }
+    return true;
+  }
+
+  private checkIfUserCompleteProfileInformation(user: UserEntity): boolean {
+    // Check if any of the required fields are null or undefined
+    const isAllRequiredFieldsAvailable =
+      user.address &&
+      user.detailedAddress &&
+      user.dob &&
+      user.phoneNumber &&
+      user.fullName &&
+      user.citizenId &&
+      user.citizenCardFront &&
+      user.citizenCardBack;
+
+    if (!isAllRequiredFieldsAvailable) {
+      throw new BadRequestException(
+        'User must complete profile information before renting a product!',
+      );
     }
     return true;
   }
