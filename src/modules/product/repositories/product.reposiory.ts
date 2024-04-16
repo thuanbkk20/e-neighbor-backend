@@ -41,8 +41,8 @@ export class ProductRepository extends Repository<ProductEntity> {
     }
 
     if (pageOptionsDto.categoryId) {
-      queryBuilder = queryBuilder.andWhere('category.id = :id', {
-        id: pageOptionsDto.categoryId,
+      queryBuilder = queryBuilder.andWhere('category.id = :categoryId', {
+        categoryId: pageOptionsDto.categoryId,
       });
     } else if (pageOptionsDto.isVehicle) {
       queryBuilder = queryBuilder.andWhere('category.is_vehicle = :isVehicle', {
@@ -51,8 +51,8 @@ export class ProductRepository extends Repository<ProductEntity> {
     }
 
     if (pageOptionsDto.lessorId) {
-      queryBuilder = queryBuilder.andWhere('lessor.id = :id', {
-        id: pageOptionsDto.lessorId,
+      queryBuilder = queryBuilder.andWhere('lessor.id = :lessorId', {
+        lessorId: pageOptionsDto.lessorId,
       });
     }
 

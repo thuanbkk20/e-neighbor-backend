@@ -39,7 +39,7 @@ export class AuthController {
     if (authUser instanceof LessorEntity) {
       const userInfo = authUser.user;
       delete authUser.user;
-      return { ...authUser, ...userInfo };
+      return { ...authUser, ...userInfo, lessorId: authUser.id };
     }
     return ContextProvider.getAuthUser();
   }
