@@ -15,6 +15,7 @@ export class ProductRepository extends Repository<ProductEntity> {
     const query = this.createQueryBuilder('products')
       .leftJoinAndSelect('products.category', 'category')
       .leftJoinAndSelect('products.lessor', 'lessor')
+      .leftJoinAndSelect('lessor.user', 'user')
       .leftJoinAndSelect('products.productSurcharges', 'productSurcharges')
       .leftJoinAndSelect('productSurcharges.surcharge', 'surcharge')
       .where('products.id = :id', { id: id });

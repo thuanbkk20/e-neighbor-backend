@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 
 import { ProductController } from './controllers/product.controller';
 import { InsuranceRepository } from './repositories/insurance.repository';
@@ -21,8 +21,8 @@ import { UserModule } from '@/modules/user/user.module';
     AdminModule,
     LessorModule,
     SurchargeModule,
-    OrderModule,
     FeedbackModule,
+    forwardRef(() => OrderModule),
   ],
   controllers: [ProductController],
   providers: [

@@ -5,6 +5,7 @@ export const ORDER_STATUS = {
   IN_PROGRESS: 'IN PROGRESS',
   COMPLETED: 'COMPLETED',
   CANCELED: 'CANCELED',
+  REJECTED: 'REJECTED',
 } as const;
 
 export type OrderStatusType = ValueOf<typeof ORDER_STATUS>;

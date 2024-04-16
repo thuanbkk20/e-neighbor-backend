@@ -117,6 +117,7 @@ export class ProductDto {
       responseRate: product.lessor.responseRate,
       responseTime: product.lessor.responseTime,
       agreementRate: product.lessor.agreementRate,
+      avatar: product.lessor.user.avatar,
     };
     this.accessCount = product.accessCount;
     this.averageStar = product.rating;

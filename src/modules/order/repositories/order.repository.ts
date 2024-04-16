@@ -54,4 +54,36 @@ export class OrderRepository extends Repository<OrderEntity> {
     const ids = products.map((product) => product.product_id);
     return ids;
   }
+
+  async findOneById(id: number): Promise<OrderEntity> {
+    const query = this.createQueryBuilder('orders')
+      .leftJoinAndSelect('orders.product', 'product')
+      .leftJoinAndSelect('orders.rentalFees', 'rentalFees')
+      .leftJoinAndSelect('orders.feedback', 'feedback')
+      .leftJoinAndSelect('orders.payment', 'payment')
+      .leftJoinAndSelect('orders.user', 'user')
+      .where('orders.id = :id', {
+        id: id,
+      });
+    return query.getOne();
+  }
+
+  async getOrdersByStatuses(
+    statuses: OrderStatusType[],
+    productId?: number,
+  ): Promise<OrderEntity[]> {
+    const query = this.createQueryBuilder('orders')
+      .leftJoinAndSelect('orders.product', 'product')
+      .leftJoinAndSelect('orders.rentalFees', 'rentalFees')
+      .leftJoinAndSelect('orders.feedback', 'feedback')
+      .leftJoinAndSelect('orders.payment', 'payment')
+      .leftJoinAndSelect('orders.user', 'user')
+      .where('orders.orderStatus IN (:...orderStatus)', {
+        orderStatus: statuses,
+      });
+    if (productId) {
+      query.andWhere('product.id = :id', { id: productId });
+    }
+    return query.getMany();
+  }
 }

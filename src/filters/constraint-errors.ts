@@ -8,6 +8,7 @@ export const ERROR_USER_NOT_FOUND = 'error.userNotFound';
 export const ERROR_UNIQUE_EMAIL = 'error.unique.email';
 export const ERROR_USER_CONFLICT = 'error.userConflict';
 export const ERROR_DATA_CONFLICT = 'error.dataConflict';
+export const ERROR_USER_NOT_COMPLETE_PROFILE = 'error.userNotCompleteProfile';
 
 // Payment Module error messages
 export const ERROR_DUPLICATE_PAYMENT_METHOD = 'error.duplicatePaymentMethod';
@@ -37,6 +38,12 @@ export const ERROR_BAD_INPUT = 'error.badInput';
 // logout exception
 export const ERROR_LOGOUT_FAILED = 'error.logoutFailed';
 
+// order exception
+export const ERROR_ORDER_NOT_FOUND = 'error.orderNotFound';
+export const ERROR_CANT_RENT_OWN_PRODUCT = 'error.lessorCantRentOwnProduct';
+export const ERROR_INVALID_RENT_TIME = 'error.invalidRentTime';
+export const ERROR_ORDER_CONFLICT = 'error.orderConflict';
+
 export const CONSTRAINT_ERRORS: Record<string, string | string[]> = {
   // System error
   SYS_000: HttpStatus.INTERNAL_SERVER_ERROR.toString(),
@@ -54,6 +61,7 @@ export const CONSTRAINT_ERRORS: Record<string, string | string[]> = {
     HttpStatus.UNAUTHORIZED.toString(),
   ],
   USER_004: ERROR_USER_CONFLICT,
+  USER_005: ERROR_USER_NOT_COMPLETE_PROFILE,
 
   // Lessor Module error
   LESSOR_001: ERROR_LESSOR_NOT_FOUND,
@@ -75,4 +83,10 @@ export const CONSTRAINT_ERRORS: Record<string, string | string[]> = {
 
   // Payment
   PAYMENT_001: ERROR_DUPLICATE_PAYMENT_METHOD,
+
+  // Order
+  ORDER_001: ERROR_ORDER_NOT_FOUND,
+  ORDER_002: ERROR_CANT_RENT_OWN_PRODUCT,
+  ORDER_003: ERROR_INVALID_RENT_TIME,
+  ORDER_004: ERROR_ORDER_CONFLICT,
 };

@@ -1,7 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 import { AbstractEntity } from '@/common/abstract.entity';
 import { ROLE } from '@/constants';
+import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 
 @Entity('users')
 export class UserEntity extends AbstractEntity {
@@ -43,4 +44,7 @@ export class UserEntity extends AbstractEntity {
 
   @Column({ nullable: true })
   citizenCardBack: string;
+
+  @OneToMany(() => OrderEntity, (order) => order.user)
+  orders: OrderEntity[];
 }
