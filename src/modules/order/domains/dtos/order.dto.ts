@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 import {
   ORDER_STATUS,
@@ -65,6 +65,9 @@ export class OrderDto {
   @ApiProperty({ type: 'enum', enum: TIME_UNIT })
   timeUnit: TimeUnitType;
 
+  @ApiPropertyOptional()
+  rejectReason?: string;
+
   @ApiProperty()
   product: ProductDto;
 
@@ -95,6 +98,7 @@ export class OrderDto {
     this.paymentStatus = order.paymentStatus;
     this.rentPrice = order.rentPrice;
     this.timeUnit = order.timeUnit;
+    this.rejectReason = order.rejectReason;
     this.feedback = order.feedback;
     this.payment = order.payment;
     this.user = new UserDto(order.user);

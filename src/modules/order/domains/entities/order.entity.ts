@@ -78,6 +78,9 @@ export class OrderEntity extends AbstractEntity {
   })
   timeUnit: TimeUnitType;
 
+  @Column({ nullable: true })
+  rejectReason?: string;
+
   @OneToMany(() => RentalFeeEntity, (rentalFee) => rentalFee.order)
   rentalFees: RentalFeeEntity[];
 
