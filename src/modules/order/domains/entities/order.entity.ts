@@ -48,7 +48,7 @@ export class OrderEntity extends AbstractEntity {
   @Column('simple-array', { nullable: true })
   imagesUponReturn: string[];
 
-  @Column('simple-array')
+  @Column()
   deliveryAddress: string;
 
   @Column({ default: 0 })
