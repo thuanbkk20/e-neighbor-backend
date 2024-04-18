@@ -6,15 +6,20 @@ import {
   HttpStatus,
   Param,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+import { PageDto } from '@/common/dtos/page.dto';
 import { ROLE } from '@/constants';
 import { Auth } from '@/decorators';
 import { CreateOrderDto } from '@/modules/order/domains/dtos/createOrder.dto';
 import { OrderDto } from '@/modules/order/domains/dtos/order.dto';
+import { OrderListOkResponse } from '@/modules/order/domains/dtos/orderListOkResponse.dto';
+import { OrderPageOptionsDto } from '@/modules/order/domains/dtos/orderPageOptions.dto';
+import { OrderRecordDto } from '@/modules/order/domains/dtos/orderRecord.dto';
 import { OrderService } from '@/modules/order/services/order.service';
 
 @Controller('orders')
@@ -30,6 +35,18 @@ export class OrderController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<OrderDto> {
     return this.orderService.createOrder(createOrderDto);
+  }
+
+  @Auth([ROLE.ADMIN, ROLE.LESSOR, ROLE.USER])
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: OrderListOkResponse,
+  })
+  async getOrdersList(
+    @Query() orderPageOptions: OrderPageOptionsDto,
+  ): Promise<PageDto<OrderRecordDto>> {
+    return this.orderService.getOrdersList(orderPageOptions);
   }
 
   @Auth([ROLE.ADMIN, ROLE.USER, ROLE.LESSOR])
