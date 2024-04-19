@@ -204,10 +204,12 @@ export class OrderService {
         orderValue = product.price * Math.ceil(differenceInDate);
         break;
       case TIME_UNIT.WEEK:
-        orderValue = (product.price / 7) * Math.ceil(differenceInDate);
+        orderValue =
+          Math.floor(product.price / 7) * Math.ceil(differenceInDate);
         break;
       case TIME_UNIT.MONTH:
-        orderValue = (product.price / 28) * Math.ceil(differenceInDate);
+        orderValue =
+          Math.floor(product.price / 28) * Math.ceil(differenceInDate);
         break;
       default:
         throw new Error('Invalid time unit');
@@ -285,20 +287,21 @@ export class OrderService {
       default:
         throw new Error('Invalid time unit');
     }
-    return true;
   }
 
   private checkIfUserCompleteProfileInformation(user: UserEntity): boolean {
     // Check if any of the required fields are null or undefined
     const isAllRequiredFieldsAvailable =
       user.address &&
-      user.detailedAddress &&
+      // Not needed, might considerate removing this column from Entity
+      // user.detailedAddress &&
       user.dob &&
       user.phoneNumber &&
       user.fullName &&
-      user.citizenId &&
-      user.citizenCardFront &&
-      user.citizenCardBack;
+      user.citizenId;
+    // && Only Lessor using these (these 2 are optional as well)
+    // user.citizenCardFront &&
+    // user.citizenCardBack;
 
     if (!isAllRequiredFieldsAvailable) {
       throw new BadRequestException(

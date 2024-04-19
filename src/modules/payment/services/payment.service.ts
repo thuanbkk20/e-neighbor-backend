@@ -8,6 +8,7 @@ import {
 import { PaymentMethodEntity } from '@/modules/payment/domains/entities/payment-method.entity';
 import { PaymentRepository } from '@/modules/payment/repositories/payment.repository';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
+
 @Injectable()
 export class PaymentService {
   constructor(private readonly paymentRepository: PaymentRepository) {}
