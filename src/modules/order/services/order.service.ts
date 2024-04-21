@@ -3,6 +3,7 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
   forwardRef,
 } from '@nestjs/common';
 
@@ -19,10 +20,12 @@ import { OrderNotFoundException } from '@/exceptions';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 import { CreateOrderDto } from '@/modules/order/domains/dtos/createOrder.dto';
 import { FilterProductByOrderOptions } from '@/modules/order/domains/dtos/filterProductByOrder.dto';
+import { LessorUpdatePendingOrderDto } from '@/modules/order/domains/dtos/lessorUpdatePendingOrder.dto';
 import { OrderDto } from '@/modules/order/domains/dtos/order.dto';
 import { OrderPageOptionsDto } from '@/modules/order/domains/dtos/orderPageOptions.dto';
 import { OrderRecordDto } from '@/modules/order/domains/dtos/orderRecord.dto';
 import { OrderResponseDto } from '@/modules/order/domains/dtos/orderResponse.dto';
+import { UserUpdatePendingOrderDto } from '@/modules/order/domains/dtos/userUpdatePendingOrder.dto';
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { RentalFeeEntity } from '@/modules/order/domains/entities/rental-fee.entity';
 import { OrderRepository } from '@/modules/order/repositories/order.repository';
@@ -76,6 +79,14 @@ export class OrderService {
     const product = await this.productService.getEntityById(order.product.id);
     const productDto = new ProductDto(product, productCompletedOrder);
     return new OrderDto(order, productDto);
+  }
+
+  async findOrderEntityById(id: number): Promise<OrderEntity> {
+    const order = await this.orderRepository.findOneById(id);
+    if (!order) {
+      throw new OrderNotFoundException(`Can not found order with id ${id}`);
+    }
+    return order;
   }
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<OrderDto> {
@@ -135,6 +146,121 @@ export class OrderService {
       console.error('Error creating order:', error);
       throw new InternalServerErrorException('Failed to create order');
     }
+  }
+
+  /**
+   * Updates a pending order based on the provided updateDto.
+   * If the order is not in pending status or the user does not have permission to update the order,
+   * appropriate exceptions are thrown.
+   * If the updateDto indicates cancellation, the order status is set to CANCELED;
+   * otherwise, the order details are updated based on the provided rentTime, returnTime,
+   * deliveryAddress, and other fields.
+   * Returns the updated OrderDto.
+   *
+   * @param updateDto The DTO containing the update information.
+   * @returns A Promise resolving to the updated OrderDto.
+   * @throws BadRequestException if the order is not in pending status.
+   * @throws UnauthorizedException if the user does not have permission to update the order.
+   */
+  async userUpdatePendingOrder(
+    updateDto: UserUpdatePendingOrderDto,
+  ): Promise<OrderDto> {
+    const order = await this.findOrderEntityById(updateDto.orderId);
+    const user = ContextProvider.getAuthUser();
+    if (user.id !== order.user.id) {
+      throw new UnauthorizedException(
+        'PermissionDenied: Can not update order that belong to other user!',
+      );
+    }
+    if (order.orderStatus !== ORDER_STATUS.PENDING) {
+      //throw error
+      throw new BadRequestException(`Order is not in pending status!`);
+    }
+    const product = await this.productService.getEntityById(order.product.id);
+    if (updateDto.isCanceled === true) {
+      order.orderStatus = ORDER_STATUS.CANCELED;
+      const updatedOrder = await this.orderRepository.save(order);
+      const productDto = new ProductDto(product, 0);
+      return new OrderDto(updatedOrder, productDto);
+    } else {
+      let rentTime = updateDto.rentTime ? updateDto.rentTime : order.rentTime;
+      let returnTime = updateDto.returnTime
+        ? updateDto.returnTime
+        : order.returnTime;
+      if (typeof rentTime === 'string') {
+        rentTime = new Date(rentTime);
+      }
+      if (typeof returnTime === 'string') {
+        returnTime = new Date(returnTime);
+      }
+      // Check time
+      this.checkRentTime(rentTime, returnTime, product);
+      await this.validateRentTimeWithOrders(rentTime, returnTime, product);
+      // Update order fields
+      order.rentTime = rentTime;
+      order.returnTime = returnTime;
+      order.deliveryAddress = updateDto.deliveryAddress
+        ? updateDto.deliveryAddress
+        : order.deliveryAddress;
+      order.rentPrice = product.price;
+      order.orderValue = this.calculateInitialOrderPrice(
+        rentTime,
+        returnTime,
+        product,
+      );
+      // Update standard rental fee
+      const standardRentalFee = await this.rentalFeeRepository.findOneBy({
+        id: order.rentalFees[0].id,
+      });
+      standardRentalFee.amount = order.orderValue;
+      standardRentalFee.description = `Fee for renting product with price ${product.price}, time unit ${product.timeUnit} from ${order.rentTime} to ${order.returnTime}`;
+      await this.rentalFeeRepository.save(standardRentalFee);
+      //Save order
+      const updatedOrder = await this.orderRepository.save(order);
+      const productDto = new ProductDto(product, 0);
+      return new OrderDto(updatedOrder, productDto);
+    }
+  }
+
+  /**
+   * Updates a pending order based on the provided updateDto.
+   * If the order is not in pending status or the user does not have permission to update the order,
+   * appropriate exceptions are thrown.
+   * If the updateDto indicates rejection, the order status is set to REJECTED with the specified rejectReason;
+   * otherwise, the order status is set to APPROVED.
+   * Returns the updated OrderDto.
+   *
+   * @param updateDto The DTO containing the update information.
+   * @returns A Promise resolving to the updated OrderDto.
+   * @throws BadRequestException if the order is not in pending status.
+   * @throws UnauthorizedException if the user does not have permission to update the order.
+   */
+  async lessorUpdatePendingOrder(
+    updateDto: LessorUpdatePendingOrderDto,
+  ): Promise<OrderDto> {
+    const order = await this.findOrderEntityById(updateDto.orderId);
+    const user = ContextProvider.getAuthUser();
+    if (user.id !== order.product?.lessor?.id) {
+      throw new UnauthorizedException(
+        'PermissionDenied: Can not update order that belong to other lessor!',
+      );
+    }
+    if (order.orderStatus !== ORDER_STATUS.PENDING) {
+      //throw error
+      throw new BadRequestException(`Order is not in pending status!`);
+    }
+    const product = await this.productService.getEntityById(order.product.id);
+    if (updateDto.isRejected === true) {
+      // reject the order
+      order.orderStatus = ORDER_STATUS.REJECTED;
+      order.rejectReason = updateDto.rejectReason;
+    } else {
+      // approve the order
+      order.orderStatus = ORDER_STATUS.APPROVED;
+    }
+    const updatedOrder = await this.orderRepository.save(order);
+    const productDto = new ProductDto(product, 0);
+    return new OrderDto(updatedOrder, productDto);
   }
 
   private checkRentTime(

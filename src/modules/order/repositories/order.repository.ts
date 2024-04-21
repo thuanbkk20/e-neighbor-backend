@@ -64,6 +64,7 @@ export class OrderRepository extends Repository<OrderEntity> {
       .leftJoinAndSelect('orders.feedback', 'feedback')
       .leftJoinAndSelect('orders.payment', 'payment')
       .leftJoinAndSelect('orders.user', 'user')
+      .leftJoinAndSelect('product.lessor', 'lessor')
       .where('orders.id = :id', {
         id: id,
       });
