@@ -7,16 +7,21 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+import { PageDto } from '@/common/dtos/page.dto';
 import { ROLE } from '@/constants';
 import { Auth } from '@/decorators';
 import { CreateOrderDto } from '@/modules/order/domains/dtos/createOrder.dto';
 import { LessorUpdatePendingOrderDto } from '@/modules/order/domains/dtos/lessorUpdatePendingOrder.dto';
 import { OrderDto } from '@/modules/order/domains/dtos/order.dto';
+import { OrderListOkResponse } from '@/modules/order/domains/dtos/orderListOkResponse.dto';
+import { OrderPageOptionsDto } from '@/modules/order/domains/dtos/orderPageOptions.dto';
+import { OrderRecordDto } from '@/modules/order/domains/dtos/orderRecord.dto';
 import { UserUpdatePendingOrderDto } from '@/modules/order/domains/dtos/userUpdatePendingOrder.dto';
 import { OrderService } from '@/modules/order/services/order.service';
 
@@ -33,6 +38,18 @@ export class OrderController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<OrderDto> {
     return this.orderService.createOrder(createOrderDto);
+  }
+
+  @Auth([ROLE.ADMIN, ROLE.LESSOR, ROLE.USER])
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: OrderListOkResponse,
+  })
+  async getOrdersList(
+    @Query() orderPageOptions: OrderPageOptionsDto,
+  ): Promise<PageDto<OrderRecordDto>> {
+    return this.orderService.getOrdersList(orderPageOptions);
   }
 
   @Auth([ROLE.USER, ROLE.LESSOR])

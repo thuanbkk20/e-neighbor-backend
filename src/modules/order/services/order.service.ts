@@ -7,6 +7,8 @@ import {
   forwardRef,
 } from '@nestjs/common';
 
+import { PageMetaDto } from '@/common/dtos/page-meta.dto';
+import { PageDto } from '@/common/dtos/page.dto';
 import {
   ORDER_STATUS,
   OrderStatusType,
@@ -20,6 +22,9 @@ import { CreateOrderDto } from '@/modules/order/domains/dtos/createOrder.dto';
 import { FilterProductByOrderOptions } from '@/modules/order/domains/dtos/filterProductByOrder.dto';
 import { LessorUpdatePendingOrderDto } from '@/modules/order/domains/dtos/lessorUpdatePendingOrder.dto';
 import { OrderDto } from '@/modules/order/domains/dtos/order.dto';
+import { OrderPageOptionsDto } from '@/modules/order/domains/dtos/orderPageOptions.dto';
+import { OrderRecordDto } from '@/modules/order/domains/dtos/orderRecord.dto';
+import { OrderResponseDto } from '@/modules/order/domains/dtos/orderResponse.dto';
 import { UserUpdatePendingOrderDto } from '@/modules/order/domains/dtos/userUpdatePendingOrder.dto';
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { RentalFeeEntity } from '@/modules/order/domains/entities/rental-fee.entity';
@@ -432,5 +437,19 @@ export class OrderService {
       );
     }
     return true;
+  }
+
+  async getOrdersList(
+    pageOptionsDto: OrderPageOptionsDto,
+  ): Promise<PageDto<OrderRecordDto>> {
+    const orderResponse: OrderResponseDto =
+      await this.orderRepository.getOrderList(pageOptionsDto);
+
+    const orderRecords = orderResponse.entities.map(
+      (order) => new OrderRecordDto(order),
+    );
+    const itemCount = orderResponse.itemCount;
+    const pageMeta = new PageMetaDto({ pageOptionsDto, itemCount });
+    return new PageDto(orderRecords, pageMeta);
   }
 }
