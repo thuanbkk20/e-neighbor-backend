@@ -13,7 +13,7 @@ import {
   ORDER_STATUS,
   OrderStatusType,
   RENTAL_FEE_NAME,
-  RENT_TIME,
+  // RENT_TIME,
 } from '@/constants';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { OrderNotFoundException } from '@/exceptions';
@@ -282,32 +282,33 @@ export class OrderService {
         'Return date must be after rent date at least 1 ' + product.timeUnit,
       );
     }
-    let rentHour = rentDate.getHours();
-    if (
-      rentDate.getMinutes() !== 0 ||
-      rentDate.getSeconds() !== 0 ||
-      rentDate.getMilliseconds() !== 0
-    ) {
-      rentHour += 1;
-    }
-    let returnHour = returnDate.getHours();
-    if (
-      returnDate.getMinutes() !== 0 ||
-      returnDate.getSeconds() !== 0 ||
-      returnDate.getMilliseconds() !== 0
-    ) {
-      returnHour += 1;
-    }
-    if (
-      rentHour < RENT_TIME.RENT_START ||
-      rentHour > RENT_TIME.RENT_END ||
-      returnHour < RENT_TIME.RETURN_START ||
-      returnHour > RENT_TIME.RETURN_END
-    ) {
-      throw new BadRequestException(
-        `Rent time must be between ${RENT_TIME.RENT_START} and ${RENT_TIME.RENT_END}; return time must be between ${RENT_TIME.RETURN_START} and ${RENT_TIME.RETURN_END}!`,
-      );
-    }
+    // Not flexible with timezone -> Remove
+    // let rentHour = rentDate.getHours();
+    // if (
+    //   rentDate.getMinutes() !== 0 ||
+    //   rentDate.getSeconds() !== 0 ||
+    //   rentDate.getMilliseconds() !== 0
+    // ) {
+    //   rentHour += 1;
+    // }
+    // let returnHour = returnDate.getHours();
+    // if (
+    //   returnDate.getMinutes() !== 0 ||
+    //   returnDate.getSeconds() !== 0 ||
+    //   returnDate.getMilliseconds() !== 0
+    // ) {
+    //   returnHour += 1;
+    // }
+    // if (
+    //   rentHour < RENT_TIME.RENT_START ||
+    //   rentHour > RENT_TIME.RENT_END ||
+    //   returnHour < RENT_TIME.RETURN_START ||
+    //   returnHour > RENT_TIME.RETURN_END
+    // ) {
+    //   throw new BadRequestException(
+    //     `Rent time must be between ${RENT_TIME.RENT_START} and ${RENT_TIME.RENT_END}; return time must be between ${RENT_TIME.RETURN_START} and ${RENT_TIME.RETURN_END}!`,
+    //   );
+    // }
     return true;
   }
 
