@@ -7,22 +7,26 @@ import {
   PaymentStatusType,
 } from '@/constants';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
-import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { RentalFeeEntity } from '@/modules/order/domains/entities/rental-fee.entity';
 import { PaymentEntity } from '@/modules/payment/domains/entities/payment.entity';
-import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
 import { UserDto } from '@/modules/user/domains/dtos/user.dto';
 
-export class OrderDto {
+export class OrderRecordDto {
   @ApiProperty()
   id: number;
 
   @ApiProperty()
-  createdAt: Date;
+  productId: number;
 
   @ApiProperty()
-  updatedAt: Date;
+  productName: string;
+
+  @ApiProperty()
+  lessorId: number;
+
+  @ApiProperty()
+  shopName: string;
 
   @ApiProperty()
   rentTime: Date;
@@ -39,13 +43,13 @@ export class OrderDto {
   @ApiProperty()
   conditionUponReceipt: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, isArray: true })
   imagesUponReceipt: string[];
 
   @ApiProperty()
   conditionUponReturn: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, isArray: true })
   imagesUponReturn: string[];
 
   @ApiProperty()
@@ -54,7 +58,10 @@ export class OrderDto {
   @ApiProperty()
   orderValue: number;
 
-  @ApiProperty({ type: 'enum', enum: ORDER_STATUS })
+  @ApiProperty({
+    type: 'enum',
+    enum: ORDER_STATUS,
+  })
   orderStatus: OrderStatusType;
 
   @ApiProperty({ type: 'enum', enum: PAYMENT_STATUS })
@@ -69,50 +76,36 @@ export class OrderDto {
   @ApiPropertyOptional()
   rejectReason?: string;
 
-  @ApiProperty()
-  product: ProductDto;
-
-  @ApiProperty()
-  feedback: FeedbackEntity;
-
   @ApiProperty() // May undergo update
   rentalFees: RentalFeeEntity[];
 
-  @ApiProperty()
+  @ApiProperty() // May undergo update
   payment: PaymentEntity;
-
-  @ApiProperty()
-  paymentAmount: number;
 
   @ApiProperty()
   user: UserDto;
 
-  constructor(order: OrderEntity, product: ProductDto) {
+  constructor(order: OrderEntity) {
     this.id = order.id;
-    this.createdAt = order.createdAt;
-    this.updatedAt = order.updatedAt;
+    this.productId = order.product?.id;
+    this.productName = order.product?.name;
+    this.lessorId = order.product?.lessor?.id;
+    this.shopName = order.product?.lessor?.shopName;
     this.rentTime = order.rentTime;
     this.returnTime = order.returnTime;
     this.realRentTime = order.realRentTime;
     this.realReturnTime = order.realReturnTime;
     this.conditionUponReceipt = order.conditionUponReceipt;
     this.imagesUponReceipt = order.imagesUponReceipt;
-    this.conditionUponReturn = order.conditionUponReturn;
-    this.imagesUponReturn = order.imagesUponReturn;
     this.deliveryAddress = order.deliveryAddress;
     this.orderValue = order.orderValue;
     this.orderStatus = order.orderStatus;
     this.paymentStatus = order.paymentStatus;
-    this.paymentAmount = order.rentalFees.reduce((accumulator: number, fee) => {
-      return accumulator + fee.amount;
-    }, 0);
     this.rentPrice = order.rentPrice;
     this.timeUnit = order.timeUnit;
     this.rejectReason = order.rejectReason;
-    this.feedback = order.feedback;
     this.rentalFees = order.rentalFees;
     this.payment = order.payment;
     this.user = new UserDto(order.user);
-    this.product = product;
   }
 }
