@@ -12,3 +12,4 @@ export * from './rent-time';
 export * from './timezone';
 export * from './rental-fee';
 export * from './order-list-sort-field';
+export * from './vnpay-ipn-response';
