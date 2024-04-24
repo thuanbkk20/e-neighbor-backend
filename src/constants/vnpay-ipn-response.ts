@@ -13,9 +13,9 @@ export const IPN_ORDER_NOT_FOUND: IpnResponse = {
   Message: 'Order not found',
 };
 
-export const INP_ORDER_ALREADY_CONFIRMED: IpnResponse = {
+export const INP_ORDER_ALREADY_PAID: IpnResponse = {
   RspCode: '02',
-  Message: 'Order already confirmed',
+  Message: 'Order already paid',
 };
 
 export const IPN_INVALID_AMOUNT: IpnResponse = {
