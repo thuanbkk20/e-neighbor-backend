@@ -112,4 +112,15 @@ export class ApiConfigService {
       callbackURL: this.getString('GOOGLE_CALLBACK_URL'),
     };
   }
+
+  get vnPayConfig() {
+    return {
+      vnpUrl: this.getString('VNP_URL'),
+      vnpVersion: this.getString('VNP_VERSION'),
+      vnpTMNCode: this.getString('VNP_TMVCODE'),
+      vnpBANKCODE: this.getString('VNP_BANKCODE'),
+      vnpReturnUrl: this.getString('VNP_RETURNURL'),
+      vnpHashSecret: this.getString('VNP_HASHSECRET'),
+    };
+  }
 }

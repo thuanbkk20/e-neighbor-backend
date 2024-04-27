@@ -13,14 +13,42 @@ import { setupSwagger } from './setup-swagger';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { SharedModule } from './shared/shared.module';
 
+import { OAuthException } from '@/exceptions';
 declare const module: any;
 
 async function bootstrap() {
   initializeTransactionalContext();
+  const whitelist = [
+    'http://localhost:3000',
+    'https://localhost:3000',
+    'http://localhost:8000',
+    'https://localhost:8000',
+    'https://e-neighbor.netlify.app',
+    'https://sandbox.vnpayment.vn/',
+  ];
+
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
     new ExpressAdapter(),
-    { cors: true },
+    {
+      cors: {
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
+        origin: function (origin, callback) {
+          if (!origin) {
+            callback(null, true);
+            return;
+          }
+          if (
+            whitelist.includes(origin) // Checks your whitelist
+            // || !!origin.match(/yourdomain\.com$/) // Overall check for your domain
+          ) {
+            callback(null, true);
+          } else {
+            callback(new OAuthException('Not allowed by CORS'), false);
+          }
+        },
+      },
+    },
   );
 
   const reflector = app.get(Reflector);

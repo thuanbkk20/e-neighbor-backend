@@ -13,7 +13,7 @@ import {
   ORDER_STATUS,
   OrderStatusType,
   RENTAL_FEE_NAME,
-  RENT_TIME,
+  // RENT_TIME,
 } from '@/constants';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { OrderNotFoundException } from '@/exceptions';
@@ -282,32 +282,33 @@ export class OrderService {
         'Return date must be after rent date at least 1 ' + product.timeUnit,
       );
     }
-    let rentHour = rentDate.getHours();
-    if (
-      rentDate.getMinutes() !== 0 ||
-      rentDate.getSeconds() !== 0 ||
-      rentDate.getMilliseconds() !== 0
-    ) {
-      rentHour += 1;
-    }
-    let returnHour = returnDate.getHours();
-    if (
-      returnDate.getMinutes() !== 0 ||
-      returnDate.getSeconds() !== 0 ||
-      returnDate.getMilliseconds() !== 0
-    ) {
-      returnHour += 1;
-    }
-    if (
-      rentHour < RENT_TIME.RENT_START ||
-      rentHour > RENT_TIME.RENT_END ||
-      returnHour < RENT_TIME.RETURN_START ||
-      returnHour > RENT_TIME.RETURN_END
-    ) {
-      throw new BadRequestException(
-        `Rent time must be between ${RENT_TIME.RENT_START} and ${RENT_TIME.RENT_END}; return time must be between ${RENT_TIME.RETURN_START} and ${RENT_TIME.RETURN_END}!`,
-      );
-    }
+    // Not flexible with timezone -> Remove
+    // let rentHour = rentDate.getHours();
+    // if (
+    //   rentDate.getMinutes() !== 0 ||
+    //   rentDate.getSeconds() !== 0 ||
+    //   rentDate.getMilliseconds() !== 0
+    // ) {
+    //   rentHour += 1;
+    // }
+    // let returnHour = returnDate.getHours();
+    // if (
+    //   returnDate.getMinutes() !== 0 ||
+    //   returnDate.getSeconds() !== 0 ||
+    //   returnDate.getMilliseconds() !== 0
+    // ) {
+    //   returnHour += 1;
+    // }
+    // if (
+    //   rentHour < RENT_TIME.RENT_START ||
+    //   rentHour > RENT_TIME.RENT_END ||
+    //   returnHour < RENT_TIME.RETURN_START ||
+    //   returnHour > RENT_TIME.RETURN_END
+    // ) {
+    //   throw new BadRequestException(
+    //     `Rent time must be between ${RENT_TIME.RENT_START} and ${RENT_TIME.RENT_END}; return time must be between ${RENT_TIME.RETURN_START} and ${RENT_TIME.RETURN_END}!`,
+    //   );
+    // }
     return true;
   }
 
@@ -335,10 +336,12 @@ export class OrderService {
         orderValue = product.price * Math.ceil(differenceInDate);
         break;
       case TIME_UNIT.WEEK:
-        orderValue = (product.price / 7) * Math.ceil(differenceInDate);
+        orderValue =
+          Math.floor(product.price / 7) * Math.ceil(differenceInDate);
         break;
       case TIME_UNIT.MONTH:
-        orderValue = (product.price / 28) * Math.ceil(differenceInDate);
+        orderValue =
+          Math.floor(product.price / 28) * Math.ceil(differenceInDate);
         break;
       default:
         throw new Error('Invalid time unit');
@@ -416,20 +419,21 @@ export class OrderService {
       default:
         throw new Error('Invalid time unit');
     }
-    return true;
   }
 
   private checkIfUserCompleteProfileInformation(user: UserEntity): boolean {
     // Check if any of the required fields are null or undefined
     const isAllRequiredFieldsAvailable =
       user.address &&
-      user.detailedAddress &&
+      // Not needed, might considerate removing this column from Entity
+      // user.detailedAddress &&
       user.dob &&
       user.phoneNumber &&
       user.fullName &&
-      user.citizenId &&
-      user.citizenCardFront &&
-      user.citizenCardBack;
+      user.citizenId;
+    // && Only Lessor using these (these 2 are optional as well)
+    // user.citizenCardFront &&
+    // user.citizenCardBack;
 
     if (!isAllRequiredFieldsAvailable) {
       throw new BadRequestException(

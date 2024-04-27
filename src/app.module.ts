@@ -15,6 +15,7 @@ import { LessorModule } from './modules/lessor/lessor.module';
 import { OrderModule } from './modules/order/order.module';
 import { ProductModule } from './modules/product/product.module';
 import { SurchargeModule } from './modules/surcharge/surcharge.module';
+import { ThirdpartyPaymentModule } from './modules/thirdparty-payment/thirdparty-payment.module';
 import { UserModule } from './modules/user/user.module';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { SharedModule } from './shared/shared.module';
@@ -52,6 +53,7 @@ import { SharedModule } from './shared/shared.module';
     FeedbackModule,
     CategoryModule,
     SurchargeModule,
+    ThirdpartyPaymentModule,
   ],
 })
 export class AppModule {}

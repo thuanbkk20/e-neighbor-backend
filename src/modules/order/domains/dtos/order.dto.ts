@@ -82,6 +82,9 @@ export class OrderDto {
   payment: PaymentEntity;
 
   @ApiProperty()
+  paymentAmount: number;
+
+  @ApiProperty()
   user: UserDto;
 
   constructor(order: OrderEntity, product: ProductDto) {
@@ -100,6 +103,9 @@ export class OrderDto {
     this.orderValue = order.orderValue;
     this.orderStatus = order.orderStatus;
     this.paymentStatus = order.paymentStatus;
+    this.paymentAmount = order.rentalFees.reduce((accumulator: number, fee) => {
+      return accumulator + fee.amount;
+    }, 0);
     this.rentPrice = order.rentPrice;
     this.timeUnit = order.timeUnit;
     this.rejectReason = order.rejectReason;

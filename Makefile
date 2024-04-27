@@ -64,3 +64,6 @@ compose-seed-run:
 
 fork-kill-dev:
 	lsof -t -i tcp:3000 | xargs kill
+
+mkcert-create:
+	mkcert -key-file ./secrets/key.pem -cert-file ./secrets/cert.pem localhost
