@@ -44,3 +44,6 @@ lerna-debug.log*
 .flaskenv*
 !.env.project
 !.env.vault
+
+# secrets
+/secrets

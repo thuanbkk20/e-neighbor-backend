@@ -44,7 +44,7 @@ export class ThirdPartyPaymentController {
   @HttpCode(HttpStatus.OK)
   async saveTransaction(@Query() params: IpnQueryDto, @Res() response: any) {
     const ipnResponse =
-      await this.thirdpartyPaymentService.saveTransaction(params);
+      await this.thirdpartyPaymentService.saveVnPayTransaction(params);
     response.status(HttpStatus.OK).json(ipnResponse); // bypassing the framework's automatic response handling
     response.end(); // Ensure the response is ended to prevent further processing
   }
