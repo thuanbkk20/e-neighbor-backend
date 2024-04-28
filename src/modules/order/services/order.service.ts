@@ -174,7 +174,7 @@ export class OrderService {
     const user = ContextProvider.getAuthUser();
     if (
       (user instanceof UserEntity && user.id !== order.user.id) ||
-      (user instanceof LessorEntity && user.id !== order.product.lessor.id)
+      (user instanceof LessorEntity && user.user.id !== order.user.id)
     ) {
       throw new UnauthorizedException(
         'PermissionDenied: Can not update order that belong to other user!',
@@ -477,7 +477,7 @@ export class OrderService {
     const product = await this.productService.getEntityById(order.product.id);
     if (
       (user instanceof UserEntity && user.id !== order.user.id) ||
-      (user instanceof LessorEntity && user.id !== order.product.lessor.id)
+      (user instanceof LessorEntity && user.user.id !== order.user.id)
     ) {
       throw new UnauthorizedException(
         'PermissionDenied: Can not update order that belong to other user!',
