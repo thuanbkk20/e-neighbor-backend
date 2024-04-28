@@ -23,6 +23,7 @@ import { OrderListOkResponse } from '@/modules/order/domains/dtos/orderListOkRes
 import { OrderPageOptionsDto } from '@/modules/order/domains/dtos/orderPageOptions.dto';
 import { OrderRecordDto } from '@/modules/order/domains/dtos/orderRecord.dto';
 import { UpdateApprovedOrderDto } from '@/modules/order/domains/dtos/updateApprovedOrder.dto';
+import { UpdateInProgressOrderDto } from '@/modules/order/domains/dtos/updateInProgressOrder.dto';
 import { UserUpdatePendingOrderDto } from '@/modules/order/domains/dtos/userUpdatePendingOrder.dto';
 import { OrderService } from '@/modules/order/services/order.service';
 
@@ -98,6 +99,21 @@ export class OrderController {
     updateDto: UpdateApprovedOrderDto,
   ) {
     return this.orderService.updateApprovedOrder(updateDto);
+  }
+
+  @Auth([ROLE.LESSOR])
+  @Patch('in-progress/lessor-update')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse()
+  @ApiBody({
+    type: UpdateInProgressOrderDto,
+  })
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async completeInProgressOrder(
+    @Body()
+    updateDto: UpdateInProgressOrderDto,
+  ) {
+    return this.orderService.completeInProgressOrder(updateDto);
   }
 
   @Auth([ROLE.ADMIN, ROLE.USER, ROLE.LESSOR])

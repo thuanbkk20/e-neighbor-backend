@@ -26,6 +26,7 @@ import { OrderPageOptionsDto } from '@/modules/order/domains/dtos/orderPageOptio
 import { OrderRecordDto } from '@/modules/order/domains/dtos/orderRecord.dto';
 import { OrderResponseDto } from '@/modules/order/domains/dtos/orderResponse.dto';
 import { UpdateApprovedOrderDto } from '@/modules/order/domains/dtos/updateApprovedOrder.dto';
+import { UpdateInProgressOrderDto } from '@/modules/order/domains/dtos/updateInProgressOrder.dto';
 import { UserUpdatePendingOrderDto } from '@/modules/order/domains/dtos/userUpdatePendingOrder.dto';
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { RentalFeeEntity } from '@/modules/order/domains/entities/rental-fee.entity';
@@ -495,6 +496,40 @@ export class OrderService {
     order.conditionUponReceipt = updateDto.conditionUponReceipt;
     order.imagesUponReceipt = updateDto.imagesUponReceipt;
     order.orderStatus = ORDER_STATUS.IN_PROGRESS;
+    //Update order
+    const updatedOrder = await this.orderRepository.save(order);
+    const numOfCompletedOrder = await this.numberOfOrderByStatus(
+      product.id,
+      ORDER_STATUS.COMPLETED,
+    );
+    const productDto = new ProductDto(product, numOfCompletedOrder);
+    return new OrderDto(updatedOrder, productDto);
+  }
+
+  async completeInProgressOrder(
+    updateDto: UpdateInProgressOrderDto,
+  ): Promise<OrderDto> {
+    const order = await this.findOrderEntityById(updateDto.orderId);
+    const user = ContextProvider.getAuthUser();
+    const product = await this.productService.getEntityById(order.product.id);
+    if (user.id !== order.product.lessor.id) {
+      throw new UnauthorizedException(
+        'PermissionDenied: Can not update order that belong to other lessor!',
+      );
+    }
+    if (order.orderStatus !== ORDER_STATUS.IN_PROGRESS) {
+      //throw error
+      throw new BadRequestException(`Order is not in progress status!`);
+    }
+    if (updateDto.isReturnOnTime === true) {
+      order.realReturnTime = order.returnTime;
+    } else {
+      const currentTime = new Date();
+      order.realReturnTime = currentTime;
+    }
+    order.conditionUponReturn = updateDto.conditionUponReturn;
+    order.imagesUponReturn = updateDto.imagesUponReturn;
+    order.orderStatus = ORDER_STATUS.COMPLETED;
     //Update order
     const updatedOrder = await this.orderRepository.save(order);
     const numOfCompletedOrder = await this.numberOfOrderByStatus(
