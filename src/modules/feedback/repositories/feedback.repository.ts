@@ -19,4 +19,13 @@ export class FeedbackRepository extends Repository<FeedbackEntity> {
 
     return parseFloat(feedbacks.averageStar) || 0;
   }
+
+  async findByOrderId(orderId: number): Promise<FeedbackEntity> {
+    const feedback = await this.createQueryBuilder('feedbacks')
+      .leftJoin('feedbacks.order', 'order')
+      .leftJoin('order.product', 'product')
+      .where('order.id = :orderId', { orderId: orderId })
+      .getOne();
+    return feedback;
+  }
 }

@@ -12,7 +12,6 @@ import { ORDER_STATUS, SURCHARGE } from '@/constants';
 import { ProductMissingFieldException } from '@/exceptions/invalid-product.exception';
 import { ProductNotFoundException } from '@/exceptions/product-not-found.exception';
 import { CategoryService } from '@/modules/category/services/category.service';
-import { FeedbackService } from '@/modules/feedback/services/feedback.service';
 import { LessorService } from '@/modules/lessor/services/lessor.service';
 import { OrderService } from '@/modules/order/services/order.service';
 import { AdminConfirmDto } from '@/modules/product/domains/dtos/adminConfirm.dto';
@@ -42,7 +41,6 @@ export class ProductService {
     private readonly insuranceRepository: InsuranceRepository,
     @Inject(forwardRef(() => OrderService))
     private readonly orderService: OrderService,
-    private readonly feedbackService: FeedbackService,
   ) {}
 
   private async productDtoToProductEntity(
