@@ -25,6 +25,7 @@ import { OrderDto } from '@/modules/order/domains/dtos/order.dto';
 import { OrderPageOptionsDto } from '@/modules/order/domains/dtos/orderPageOptions.dto';
 import { OrderRecordDto } from '@/modules/order/domains/dtos/orderRecord.dto';
 import { OrderResponseDto } from '@/modules/order/domains/dtos/orderResponse.dto';
+import { UpdateApprovedOrderDto } from '@/modules/order/domains/dtos/updateApprovedOrder.dto';
 import { UserUpdatePendingOrderDto } from '@/modules/order/domains/dtos/userUpdatePendingOrder.dto';
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { RentalFeeEntity } from '@/modules/order/domains/entities/rental-fee.entity';
@@ -35,7 +36,6 @@ import { ProductEntity } from '@/modules/product/domains/entities/product.entity
 import { ProductService } from '@/modules/product/services/product.service';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 import { ContextProvider } from '@/providers';
-
 @Injectable()
 export class OrderService {
   constructor(
@@ -140,7 +140,11 @@ export class OrderService {
       order.rentalFees = [rentalFee];
       //Save order
       const createdOrder = await this.orderRepository.save(order);
-      const productDto = new ProductDto(product, 0);
+      const numOfCompletedOrder = await this.numberOfOrderByStatus(
+        product.id,
+        ORDER_STATUS.COMPLETED,
+      );
+      const productDto = new ProductDto(product, numOfCompletedOrder);
       return new OrderDto(createdOrder, productDto);
     } catch (error) {
       console.error('Error creating order:', error);
@@ -167,7 +171,10 @@ export class OrderService {
   ): Promise<OrderDto> {
     const order = await this.findOrderEntityById(updateDto.orderId);
     const user = ContextProvider.getAuthUser();
-    if (user.id !== order.user.id) {
+    if (
+      (user instanceof UserEntity && user.id !== order.user.id) ||
+      (user instanceof LessorEntity && user.id !== order.product.lessor.id)
+    ) {
       throw new UnauthorizedException(
         'PermissionDenied: Can not update order that belong to other user!',
       );
@@ -180,7 +187,11 @@ export class OrderService {
     if (updateDto.isCanceled === true) {
       order.orderStatus = ORDER_STATUS.CANCELED;
       const updatedOrder = await this.orderRepository.save(order);
-      const productDto = new ProductDto(product, 0);
+      const numOfCompletedOrder = await this.numberOfOrderByStatus(
+        product.id,
+        ORDER_STATUS.COMPLETED,
+      );
+      const productDto = new ProductDto(product, numOfCompletedOrder);
       return new OrderDto(updatedOrder, productDto);
     } else {
       let rentTime = updateDto.rentTime ? updateDto.rentTime : order.rentTime;
@@ -455,5 +466,42 @@ export class OrderService {
     const itemCount = orderResponse.itemCount;
     const pageMeta = new PageMetaDto({ pageOptionsDto, itemCount });
     return new PageDto(orderRecords, pageMeta);
+  }
+
+  async updateApprovedOrder(
+    updateDto: UpdateApprovedOrderDto,
+  ): Promise<OrderDto> {
+    const order = await this.findOrderEntityById(updateDto.orderId);
+    const user = ContextProvider.getAuthUser();
+    const product = await this.productService.getEntityById(order.product.id);
+    if (
+      (user instanceof UserEntity && user.id !== order.user.id) ||
+      (user instanceof LessorEntity && user.id !== order.product.lessor.id)
+    ) {
+      throw new UnauthorizedException(
+        'PermissionDenied: Can not update order that belong to other user!',
+      );
+    }
+    if (order.orderStatus !== ORDER_STATUS.APPROVED) {
+      //throw error
+      throw new BadRequestException(`Order is not in approved status!`);
+    }
+    if (updateDto.isDeliveryOnTime === true) {
+      order.realRentTime = order.rentTime;
+    } else {
+      const currentTime = new Date();
+      order.realRentTime = currentTime;
+    }
+    order.conditionUponReceipt = updateDto.conditionUponReceipt;
+    order.imagesUponReceipt = updateDto.imagesUponReceipt;
+    order.orderStatus = ORDER_STATUS.IN_PROGRESS;
+    //Update order
+    const updatedOrder = await this.orderRepository.save(order);
+    const numOfCompletedOrder = await this.numberOfOrderByStatus(
+      product.id,
+      ORDER_STATUS.COMPLETED,
+    );
+    const productDto = new ProductDto(product, numOfCompletedOrder);
+    return new OrderDto(updatedOrder, productDto);
   }
 }
