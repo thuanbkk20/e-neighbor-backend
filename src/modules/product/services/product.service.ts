@@ -1,6 +1,7 @@
 import {
   Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   forwardRef,
 } from '@nestjs/common';
@@ -239,4 +240,21 @@ export class ProductService {
 
     return new PageDto(mostRatedProducts, paginationMeta);
   };
+
+  async updateProductAverageStar(
+    productId: number,
+    averageStar: number,
+  ): Promise<boolean> {
+    try {
+      const product = await this.productRepository.findOneBy({ id: productId });
+      if (!product) {
+        throw new ProductNotFoundException();
+      }
+      product.rating = averageStar;
+      await this.productRepository.save(product);
+    } catch {
+      throw new InternalServerErrorException('Failed to create order');
+    }
+    return true;
+  }
 }

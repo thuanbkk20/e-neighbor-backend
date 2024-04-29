@@ -539,4 +539,13 @@ export class OrderService {
     const productDto = new ProductDto(product, numOfCompletedOrder);
     return new OrderDto(updatedOrder, productDto);
   }
+
+  async updateOrderEntity(order: OrderEntity): Promise<boolean> {
+    try {
+      await this.orderRepository.save(order);
+    } catch {
+      throw new InternalServerErrorException('Failed to create order');
+    }
+    return true;
+  }
 }

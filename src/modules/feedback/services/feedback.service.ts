@@ -11,6 +11,7 @@ import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.ent
 import { FeedbackRepository } from '@/modules/feedback/repositories/feedback.repository';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 import { OrderService } from '@/modules/order/services/order.service';
+import { ProductService } from '@/modules/product/services/product.service';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 import { ContextProvider } from '@/providers';
 
@@ -19,6 +20,7 @@ export class FeedbackService {
   constructor(
     private readonly feedbackRepository: FeedbackRepository,
     private readonly orderService: OrderService,
+    private readonly productService: ProductService,
   ) {}
 
   async productAverageStar(productId: number): Promise<number> {
@@ -61,6 +63,15 @@ export class FeedbackService {
     newFeedback.star = createFeedbackDto.star;
     newFeedback.order = order;
     const returnFeedback = await this.feedbackRepository.save(newFeedback);
+    // Update product average rating
+    const averageStar = await this.productAverageStar(order.product.id);
+    await this.productService.updateProductAverageStar(
+      order.product.id,
+      averageStar,
+    );
+    // Update order
+    order.feedback = returnFeedback;
+    await this.orderService.updateOrderEntity(order);
     return new FeedbackDto(returnFeedback);
   }
 }
