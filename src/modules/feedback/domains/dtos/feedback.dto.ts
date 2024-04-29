@@ -4,6 +4,9 @@ import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.ent
 
 export class FeedbackDto {
   @ApiProperty()
+  id: number;
+
+  @ApiProperty()
   content: string;
 
   @ApiPropertyOptional()
@@ -25,6 +28,7 @@ export class FeedbackDto {
   uploaderAvatar: string;
 
   constructor(feedbackEntity: FeedbackEntity) {
+    this.id = feedbackEntity.id;
     this.content = feedbackEntity.content;
     this.image = feedbackEntity.image;
     this.star = feedbackEntity.star;

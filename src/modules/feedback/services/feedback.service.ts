@@ -4,9 +4,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
+import { PageMetaDto } from '@/common/dtos/page-meta.dto';
+import { PageDto } from '@/common/dtos/page.dto';
 import { ORDER_STATUS } from '@/constants';
 import { CreateFeedbackDto } from '@/modules/feedback/domains/dtos/createFeedback.dto';
 import { FeedbackDto } from '@/modules/feedback/domains/dtos/feedback.dto';
+import { FeedbackPageOptionsDto } from '@/modules/feedback/domains/dtos/feedbackPageOption.dto';
+import { FeedbackResponseDto } from '@/modules/feedback/domains/dtos/feedbackResponse.dto';
 import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
 import { FeedbackRepository } from '@/modules/feedback/repositories/feedback.repository';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
@@ -73,5 +77,19 @@ export class FeedbackService {
     order.feedback = returnFeedback;
     await this.orderService.updateOrderEntity(order);
     return new FeedbackDto(returnFeedback);
+  }
+
+  async getFeedbacksList(
+    pageOptionsDto: FeedbackPageOptionsDto,
+  ): Promise<PageDto<FeedbackDto>> {
+    const feedbackResponse: FeedbackResponseDto =
+      await this.feedbackRepository.getFeedbackList(pageOptionsDto);
+
+    const feedbackRecords = feedbackResponse.entities.map(
+      (order) => new FeedbackDto(order),
+    );
+    const itemCount = feedbackResponse.itemCount;
+    const pageMeta = new PageMetaDto({ pageOptionsDto, itemCount });
+    return new PageDto(feedbackRecords, pageMeta);
   }
 }

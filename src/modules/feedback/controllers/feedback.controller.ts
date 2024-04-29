@@ -1,18 +1,23 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+import { PageDto } from '@/common/dtos/page.dto';
 import { ROLE } from '@/constants';
 import { Auth } from '@/decorators';
 import { CreateFeedbackDto } from '@/modules/feedback/domains/dtos/createFeedback.dto';
 import { FeedbackDto } from '@/modules/feedback/domains/dtos/feedback.dto';
+import { FeedbackListOkResponse } from '@/modules/feedback/domains/dtos/feedbackListOkResponse.dto';
+import { FeedbackPageOptionsDto } from '@/modules/feedback/domains/dtos/feedbackPageOption.dto';
 import { FeedbackService } from '@/modules/feedback/services/feedback.service';
 
 @Controller('feedbacks')
@@ -29,7 +34,18 @@ export class FeedbackController {
   async createOrder(
     @Body() createFeedbackDto: CreateFeedbackDto,
   ): Promise<FeedbackDto> {
-    console.log('aaaa');
     return this.feedbackService.createFeedback(createFeedbackDto);
+  }
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: FeedbackListOkResponse,
+  })
+  async getProductsList(
+    @Query() feedbackPageOptions: FeedbackPageOptionsDto,
+  ): Promise<PageDto<FeedbackDto>> {
+    console.log(feedbackPageOptions);
+    return this.feedbackService.getFeedbacksList(feedbackPageOptions);
   }
 }
