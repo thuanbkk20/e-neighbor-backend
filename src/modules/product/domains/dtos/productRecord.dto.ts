@@ -62,6 +62,6 @@ export class ProductRecordDto {
     this.rating = product.rating;
     this.category = product.category;
     this.location = product?.lessor?.location;
-    this.lessorImage = product?.lessor?.user?.avatar;
+    this.lessorImage = product.lessor.user.avatar;
   }
 }
