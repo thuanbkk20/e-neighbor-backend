@@ -133,4 +133,14 @@ export class UserService {
     //update user infor
     return this.userRepository.save(userToUpdate);
   }
+
+  async updateWallet(userId: number, amount: number) {
+    const user = await this.findOneById(userId);
+    if (amount < 0 && user.wallet + amount < 0)
+      throw new BadRequestException('Insufficient Account Balance');
+
+    user.wallet += amount;
+
+    return this.userRepository.save(user);
+  }
 }

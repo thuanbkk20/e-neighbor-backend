@@ -34,12 +34,14 @@ import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 import { ProductService } from '@/modules/product/services/product.service';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
+import { UserService } from '@/modules/user/services/user.service';
 import { ContextProvider } from '@/providers';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly orderRepository: OrderRepository,
+    private readonly userService: UserService,
     @Inject(forwardRef(() => ProductService))
     private readonly productService: ProductService,
     private readonly rentalFeeRepository: RentalFeeRepository,
@@ -255,6 +257,14 @@ export class OrderService {
       // reject the order
       order.orderStatus = ORDER_STATUS.REJECTED;
       order.rejectReason = updateDto.rejectReason;
+
+      // refund
+      this.userService.updateWallet(
+        user.id,
+        order.rentalFees.reduce((accumulator: number, fee) => {
+          return accumulator + fee.amount;
+        }, 0),
+      );
     } else {
       // approve the order
       order.orderStatus = ORDER_STATUS.APPROVED;
