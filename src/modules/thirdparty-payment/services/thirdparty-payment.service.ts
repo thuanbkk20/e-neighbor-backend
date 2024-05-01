@@ -1,7 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { DataSource } from 'typeorm';
 
 import { OrderService } from '@/modules/order/services/order.service';
+import { IpnQueryDto } from '@/modules/thirdparty-payment/domains/dtos/request/ipn-query.dto';
 import { CreateTransactionDto } from '@/modules/thirdparty-payment/domains/dtos/request/order-transaction.dto';
 import { ThirdpartyPaymentRepository } from '@/modules/thirdparty-payment/repositories/thirdparty-payment.repository';
 import {
@@ -12,13 +14,14 @@ import {
 import { ApiConfigService } from '@/shared/services/api-config.service';
 
 @Injectable()
-export class ThirdpartyPaymentService {
+export class ThirdPartyPaymentService {
   constructor(
     private readonly httpService: HttpService,
     @Inject(forwardRef(() => OrderService))
     private readonly orderService: OrderService,
     private readonly configService: ApiConfigService,
     private readonly thirdpartyPaymentRepository: ThirdpartyPaymentRepository,
+    private readonly dataSource: DataSource,
   ) {
     this.loadGateway();
   }
@@ -36,6 +39,7 @@ export class ThirdpartyPaymentService {
         this.orderService,
         this.configService,
         this.thirdpartyPaymentRepository,
+        this.dataSource,
       ),
     };
   }
@@ -55,10 +59,9 @@ export class ThirdpartyPaymentService {
     );
   }
 
-  /**
-   * TODO: redirect handler, called by thirdparty
-   * @description Update order payment_status after being called
-   * @redirect Redirect to FE thankyou page upon successfully update the order
-   * @notice Consider moving to VnPayStrategy.callback after refactoring
-   */
+  async saveVnPayTransaction(params: IpnQueryDto) {
+    return this.paymentGateways[GATEWAY_STRATEGIES.vnpay].saveTransaction(
+      params,
+    );
+  }
 }

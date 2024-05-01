@@ -1,23 +1,27 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Ip,
   Post,
+  Query,
+  Res,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { ROLE } from '@/constants';
 import { Auth } from '@/decorators';
+import { IpnQueryDto } from '@/modules/thirdparty-payment/domains/dtos/request/ipn-query.dto';
 import { CreateTransactionDto } from '@/modules/thirdparty-payment/domains/dtos/request/order-transaction.dto';
-import { ThirdpartyPaymentService } from '@/modules/thirdparty-payment/services/thirdparty-payment.service';
+import { ThirdPartyPaymentService } from '@/modules/thirdparty-payment/services/thirdparty-payment.service';
 
 @Controller('thirdparty-payment')
 @ApiTags('thirdparty-payment')
-export class ThirdpartyPaymentController {
+export class ThirdPartyPaymentController {
   constructor(
-    private readonly thirdpartyPaymentService: ThirdpartyPaymentService,
+    private readonly thirdpartyPaymentService: ThirdPartyPaymentService,
   ) {}
 
   @Post('/create-transaction')
@@ -25,7 +29,7 @@ export class ThirdpartyPaymentController {
   @ApiBody({ type: CreateTransactionDto })
   @HttpCode(HttpStatus.TEMPORARY_REDIRECT)
   // @UsePipes(new ValidationPipe({ transform: true }))
-  async getProductsList(
+  async createTransaction(
     @Body() transactionInfo: CreateTransactionDto,
     @Ip() userIp: string,
   ) {
@@ -34,5 +38,14 @@ export class ThirdpartyPaymentController {
       userIp,
     );
     return { url: url };
+  }
+
+  @Get('/vnpay-ipn')
+  @HttpCode(HttpStatus.OK)
+  async saveTransaction(@Query() params: IpnQueryDto, @Res() response: any) {
+    const ipnResponse =
+      await this.thirdpartyPaymentService.saveVnPayTransaction(params);
+    response.status(HttpStatus.OK).json(ipnResponse); // bypassing the framework's automatic response handling
+    response.end(); // Ensure the response is ended to prevent further processing
   }
 }

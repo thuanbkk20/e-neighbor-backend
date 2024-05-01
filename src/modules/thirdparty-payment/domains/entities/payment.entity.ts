@@ -6,7 +6,7 @@ import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 @Entity('thirdparty-payment')
 export class ThirdpartyPaymentEntity extends AbstractEntity {
   @Column()
-  merchantId: string;
+  merchantId: number;
 
   @Column()
   merchantName: string;
