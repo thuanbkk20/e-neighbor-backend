@@ -22,6 +22,8 @@ import { OrderDto } from '@/modules/order/domains/dtos/order.dto';
 import { OrderListOkResponse } from '@/modules/order/domains/dtos/orderListOkResponse.dto';
 import { OrderPageOptionsDto } from '@/modules/order/domains/dtos/orderPageOptions.dto';
 import { OrderRecordDto } from '@/modules/order/domains/dtos/orderRecord.dto';
+import { UpdateApprovedOrderDto } from '@/modules/order/domains/dtos/updateApprovedOrder.dto';
+import { UpdateInProgressOrderDto } from '@/modules/order/domains/dtos/updateInProgressOrder.dto';
 import { UserUpdatePendingOrderDto } from '@/modules/order/domains/dtos/userUpdatePendingOrder.dto';
 import { OrderService } from '@/modules/order/services/order.service';
 
@@ -52,6 +54,7 @@ export class OrderController {
     return this.orderService.getOrdersList(orderPageOptions);
   }
 
+  // May need to be disabled because the transaction is created at the moment the user places order
   @Auth([ROLE.USER, ROLE.LESSOR])
   @Patch('pending/user-update')
   @HttpCode(HttpStatus.OK)
@@ -67,6 +70,7 @@ export class OrderController {
     return this.orderService.userUpdatePendingOrder(updateDto);
   }
 
+  // As the transaction is created at the moment the user places order, a refund is required if lessor reject the order
   @Auth([ROLE.LESSOR])
   @Patch('pending/lessor-update')
   @HttpCode(HttpStatus.OK)
@@ -80,6 +84,36 @@ export class OrderController {
     updateOptions: LessorUpdatePendingOrderDto,
   ) {
     return this.orderService.lessorUpdatePendingOrder(updateOptions);
+  }
+
+  @Auth([ROLE.USER, ROLE.LESSOR])
+  @Patch('approved/user-update')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse()
+  @ApiBody({
+    type: UpdateApprovedOrderDto,
+  })
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async userUpdateApprovedOrder(
+    @Body()
+    updateDto: UpdateApprovedOrderDto,
+  ) {
+    return this.orderService.updateApprovedOrder(updateDto);
+  }
+
+  @Auth([ROLE.LESSOR])
+  @Patch('in-progress/lessor-update')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse()
+  @ApiBody({
+    type: UpdateInProgressOrderDto,
+  })
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async completeInProgressOrder(
+    @Body()
+    updateDto: UpdateInProgressOrderDto,
+  ) {
+    return this.orderService.completeInProgressOrder(updateDto);
   }
 
   @Auth([ROLE.ADMIN, ROLE.USER, ROLE.LESSOR])
