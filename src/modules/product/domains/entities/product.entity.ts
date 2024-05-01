@@ -92,7 +92,7 @@ export class ProductEntity extends AbstractEntity {
   accessCount: number = 0;
 
   // Calculated each time a feedback is update
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'float' })
   rating?: number;
 
   @OneToMany(() => OrderEntity, (order) => order.product)
