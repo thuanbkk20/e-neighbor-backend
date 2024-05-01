@@ -118,6 +118,7 @@ export class ProductDto {
       responseTime: product.lessor.responseTime,
       agreementRate: product.lessor.agreementRate,
       avatar: product.lessor.user.avatar,
+      shopName: product.lessor.shopName,
     };
     this.accessCount = product.accessCount;
     this.averageStar = product.rating;

@@ -79,6 +79,7 @@ export class OrderService {
     );
     const product = await this.productService.getEntityById(order.product.id);
     const productDto = new ProductDto(product, productCompletedOrder);
+
     return new OrderDto(order, productDto);
   }
 
