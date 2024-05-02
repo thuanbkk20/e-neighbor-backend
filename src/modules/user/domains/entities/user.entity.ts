@@ -47,4 +47,7 @@ export class UserEntity extends AbstractEntity {
 
   @OneToMany(() => OrderEntity, (order) => order.user)
   orders: OrderEntity[];
+
+  @Column({ default: 0 })
+  wallet: number;
 }

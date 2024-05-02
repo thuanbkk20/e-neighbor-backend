@@ -28,6 +28,7 @@ export class ProductRepository extends Repository<ProductEntity> {
     let queryBuilder = this.createQueryBuilder('products')
       .leftJoinAndSelect('products.category', 'category')
       .leftJoinAndSelect('products.lessor', 'lessor')
+      .leftJoinAndSelect('lessor.user', 'user')
       .where('products.is_confirmed = :isConfirm', {
         isConfirm: pageOptionsDto.isConfirmedByAdmin,
       });

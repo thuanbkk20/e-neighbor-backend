@@ -12,11 +12,13 @@ import { PageDto } from '@/common/dtos/page.dto';
 import {
   ORDER_STATUS,
   OrderStatusType,
+  PAYMENT_STATUS,
   RENTAL_FEE_NAME,
   // RENT_TIME,
 } from '@/constants';
 import { TIME_UNIT, TimeUnitType } from '@/constants/time-unit';
 import { OrderNotFoundException } from '@/exceptions';
+import { AdminEntity } from '@/modules/admin/domains/entities/admin.entity';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 import { CreateOrderDto } from '@/modules/order/domains/dtos/createOrder.dto';
 import { FilterProductByOrderOptions } from '@/modules/order/domains/dtos/filterProductByOrder.dto';
@@ -36,11 +38,13 @@ import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 import { ProductService } from '@/modules/product/services/product.service';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
+import { UserService } from '@/modules/user/services/user.service';
 import { ContextProvider } from '@/providers';
 @Injectable()
 export class OrderService {
   constructor(
     private readonly orderRepository: OrderRepository,
+    private readonly userService: UserService,
     @Inject(forwardRef(() => ProductService))
     private readonly productService: ProductService,
     private readonly rentalFeeRepository: RentalFeeRepository,
@@ -79,6 +83,7 @@ export class OrderService {
     );
     const product = await this.productService.getEntityById(order.product.id);
     const productDto = new ProductDto(product, productCompletedOrder);
+
     return new OrderDto(order, productDto);
   }
 
@@ -172,6 +177,8 @@ export class OrderService {
   ): Promise<OrderDto> {
     const order = await this.findOrderEntityById(updateDto.orderId);
     const user = ContextProvider.getAuthUser();
+
+    if (user instanceof AdminEntity) return;
     if (
       (user instanceof UserEntity && user.id !== order.user.id) ||
       (user instanceof LessorEntity && user.user.id !== order.user.id)
@@ -186,12 +193,29 @@ export class OrderService {
     }
     const product = await this.productService.getEntityById(order.product.id);
     if (updateDto.isCanceled === true) {
+      // refund
+      const paidAmount = order.rentalFees.reduce((accumulator: number, fee) => {
+        return accumulator + fee.amount;
+      }, 0);
+
+      if (paidAmount < 0)
+        throw new BadRequestException(
+          'Insufficient Balance: negative amount of fees',
+        );
+
+      this.userService.updateWallet(
+        user instanceof UserEntity ? user.id : user.user.id,
+        paidAmount,
+      );
+
+      // update order
       order.orderStatus = ORDER_STATUS.CANCELED;
       const updatedOrder = await this.orderRepository.save(order);
       const numOfCompletedOrder = await this.numberOfOrderByStatus(
         product.id,
         ORDER_STATUS.COMPLETED,
       );
+
       const productDto = new ProductDto(product, numOfCompletedOrder);
       return new OrderDto(updatedOrder, productDto);
     } else {
@@ -266,6 +290,19 @@ export class OrderService {
       // reject the order
       order.orderStatus = ORDER_STATUS.REJECTED;
       order.rejectReason = updateDto.rejectReason;
+
+      // refund
+      const paidAmount = order.rentalFees.reduce((accumulator: number, fee) => {
+        return accumulator + fee.amount;
+      }, 0);
+
+      if (paidAmount < 0)
+        throw new BadRequestException(
+          'Insufficient Balance: negative amount of fees',
+        );
+
+      this.userService.updateWallet(user.id, paidAmount);
+      order.paymentStatus = PAYMENT_STATUS.REFUNDED;
     } else {
       // approve the order
       order.orderStatus = ORDER_STATUS.APPROVED;
