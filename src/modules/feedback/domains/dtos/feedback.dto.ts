@@ -35,12 +35,6 @@ export class FeedbackDto {
   productId: number;
 
   @ApiProperty()
-  uploaderFullName: string;
-
-  @ApiProperty()
-  uploaderAvatar: string;
-
-  @ApiProperty()
   createdAt: Date;
 
   @ApiProperty()
@@ -53,8 +47,6 @@ export class FeedbackDto {
     this.star = feedbackEntity.star;
     this.orderId = feedbackEntity.order.id;
     this.productId = feedbackEntity.order.product.id;
-    this.uploaderFullName = feedbackEntity.order.user.fullName;
-    this.uploaderAvatar = feedbackEntity.order.user.avatar;
     this.createdAt = feedbackEntity.createdAt;
     this.user = new FeedbackUserDto(feedbackEntity.order.user);
   }
