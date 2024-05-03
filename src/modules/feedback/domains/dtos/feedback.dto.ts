@@ -1,7 +1,20 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
+import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 
+export class FeedbackUserDto {
+  @ApiProperty()
+  fullName: string;
+
+  @ApiProperty()
+  avatar: string;
+
+  constructor(user: UserEntity) {
+    this.fullName = user.fullName;
+    this.avatar = user.avatar;
+  }
+}
 export class FeedbackDto {
   @ApiProperty()
   id: number;
@@ -27,6 +40,12 @@ export class FeedbackDto {
   @ApiProperty()
   uploaderAvatar: string;
 
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  user: FeedbackUserDto;
+
   constructor(feedbackEntity: FeedbackEntity) {
     this.id = feedbackEntity.id;
     this.content = feedbackEntity.content;
@@ -36,5 +55,7 @@ export class FeedbackDto {
     this.productId = feedbackEntity.order.product.id;
     this.uploaderFullName = feedbackEntity.order.user.fullName;
     this.uploaderAvatar = feedbackEntity.order.user.avatar;
+    this.createdAt = feedbackEntity.createdAt;
+    this.user = new FeedbackUserDto(feedbackEntity.order.user);
   }
 }
