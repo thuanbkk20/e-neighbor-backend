@@ -37,7 +37,7 @@ export class FeedbackDto {
   @ApiProperty()
   createdAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({ type: FeedbackUserDto })
   user: FeedbackUserDto;
 
   constructor(feedbackEntity: FeedbackEntity) {
