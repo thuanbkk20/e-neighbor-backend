@@ -31,6 +31,10 @@ export class FeedbackService {
     return this.feedbackRepository.productAverageStar(productId);
   }
 
+  async queryFeedbackSummary(productId: number) {
+    return this.feedbackRepository.productFeedbackSummary(productId);
+  }
+
   async findFeedBackByOrderId(orderId: number): Promise<FeedbackEntity> {
     return this.feedbackRepository.findByOrderId(orderId);
   }
@@ -90,6 +94,9 @@ export class FeedbackService {
     );
     const itemCount = feedbackResponse.itemCount;
     const pageMeta = new PageMetaDto({ pageOptionsDto, itemCount });
-    return new PageDto(feedbackRecords, pageMeta);
+
+    const statistic = await this.queryFeedbackSummary(pageOptionsDto.productId);
+
+    return new PageDto(feedbackRecords, pageMeta, { statistic });
   }
 }

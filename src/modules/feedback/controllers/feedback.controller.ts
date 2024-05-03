@@ -45,7 +45,6 @@ export class FeedbackController {
   async getProductsList(
     @Query() feedbackPageOptions: FeedbackPageOptionsDto,
   ): Promise<PageDto<FeedbackDto>> {
-    console.log(feedbackPageOptions);
     return this.feedbackService.getFeedbacksList(feedbackPageOptions);
   }
 }

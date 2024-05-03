@@ -22,6 +22,17 @@ export class FeedbackRepository extends Repository<FeedbackEntity> {
     return parseFloat(feedbacks.averageStar) || 0;
   }
 
+  async productFeedbackSummary(productId: number) {
+    const statistic = await this.createQueryBuilder('feedbacks')
+      .leftJoin('feedbacks.order', 'order')
+      .leftJoin('order.product', 'product')
+      .select('feedbacks.star as rating, COUNT(*)')
+      .groupBy('feedbacks.star')
+      .where('product.id = :id', { id: productId })
+      .getRawMany();
+    return statistic;
+  }
+
   async findByOrderId(orderId: number): Promise<FeedbackEntity> {
     const feedback = await this.createQueryBuilder('feedbacks')
       .leftJoinAndSelect('feedbacks.order', 'order')
