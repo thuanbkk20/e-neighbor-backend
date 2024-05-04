@@ -16,7 +16,7 @@ export class PageDto<T> {
   constructor(
     data: T[],
     meta: PageMetaDto | PageMetaCursorDto,
-    extra?: Record<string, string | boolean | number>,
+    extra?: Record<string, string | boolean | number | any>,
   ) {
     this.data = data;
     this.meta = meta;
