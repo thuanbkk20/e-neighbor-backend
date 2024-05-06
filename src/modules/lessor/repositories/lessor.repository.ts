@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
-import { StatisticOptionsDto } from '@/modules/lessor/domains/dtos/statisticOptions.dto';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 
 @Injectable()
@@ -22,18 +21,5 @@ export class LessorRepository extends Repository<LessorEntity> {
       .leftJoinAndSelect('lessor.user', 'user')
       .where('lessor.user_id = :id', { id });
     return queryBuilder.getOne();
-  }
-
-  async feedbackStatistic(options: StatisticOptionsDto, lessorId: number) {
-    const result = await this.createQueryBuilder('lessor')
-      .leftJoinAndSelect('lessor.products', 'product')
-      .leftJoinAndSelect('product.orders', 'order')
-      .leftJoinAndSelect('order.feedback', 'feedback')
-      .where('lessor.id = :lessorId', { lessorId: lessorId })
-      .select('SUM(feedback.star)')
-      .select('feedback.createdAt')
-      .groupBy('feedback.createdAt')
-      .getRawMany();
-    console.log(result);
   }
 }

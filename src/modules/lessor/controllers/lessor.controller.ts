@@ -18,6 +18,7 @@ import { LessorOnboardDto } from '@/modules/lessor/domains/dtos/lessor-onboard.d
 import { StatisticOptionsDto } from '@/modules/lessor/domains/dtos/statisticOptions.dto';
 import { LessorService } from '@/modules/lessor/services/lessor.service';
 import { ContextProvider } from '@/providers';
+import { RevenueRecordDto } from '../domains/dtos/revenueStatisticRecord.dto';
 
 @ApiTags('lessor')
 @Controller('lessor')
@@ -63,7 +64,8 @@ export class LessorController {
   async revenueStatistic(
     @Query() options: StatisticOptionsDto,
     @Param('id') lessorId: number,
-  ) {
-    await this.lessorService.revenueStatistic(options, lessorId);
+  ): Promise<RevenueRecordDto[]> {
+    const result = await this.lessorService.revenueStatistic(options, lessorId);
+    return result;
   }
 }

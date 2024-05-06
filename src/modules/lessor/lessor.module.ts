@@ -13,6 +13,8 @@ import { LessorService } from './services/lessor.service';
 import { AdminModule } from '@/modules/admin/admin.module';
 import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
 import { FeedbackRepository } from '@/modules/feedback/repositories/feedback.repository';
+import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
+import { OrderRepository } from '@/modules/order/repositories/order.repository';
 import { PaymentModule } from '@/modules/payment/payment.module';
 import { UserModule } from '@/modules/user/user.module';
 
@@ -33,6 +35,13 @@ import { UserModule } from '@/modules/user/user.module';
         return datasource
           .getRepository(FeedbackEntity)
           .extend(FeedbackRepository);
+      },
+    },
+    {
+      provide: getRepositoryToken(OrderEntity),
+      inject: [getDataSourceToken()],
+      useFactory(datasource: DataSource) {
+        return datasource.getRepository(OrderEntity).extend(OrderRepository);
       },
     },
     LessorService,

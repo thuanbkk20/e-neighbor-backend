@@ -6,15 +6,18 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { ORDER, ROLE } from '@/constants';
+import { ORDER, PAYMENT_STATUS, ROLE } from '@/constants';
 import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
 import { FeedbackRepository } from '@/modules/feedback/repositories/feedback.repository';
 import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
 import { FeedbackRecordDto } from '@/modules/lessor/domains/dtos/feedbackStatisticRecord.dto';
 import { LessorOnboardDto } from '@/modules/lessor/domains/dtos/lessor-onboard.dto';
+import { RevenueRecordDto } from '@/modules/lessor/domains/dtos/revenueStatisticRecord.dto';
 import { StatisticOptionsDto } from '@/modules/lessor/domains/dtos/statisticOptions.dto';
 import { LessorEntity } from '@/modules/lessor/domains/entities/lessor.entity';
 import { LessorRepository } from '@/modules/lessor/repositories/lessor.repository';
+import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
+import { OrderRepository } from '@/modules/order/repositories/order.repository';
 import { PaymentService } from '@/modules/payment/services/payment.service';
 import { UserUpdateDto } from '@/modules/user/domains/dtos/user-update.dto';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
@@ -31,6 +34,8 @@ export class LessorService {
     private readonly paymentService: PaymentService,
     @InjectRepository(FeedbackEntity)
     private readonly feedbackRepository: FeedbackRepository,
+    @InjectRepository(OrderEntity)
+    private readonly orderRepository: OrderRepository,
   ) {}
 
   async findOneById(
@@ -137,15 +142,18 @@ export class LessorService {
     }
     const rawData = await this.getFeedbackStatisticRawData(options, lessorId);
 
-    const result = await this.fillMissingDates(rawData, options.dayRange);
+    const result = await this.fillMissingDatesFeedback(
+      rawData,
+      options.dayRange,
+    );
     return result;
   }
 
-  private fillMissingDates(
+  private fillMissingDatesFeedback(
     result: FeedbackRecordDto[],
     dateRange: number,
   ): FeedbackRecordDto[] {
-    const filledResult: any[] = [];
+    const filledResult: FeedbackRecordDto[] = [];
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - dateRange);
 
@@ -165,7 +173,7 @@ export class LessorService {
         filledResult.push({
           averageStar: 0,
           totalFeedback: 0,
-          time: currentDate.toISOString(),
+          time: currentDate,
         });
       }
     }
@@ -216,11 +224,89 @@ export class LessorService {
   }
 
   async revenueStatistic(options: StatisticOptionsDto, lessorId: number) {
-    if (
-      options.dayRange &&
-      (typeof options.dayRange !== 'number' || options.dayRange <= 7)
-    ) {
-      throw new BadRequestException();
+    const lessor = ContextProvider.getAuthUser();
+    if (lessor.id != lessorId) {
+      throw new UnauthorizedException();
     }
+    const rawData = await this.getRevenueStatisticRawData(options, lessorId);
+
+    const result = await this.fillMissingDatesRevenue(
+      rawData,
+      options.dayRange,
+    );
+    return result;
+  }
+
+  private fillMissingDatesRevenue(
+    result: RevenueRecordDto[],
+    dateRange: number,
+  ): RevenueRecordDto[] {
+    const filledResult: RevenueRecordDto[] = [];
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - dateRange);
+
+    for (let i = 1; i <= dateRange; i++) {
+      const currentDate = new Date(startDate);
+      currentDate.setDate(currentDate.getDate() + i);
+      currentDate.setHours(0, 0, 0, 0);
+
+      const existingRecord = result.find(
+        (record) =>
+          new Date(record.time).setHours(0, 0, 0, 0) === currentDate.getTime(),
+      );
+
+      if (existingRecord) {
+        filledResult.push(existingRecord);
+      } else {
+        filledResult.push({
+          revenue: 0,
+          time: currentDate,
+        });
+      }
+    }
+
+    return filledResult;
+  }
+
+  async getRevenueStatisticRawData(
+    options: StatisticOptionsDto,
+    lessorId: number,
+  ): Promise<RevenueRecordDto[]> {
+    const query = this.orderRepository
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.product', 'product')
+      .leftJoinAndSelect('product.lessor', 'lessor')
+      .where('lessor.id = :lessorId', { lessorId: lessorId })
+      .andWhere('order.paymentStatus = :paymentStatus', {
+        paymentStatus: PAYMENT_STATUS.COMPLETE,
+      })
+      .select('SUM(order.orderValue)', 'revenue')
+      .addSelect('DATE(order.createdAt)', 'time')
+      .groupBy('DATE(order.createdAt)');
+    // Calculate the start and end dates
+    const endDate = new Date();
+    const startDate = new Date();
+    // startDate.setDate(endDate.getDate() - options.dayRange);
+    startDate.setDate(endDate.getDate() - options.dayRange);
+
+    // Ensure the start and end dates are set to the start of the day
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
+    query.andWhere('order.createdAt BETWEEN :startDate AND :endDate', {
+      startDate,
+      endDate,
+    });
+    if (options.productId) {
+      query.andWhere('product.id = :productId', {
+        productId: options.productId,
+      });
+    }
+    //
+    query.orderBy('DATE(order.createdAt)', ORDER.ASC);
+    const result = await query.getRawMany();
+    result.forEach((record) => {
+      record.revenue = parseInt(record.revenue);
+    });
+    return result;
   }
 }

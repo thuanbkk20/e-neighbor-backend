@@ -1,4 +1,4 @@
-import { NumberField, NumberFieldOptional } from '../../../../decorators';
+import { NumberField, NumberFieldOptional } from '@/decorators';
 
 export class StatisticOptionsDto {
   @NumberFieldOptional({
