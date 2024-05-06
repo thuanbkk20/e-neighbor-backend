@@ -15,10 +15,10 @@ import { Auth } from '@/decorators';
 import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
 import { FeedbackRecordDto } from '@/modules/lessor/domains/dtos/feedbackStatisticRecord.dto';
 import { LessorOnboardDto } from '@/modules/lessor/domains/dtos/lessor-onboard.dto';
+import { RevenueRecordDto } from '@/modules/lessor/domains/dtos/revenueStatisticRecord.dto';
 import { StatisticOptionsDto } from '@/modules/lessor/domains/dtos/statisticOptions.dto';
 import { LessorService } from '@/modules/lessor/services/lessor.service';
 import { ContextProvider } from '@/providers';
-import { RevenueRecordDto } from '../domains/dtos/revenueStatisticRecord.dto';
 
 @ApiTags('lessor')
 @Controller('lessor')
@@ -61,6 +61,10 @@ export class LessorController {
 
   @Auth([ROLE.LESSOR])
   @Get('/:id/statistic/revenue')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: String,
+  })
   async revenueStatistic(
     @Query() options: StatisticOptionsDto,
     @Param('id') lessorId: number,
