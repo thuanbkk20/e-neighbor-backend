@@ -51,11 +51,12 @@ export class ProductRepository extends Repository<ProductEntity> {
       });
     }
 
-    if (pageOptionsDto.isRejected === 'true') {
+    if (pageOptionsDto.isRejected === 'true')
       queryBuilder = queryBuilder.andWhere(
         'products.reject_reason IS NOT NULL',
       );
-    }
+    else if (pageOptionsDto.isRejected === 'false')
+      queryBuilder = queryBuilder.andWhere('products.reject_reason IS NULL');
 
     if (pageOptionsDto.lessorId) {
       queryBuilder = queryBuilder.andWhere('lessor.id = :lessorId', {
