@@ -135,7 +135,14 @@ export class UserService {
   }
 
   async updateWallet(userId: number, amount: number) {
-    const user = await this.findOneById(userId);
+    const user = await this.userRepository.findOneBy({
+      id: userId,
+    });
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
     if (amount < 0 && user.wallet + amount < 0)
       throw new BadRequestException('Insufficient Account Balance');
 
