@@ -1,10 +1,24 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { ROLE } from '@/constants';
 import { Auth } from '@/decorators';
 import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
+import { FeedbackRecordDto } from '@/modules/lessor/domains/dtos/feedbackStatisticRecord.dto';
+import { FeedbackStatisticResponseDto } from '@/modules/lessor/domains/dtos/feedbackStatisticResponse.dto';
 import { LessorOnboardDto } from '@/modules/lessor/domains/dtos/lessor-onboard.dto';
+import { RevenueRecordDto } from '@/modules/lessor/domains/dtos/revenueStatisticRecord.dto';
+import { RevenueStatisticResponseDto } from '@/modules/lessor/domains/dtos/revenueStatisticResponse.dto';
+import { StatisticOptionsDto } from '@/modules/lessor/domains/dtos/statisticOptions.dto';
 import { LessorService } from '@/modules/lessor/services/lessor.service';
 import { ContextProvider } from '@/providers';
 
@@ -28,5 +42,36 @@ export class LessorController {
       ...ContextProvider.getAuthUser(),
       ...registerDto,
     });
+  }
+
+  @Auth([ROLE.LESSOR])
+  @Get('/:id/statistic/feedback')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: FeedbackStatisticResponseDto,
+  })
+  async feedbackStatistic(
+    @Query() options: StatisticOptionsDto,
+    @Param('id') lessorId: number,
+  ): Promise<FeedbackStatisticResponseDto> {
+    const result = await this.lessorService.feedbackStatistic(
+      options,
+      lessorId,
+    );
+    return result;
+  }
+
+  @Auth([ROLE.LESSOR])
+  @Get('/:id/statistic/revenue')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: RevenueStatisticResponseDto,
+  })
+  async revenueStatistic(
+    @Query() options: StatisticOptionsDto,
+    @Param('id') lessorId: number,
+  ): Promise<RevenueStatisticResponseDto> {
+    const result = await this.lessorService.revenueStatistic(options, lessorId);
+    return result;
   }
 }
