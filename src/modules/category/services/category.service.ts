@@ -11,7 +11,6 @@ export class CategoryService {
   async getAllCategories(
     categoryOptions: CategoryOptionsDto,
   ): Promise<CategoryEntity[]> {
-    console.log(categoryOptions);
     const categoryResult = await this.categoryRepository.find({
       select: {
         id: true,
