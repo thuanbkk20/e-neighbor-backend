@@ -16,6 +16,8 @@ import { FeedbackRepository } from '@/modules/feedback/repositories/feedback.rep
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { OrderRepository } from '@/modules/order/repositories/order.repository';
 import { PaymentModule } from '@/modules/payment/payment.module';
+import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
+import { ProductRepository } from '@/modules/product/repositories/product.reposiory';
 import { UserModule } from '@/modules/user/user.module';
 
 @Module({
@@ -42,6 +44,15 @@ import { UserModule } from '@/modules/user/user.module';
       inject: [getDataSourceToken()],
       useFactory(datasource: DataSource) {
         return datasource.getRepository(OrderEntity).extend(OrderRepository);
+      },
+    },
+    {
+      provide: getRepositoryToken(ProductEntity),
+      inject: [getDataSourceToken()],
+      useFactory(datasource: DataSource) {
+        return datasource
+          .getRepository(ProductEntity)
+          .extend(ProductRepository);
       },
     },
     LessorService,

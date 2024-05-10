@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
 
+import { formatDay } from '@/common/utils';
 import { ORDER, PAYMENT_STATUS, ROLE } from '@/constants';
 import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
 import { FeedbackRepository } from '@/modules/feedback/repositories/feedback.repository';
@@ -22,6 +22,8 @@ import { LessorRepository } from '@/modules/lessor/repositories/lessor.repositor
 import { OrderEntity } from '@/modules/order/domains/entities/order.entity';
 import { OrderRepository } from '@/modules/order/repositories/order.repository';
 import { PaymentService } from '@/modules/payment/services/payment.service';
+import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
+import { ProductRepository } from '@/modules/product/repositories/product.reposiory';
 import { UserUpdateDto } from '@/modules/user/domains/dtos/user-update.dto';
 import { UserEntity } from '@/modules/user/domains/entities/user.entity';
 import { UserService } from '@/modules/user/services/user.service';
@@ -39,6 +41,8 @@ export class LessorService {
     private readonly feedbackRepository: FeedbackRepository,
     @InjectRepository(OrderEntity)
     private readonly orderRepository: OrderRepository,
+    @InjectRepository(ProductEntity)
+    private readonly productRepository: ProductRepository,
   ) {}
 
   async findOneById(
@@ -173,7 +177,7 @@ export class LessorService {
           new Date(record.time).setHours(0, 0, 0, 0) === currentDate.getTime(),
       );
 
-      const formatDateString = dayjs(currentDate).format('DD/MM/YYYY');
+      const formatDateString = formatDay(currentDate);
 
       if (existingRecord) {
         filledResult.push({ ...existingRecord, time: formatDateString });
@@ -324,12 +328,14 @@ export class LessorService {
           new Date(record.time).setHours(0, 0, 0, 0) === currentDate.getTime(),
       );
 
+      const formatDateString = formatDay(currentDate);
+
       if (existingRecord) {
-        filledResult.push(existingRecord);
+        filledResult.push({ ...existingRecord, time: formatDateString });
       } else {
         filledResult.push({
           revenue: 0,
-          time: currentDate,
+          time: formatDateString,
         });
       }
     }
@@ -402,6 +408,45 @@ export class LessorService {
     return {
       chartData: result,
       totalRevenue: totalRevenue,
+    };
+  }
+
+  async getOverallStatistic() {
+    const lessor = ContextProvider.getAuthUser();
+    const orderQuery = this.orderRepository
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.product', 'product')
+      .leftJoinAndSelect('product.lessor', 'lessor')
+      .where('lessor.id = :lessorId', { lessorId: lessor.id })
+      .andWhere('order.paymentStatus = :paymentStatus', {
+        paymentStatus: PAYMENT_STATUS.COMPLETE,
+      })
+      .select('COUNT(*)', 'numberOfOrder')
+      .addSelect('order.orderStatus', 'orderStatus')
+      .groupBy('order.orderStatus');
+
+    const numberOfProductQuery = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.lessor', 'lessor')
+      .leftJoinAndSelect('product.category', 'category')
+      .where('lessor.id = :lessorId', { lessorId: lessor.id })
+      .andWhere('product.isConfirmed = :isConfirmed', { isConfirmed: true })
+      .select('COUNT(*)', 'numberOfProduct')
+      .addSelect('category.isVehicle', 'isVehicle')
+      .groupBy('category.isVehicle');
+
+    const accessCountQuery = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.lessor', 'lessor')
+      .leftJoinAndSelect('product.category', 'category')
+      .where('lessor.id = :lessorId', { lessorId: lessor.id })
+      .andWhere('product.isConfirmed = :isConfirmed', { isConfirmed: true })
+      .select('SUM(product.accessCount)');
+
+    return {
+      orderByStatus: await orderQuery.getRawMany(),
+      numberOfProductByCategory: await numberOfProductQuery.getRawMany(),
+      totalAccessCount: (await accessCountQuery.getRawOne()).sum,
     };
   }
 }

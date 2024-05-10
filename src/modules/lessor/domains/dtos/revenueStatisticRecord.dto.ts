@@ -5,5 +5,5 @@ export class RevenueRecordDto {
   revenue: number;
 
   @ApiProperty()
-  time: Date;
+  time: Date | string;
 }
