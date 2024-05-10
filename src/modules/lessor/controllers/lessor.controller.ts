@@ -75,7 +75,7 @@ export class LessorController {
   }
 
   @Auth([ROLE.LESSOR])
-  @Get('/:id/statistic/overall')
+  @Get('/statistic/overall')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({
     type: OverallStatisticResponseDto,
