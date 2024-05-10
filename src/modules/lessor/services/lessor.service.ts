@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 
 import { ORDER, PAYMENT_STATUS, ROLE } from '@/constants';
 import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
@@ -172,13 +173,15 @@ export class LessorService {
           new Date(record.time).setHours(0, 0, 0, 0) === currentDate.getTime(),
       );
 
+      const formatDateString = dayjs(currentDate).format('DD/MM/YYYY');
+
       if (existingRecord) {
-        filledResult.push(existingRecord);
+        filledResult.push({ ...existingRecord, time: formatDateString });
       } else {
         filledResult.push({
           averageStar: 0,
           totalFeedback: 0,
-          time: currentDate,
+          time: formatDateString,
         });
       }
     }
@@ -226,7 +229,6 @@ export class LessorService {
       record.totalFeedback = parseInt(record.totalFeedback);
     });
 
-    // Query to get the total revenue
     const feedbackSummarizeQuery = this.feedbackRepository
       .createQueryBuilder('feedback')
       .leftJoinAndSelect('feedback.order', 'order')
@@ -236,8 +238,21 @@ export class LessorService {
       .select('AVG(feedback.star)', 'averageStar')
       .addSelect('COUNT(*)', 'totalFeedback');
 
+    const feedbackByRatingQuery = this.feedbackRepository
+      .createQueryBuilder('feedback')
+      .leftJoinAndSelect('feedback.order', 'order')
+      .leftJoinAndSelect('order.product', 'product')
+      .leftJoinAndSelect('product.lessor', 'lessor')
+      .select('feedback.star', 'rating')
+      .addSelect('COUNT(*)', 'numberOfFeedback')
+      .groupBy('feedback.star')
+      .where('lessor.id = :lessorId', { lessorId: lessorId });
+
     if (options.productId) {
       feedbackSummarizeQuery.andWhere('product.id = :productId', {
+        productId: options.productId,
+      });
+      feedbackByRatingQuery.andWhere('product.id = :productId', {
         productId: options.productId,
       });
     }
@@ -250,10 +265,24 @@ export class LessorService {
       ? parseInt(feedbackSummarizeResult.totalFeedback)
       : 0;
 
+    const feedbackByRatingResult = await feedbackByRatingQuery.getRawMany();
+    const formatFeedbackByRating = [5, 4, 3, 2, 1].map((rating) => {
+      const existingEntry = feedbackByRatingResult?.find(
+        (entry) => entry.rating === rating,
+      );
+      if (existingEntry)
+        return {
+          ...existingEntry,
+          numberOfFeedback: parseInt(existingEntry.numberOfFeedback),
+        };
+      return { rating, numberOfFeedback: 0 };
+    });
+
     return {
       chartData: result,
       averageStar,
       totalFeedback,
+      feedbackByRating: formatFeedbackByRating,
     };
   }
 

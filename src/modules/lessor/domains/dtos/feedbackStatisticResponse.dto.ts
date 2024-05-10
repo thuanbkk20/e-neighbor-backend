@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { FeedbackRecordDto } from './feedbackStatisticRecord.dto';
+import {
+  FeedbackByRatingDto,
+  FeedbackRecordDto,
+} from './feedbackStatisticRecord.dto';
 
 export class FeedbackStatisticResponseDto {
   @ApiProperty({ type: () => [FeedbackRecordDto] })
@@ -11,4 +14,7 @@ export class FeedbackStatisticResponseDto {
 
   @ApiProperty()
   averageStar: number;
+
+  @ApiProperty({ type: () => [FeedbackByRatingDto] })
+  feedbackByRating: FeedbackByRatingDto[];
 }

@@ -8,5 +8,13 @@ export class FeedbackRecordDto {
   totalFeedback: number;
 
   @ApiProperty()
-  time: Date;
+  time: Date | string;
+}
+
+export class FeedbackByRatingDto {
+  @ApiProperty()
+  numberOfFeedback: number;
+
+  @ApiProperty()
+  rating: number;
 }
