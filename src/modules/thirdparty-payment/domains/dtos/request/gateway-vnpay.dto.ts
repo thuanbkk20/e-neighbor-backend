@@ -62,7 +62,6 @@ export class CreateVNPayTransactionDto {
     orderId: number,
     isVehicle: boolean,
   ) {
-    console.log(dayjs());
     this.vnp_BankCode = configService.vnPayConfig.vnpBANKCODE;
     this.vnp_Command = 'pay';
     this.vnp_Version = configService.vnPayConfig.vnpVersion;

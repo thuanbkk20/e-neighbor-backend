@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt';
+import * as dayjs from 'dayjs';
 import type { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 
 // import type { NotificationActionType } from '../constants';
@@ -71,6 +72,11 @@ export function sortAndPaginate<T extends ObjectLiteral>(
 
   return query;
 }
+
+export const formatDay = (dateString: string | Date) => {
+  const timeObject = dayjs(dateString);
+  return timeObject.isValid() ? timeObject.format('DD/MM/YYYY') : null;
+};
 
 // function camelCaseToSnakeCase(str: string): string {
 //   return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);

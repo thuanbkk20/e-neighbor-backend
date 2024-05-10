@@ -13,10 +13,9 @@ import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ROLE } from '@/constants';
 import { Auth } from '@/decorators';
 import { LessorRegisterDto } from '@/modules/lessor/domains/dtos/create-lessor.dto';
-import { FeedbackRecordDto } from '@/modules/lessor/domains/dtos/feedbackStatisticRecord.dto';
 import { FeedbackStatisticResponseDto } from '@/modules/lessor/domains/dtos/feedbackStatisticResponse.dto';
 import { LessorOnboardDto } from '@/modules/lessor/domains/dtos/lessor-onboard.dto';
-import { RevenueRecordDto } from '@/modules/lessor/domains/dtos/revenueStatisticRecord.dto';
+import { OverallStatisticResponseDto } from '@/modules/lessor/domains/dtos/overallStatisticResponse.dto';
 import { RevenueStatisticResponseDto } from '@/modules/lessor/domains/dtos/revenueStatisticResponse.dto';
 import { StatisticOptionsDto } from '@/modules/lessor/domains/dtos/statisticOptions.dto';
 import { LessorService } from '@/modules/lessor/services/lessor.service';
@@ -72,6 +71,17 @@ export class LessorController {
     @Param('id') lessorId: number,
   ): Promise<RevenueStatisticResponseDto> {
     const result = await this.lessorService.revenueStatistic(options, lessorId);
+    return result;
+  }
+
+  @Auth([ROLE.LESSOR])
+  @Get('/statistic/overall')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: OverallStatisticResponseDto,
+  })
+  async overallStatistic() {
+    const result = await this.lessorService.getOverallStatistic();
     return result;
   }
 }

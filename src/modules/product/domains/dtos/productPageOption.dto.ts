@@ -15,6 +15,7 @@ import {
   EnumFieldOptional,
   NumberFieldOptional,
   StringFieldOptional,
+  ToBoolean,
 } from '@/decorators';
 
 export class ProductPageOptionsDto {
@@ -50,6 +51,10 @@ export class ProductPageOptionsDto {
 
   @BooleanField()
   readonly isConfirmedByAdmin: boolean;
+
+  @BooleanFieldOptional()
+  @ToBoolean()
+  readonly isRejected?: boolean | string;
 
   @StringFieldOptional()
   readonly name?: string;

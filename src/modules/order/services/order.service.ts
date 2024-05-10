@@ -276,6 +276,9 @@ export class OrderService {
   ): Promise<OrderDto> {
     const order = await this.findOrderEntityById(updateDto.orderId);
     const user = ContextProvider.getAuthUser();
+
+    console.log(order, user);
+
     if (user.id !== order.product?.lessor?.id) {
       throw new UnauthorizedException(
         'PermissionDenied: Can not update order that belong to other lessor!',
@@ -301,7 +304,7 @@ export class OrderService {
           'Insufficient Balance: negative amount of fees',
         );
 
-      this.userService.updateWallet(user.id, paidAmount);
+      this.userService.updateWallet(order.user.id, paidAmount);
       order.paymentStatus = PAYMENT_STATUS.REFUNDED;
     } else {
       // approve the order
