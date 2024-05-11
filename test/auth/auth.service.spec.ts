@@ -1,5 +1,3 @@
-import { UserEntity } from './../../src/modules/user/domains/entities/user.entity';
-import { ROLE } from './../../src/constants/role';
 import { RegisterDto } from './../../src/modules/auth/domains/dtos/sign-in.dto';
 import { LessorNotFoundException } from './../../src/exceptions/lessor-not-found.exception';
 import { AdminNotFoundException } from './../../src/exceptions/admin-not-found.exception';
@@ -15,8 +13,6 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 describe('AuthService', () => {
   let authService: AuthService;
   let userService: UserService;
-  let adminService: AdminService;
-  let lessorService: LessorService;
   let jwtService: JwtService;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -248,8 +244,6 @@ describe('AuthService', () => {
 
     authService = module.get<AuthService>(AuthService);
     userService = module.get<UserService>(UserService);
-    adminService = module.get<AdminService>(AdminService);
-    lessorService = module.get<LessorService>(LessorService);
     jwtService = module.get<JwtService>(JwtService);
   });
 
