@@ -228,6 +228,7 @@ export class LessorService {
     //
     query.orderBy('DATE(feedback.createdAt)', ORDER.ASC);
     const result = await query.getRawMany();
+    console.log('result:', result);
     result.forEach((record) => {
       record.averageStar = parseFloat(record.averageStar);
       record.totalFeedback = parseInt(record.totalFeedback);
@@ -262,6 +263,7 @@ export class LessorService {
     }
 
     const feedbackSummarizeResult = await feedbackSummarizeQuery.getRawOne();
+    console.log('feedbackSummarizeResult', feedbackSummarizeResult);
     const averageStar = feedbackSummarizeResult.averageStar
       ? parseFloat(feedbackSummarizeResult.averageStar)
       : 0;
@@ -270,6 +272,7 @@ export class LessorService {
       : 0;
 
     const feedbackByRatingResult = await feedbackByRatingQuery.getRawMany();
+    console.log('feedbackByRatingResult', feedbackByRatingResult);
     const formatFeedbackByRating = [5, 4, 3, 2, 1].map((rating) => {
       const existingEntry = feedbackByRatingResult?.find(
         (entry) => entry.rating === rating,
