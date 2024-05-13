@@ -1,8 +1,6 @@
 import { CategoryRepository } from '@/modules/category/repositories/category.repository';
 import { CategoryService } from '@/modules/category/services/category.service';
 import { Test, TestingModule } from '@nestjs/testing';
-import { before } from 'lodash';
-import { LessorRepository } from '../../src/modules/lessor/repositories/lessor.repository';
 import { NotFoundException } from '@nestjs/common';
 describe('CategoryService', () => {
   let categoryService: CategoryService;
