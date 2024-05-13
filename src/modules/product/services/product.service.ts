@@ -26,7 +26,6 @@ import { InsuranceEntity } from '@/modules/product/domains/entities/insurance.en
 import { ProductSurChargeEntity } from '@/modules/product/domains/entities/product-surcharge.entity';
 import { ProductEntity } from '@/modules/product/domains/entities/product.entity';
 import { InsuranceRepository } from '@/modules/product/repositories/insurance.repository';
-import { ProductSurchargeRepository } from '@/modules/product/repositories/product-surcharge.repository';
 import { ProductRepository } from '@/modules/product/repositories/product.reposiory';
 import { SurchargeService } from '@/modules/surcharge/services/surcharge.service';
 import { ContextProvider } from '@/providers';
@@ -37,7 +36,6 @@ export class ProductService {
     private readonly lessorService: LessorService,
     private readonly categoryService: CategoryService,
     private readonly productRepository: ProductRepository,
-    private readonly productSurchargeRepository: ProductSurchargeRepository,
     private readonly surchargeService: SurchargeService,
     private readonly insuranceRepository: InsuranceRepository,
     @Inject(forwardRef(() => OrderService))
@@ -126,6 +124,9 @@ export class ProductService {
 
   async findOneById(id: number): Promise<ProductDto> {
     const product = await this.productRepository.findOneById(id);
+    if (!product) {
+      throw new ProductNotFoundException();
+    }
     //Update access count
     product.accessCount += 1;
     await this.productRepository.save(product);
@@ -160,7 +161,6 @@ export class ProductService {
       );
     }
     product.isConfirmed = confirmDto.isConfirm;
-    console.log(confirmDto);
     if (confirmDto.rejectReason) {
       product.rejectReason = confirmDto.rejectReason;
     }
@@ -225,11 +225,10 @@ export class ProductService {
     const mostRatedQuery =
       this.productRepository.getTopFourRatedProductList(paginationParamsDto);
 
-    const mostRatedProducts = await mostRatedQuery
-      .getRawAndEntities()
-      .then(({ entities }) =>
-        entities.map((entity) => new ProductViewDto(entity)),
-      );
+    const { entities } = await await mostRatedQuery.getRawAndEntities();
+    const mostRatedProducts = entities.map(
+      (entity) => new ProductViewDto(entity),
+    );
 
     const productsCount = await mostRatedQuery.getCount();
 

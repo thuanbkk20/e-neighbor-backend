@@ -1,8 +1,7 @@
-import { AdminNotFoundException } from './../../src/exceptions/admin-not-found.exception';
+import { AdminNotFoundException } from '../../src/exceptions/admin-not-found.exception';
 import { AdminRepository } from '@/modules/admin/repositories/admin.repository';
 import { AdminService } from '@/modules/admin/services/admin.service';
 import { Test, TestingModule } from '@nestjs/testing';
-import e from 'express';
 describe('CategoryService', () => {
   let adminService: AdminService;
   const mockAdmin = {
