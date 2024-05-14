@@ -1,3 +1,5 @@
+import { OrderRecordDto } from '@/modules/order/domains/dtos/orderRecord.dto';
+import { ORDER_LIST_SORT_FIELD } from './../../src/constants/order-list-sort-field';
 import { LessorOnboardDto } from './../../src/modules/lessor/domains/dtos/lessor-onboard.dto';
 import { LessorEntity } from './../../src/modules/lessor/domains/entities/lessor.entity';
 import { PAYMENT_STATUS } from './../../src/constants/payment-status';
@@ -27,6 +29,8 @@ import e from 'express';
 import { UserEntity } from '../../src/modules/user/domains/entities/user.entity';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { CategoryEntity } from '../../src/modules/category/domains/entities/category.entity';
+import { ORDER } from '../../src/constants/order';
+import { PageDto } from '../../src/common/dtos/page.dto';
 describe('OrderService', () => {
   let orderService: OrderService;
   let orderRepository: OrderRepository;
@@ -548,6 +552,21 @@ describe('OrderService', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
       }
+    });
+  });
+
+  describe('getOrdersList', () => {
+    it('should return orders list based on options', async () => {
+      const mockPageOptions = {
+        sortField: ORDER_LIST_SORT_FIELD.ORDER_VALUE,
+        order: ORDER.DESC,
+        page: 1,
+        take: 10,
+        skip: 0,
+        productId: 1,
+      };
+      const response = await orderService.getOrdersList(mockPageOptions);
+      expect(response).toBeInstanceOf(PageDto<OrderRecordDto>);
     });
   });
 });
