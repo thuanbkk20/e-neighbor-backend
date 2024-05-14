@@ -4,7 +4,6 @@ import {
   IPN_ORDER_NOT_FOUND,
   INP_ORDER_ALREADY_PAID,
   IPN_INVALID_AMOUNT,
-  IPN_FAIL_CHECKSUM,
 } from './../../src/constants/vnpay-ipn-response';
 import { ProductDto } from '@/modules/product/domains/dtos/product.dto';
 import { CreateOrderDto } from '@/modules/order/domains/dtos/createOrder.dto';
@@ -14,7 +13,6 @@ import {
   LOCALE,
 } from '@/modules/thirdparty-payment/strategies/thirdparty-payment.strategy';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ThirdPartyPaymentService } from '../../src/modules/thirdparty-payment/services/thirdparty-payment.service';
 import { HttpService } from '@nestjs/axios';
 import { OrderService } from '../../src/modules/order/services/order.service';
 import { ApiConfigService } from '../../src/shared/services/api-config.service';

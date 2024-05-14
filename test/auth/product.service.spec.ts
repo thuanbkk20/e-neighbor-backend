@@ -1,5 +1,4 @@
 import { ProductViewDto } from './../../src/modules/product/domains/dtos/productView.dto';
-import { ProductPageOptionsDto } from './../../src/modules/product/domains/dtos/productPageOption.dto';
 import { ProductRecordDto } from './../../src/modules/product/domains/dtos/productRecord.dto';
 import { PageDto } from './../../src/common/dtos/page.dto';
 import { ORDER } from './../../src/constants/order';
@@ -29,7 +28,7 @@ import { COMMON_LOCATION } from '../../src/constants/common-location';
 import { ROLE } from '../../src/constants/role';
 import { LessorNotFoundException } from '../../src/exceptions/lessor-not-found.exception';
 
-describe('CategoryService', () => {
+describe('ProductService', () => {
   let productService: ProductService;
   // Mock entityManager
   const entityManager = {} as EntityManager;

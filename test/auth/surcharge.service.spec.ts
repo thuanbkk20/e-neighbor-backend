@@ -2,7 +2,7 @@ import { SurchargeRepository } from '@/modules/surcharge/repositories/surcharge.
 import { SurchargeService } from '@/modules/surcharge/services/surcharge.service';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-describe('CategoryService', () => {
+describe('SurchargeService', () => {
   let surchargeService: SurchargeService;
   const mockSurcharges = [
     {

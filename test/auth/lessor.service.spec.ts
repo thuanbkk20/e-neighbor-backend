@@ -20,7 +20,7 @@ import { omit } from 'lodash';
 import { ROLE } from '../../src/constants/role';
 import { BadRequestException } from '@nestjs/common';
 
-describe('UserService', () => {
+describe('LessorService', () => {
   let lessorService: LessorService;
   const mockUser = {
     id: 1,

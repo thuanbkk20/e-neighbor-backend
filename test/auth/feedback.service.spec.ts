@@ -1,9 +1,7 @@
 import { PageDto } from '@/common/dtos/page.dto';
 import { ORDER } from '@/constants';
 import { FEEDBACK_LIST_SORT_FIELD } from './../../src/constants/feedback-list-sort-field';
-import { FeedbackEntity } from '@/modules/feedback/domains/entities/feedback.entity';
 import { FeedbackDto } from '@/modules/feedback/domains/dtos/feedback.dto';
-import { ProductEntity } from './../../src/modules/product/domains/entities/product.entity';
 import { UserEntity } from './../../src/modules/user/domains/entities/user.entity';
 import { ProductService } from '@/modules/product/services/product.service';
 import { OrderService } from './../../src/modules/order/services/order.service';
@@ -22,7 +20,7 @@ import { ORDER_STATUS } from '../../src/constants/order-status';
 import { PAYMENT_STATUS } from '../../src/constants/payment-status';
 import { ContextProvider } from '../../src/providers/context.provider';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-describe('CategoryService', () => {
+describe('FeedbackService', () => {
   let feedbackService: FeedbackService;
   const mockUser = {
     id: 1,
