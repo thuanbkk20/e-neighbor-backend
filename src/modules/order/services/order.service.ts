@@ -130,7 +130,7 @@ export class OrderService {
       returnTime,
       product,
     );
-    if (user instanceof UserEntity) {
+    if (!(user instanceof AdminEntity)) {
       //Check if user complete profile information
       this.checkIfUserCompleteProfileInformation(user);
       order.user = user;
@@ -277,8 +277,6 @@ export class OrderService {
     const order = await this.findOrderEntityById(updateDto.orderId);
     const user = ContextProvider.getAuthUser();
 
-    console.log(order, user);
-
     if (user.id !== order.product?.lessor?.id) {
       throw new UnauthorizedException(
         'PermissionDenied: Can not update order that belong to other lessor!',
@@ -372,7 +370,7 @@ export class OrderService {
    * @param product The product entity containing pricing information.
    * @returns The calculated initial order price.
    */
-  private calculateInitialOrderPrice(
+  calculateInitialOrderPrice(
     rentDate: Date,
     returnDate: Date,
     product: ProductEntity,
