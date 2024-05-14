@@ -1,9 +1,5 @@
 import { Module } from '@nestjs/common';
-import {
-  TypeOrmModule,
-  getDataSourceToken,
-  getRepositoryToken,
-} from '@nestjs/typeorm';
+import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 import { LessorController } from './controllers/lessor.controller';
@@ -22,12 +18,7 @@ import { UserModule } from '@/modules/user/user.module';
 
 @Module({
   controllers: [LessorController],
-  imports: [
-    UserModule,
-    AdminModule,
-    PaymentModule,
-    TypeOrmModule.forFeature([FeedbackRepository]),
-  ],
+  imports: [UserModule, AdminModule, PaymentModule],
   exports: [LessorService],
   providers: [
     {

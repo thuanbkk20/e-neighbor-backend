@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { SurchargeEntity } from '@/modules/surcharge/domains/entities/surcharge.entity';
 import { SurchargeRepository } from '@/modules/surcharge/repositories/surcharge.repository';
@@ -12,11 +12,21 @@ export class SurchargeService {
   }
 
   async getSurchargeById(id: number): Promise<SurchargeEntity> {
-    return this.surchargeRepository.findOneBy({ id: id });
+    const surcharge = await this.surchargeRepository.findOneBy({ id: id });
+
+    if (!surcharge) {
+      throw new NotFoundException('Surcharge not found!');
+    }
+    return surcharge;
   }
 
   async getSurchargeByName(name: string): Promise<SurchargeEntity> {
-    return this.surchargeRepository.findOneBy({ name: name });
+    const surcharge = await this.surchargeRepository.findOneBy({ name: name });
+
+    if (!surcharge) {
+      throw new NotFoundException('Surcharge not found!');
+    }
+    return surcharge;
   }
 
   async getByProductSurchargeId(id: number): Promise<SurchargeEntity> {

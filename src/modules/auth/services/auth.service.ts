@@ -35,7 +35,6 @@ export class AuthService {
       role: ROLE.USER,
     };
     const lessor = await this.lessorService.findOneByUserId(user.id);
-    console.log(lessor);
     if (lessor != null) {
       payload.id = lessor.id;
       payload.role = ROLE.LESSOR;
