@@ -78,7 +78,6 @@ export class ProductController {
     type: ProductDto,
   })
   async findProductById(@Param('id') id: number): Promise<ProductDto> {
-    console.log('Check log');
     return this.productService.findOneById(id);
   }
 

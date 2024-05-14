@@ -1,11 +1,11 @@
-import { RegisterDto } from './../../src/modules/auth/domains/dtos/sign-in.dto';
-import { LessorNotFoundException } from './../../src/exceptions/lessor-not-found.exception';
-import { AdminNotFoundException } from './../../src/exceptions/admin-not-found.exception';
-import { UserNotFoundException } from './../../src/exceptions/user-not-found.exception';
-import { LessorService } from './../../src/modules/lessor/services/lessor.service';
-import { AdminService } from './../../src/modules/admin/services/admin.service';
-import { UserService } from './../../src/modules/user/services/user.service';
-import { AuthService } from './../../src/modules/auth/services/auth.service';
+import { RegisterDto } from '../../src/modules/auth/domains/dtos/sign-in.dto';
+import { LessorNotFoundException } from '../../src/exceptions/lessor-not-found.exception';
+import { AdminNotFoundException } from '../../src/exceptions/admin-not-found.exception';
+import { UserNotFoundException } from '../../src/exceptions/user-not-found.exception';
+import { LessorService } from '../../src/modules/lessor/services/lessor.service';
+import { AdminService } from '../../src/modules/admin/services/admin.service';
+import { UserService } from '../../src/modules/user/services/user.service';
+import { AuthService } from '../../src/modules/auth/services/auth.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
@@ -263,8 +263,6 @@ describe('AuthService', () => {
       const payload = await jwtService.verifyAsync(response.accessToken, {
         secret: '',
       });
-
-      console.log;
 
       // Now you can assert that the role is as expected
       // For example, if you expect the role to be 'lessor'
