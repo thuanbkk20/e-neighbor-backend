@@ -25,7 +25,6 @@ import { AbstractDto } from '../../src/common/dtos/abstract.dto';
 import { STATUS } from '../../src/constants/status';
 import * as dayjs from 'dayjs';
 import { ContextProvider } from '../../src/providers/context.provider';
-import e from 'express';
 import { UserEntity } from '../../src/modules/user/domains/entities/user.entity';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { CategoryEntity } from '../../src/modules/category/domains/entities/category.entity';
