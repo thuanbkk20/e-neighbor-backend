@@ -1,15 +1,13 @@
-name: Docker Image CD
+name: Docker Image CI
 
 on:
   push:
-    branches:
-      - master
+    branches: ['master']
   pull_request:
     types: [opened, reopened, synchronize]
 
 jobs:
   build:
-    needs: ci
     runs-on: ubuntu-latest
 
     steps:
