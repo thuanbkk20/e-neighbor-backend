@@ -1,14 +1,10 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    types: [opened, reopened, synchronize]
+  workflow_call:
 
 jobs:
-  test:
+  jest-unit-testing:
     runs-on: ubuntu-latest
 
     steps:
